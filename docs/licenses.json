@@ -1,27 +1,23 @@
 {
   "licenses": {},
-  "dependencies": [
+  "dependencies": [],
+  "references": [
     {
-      "title": ".NET Runtime",
-      "formats": [ "c#", "c++", "c" ],
-      "source": "https://github.com/dotnet/runtime",
-      "author": ".NET Foundation and Contributors",
-      "copyright": ".NET Foundation and Contributors",
-      "license": "mit_dotnet",
-      "notices": "https://github.com/dotnet/runtime/blob/main/THIRD-PARTY-NOTICES.TXT",
-      "index": ".NET Foundation, et al."
-    }
-  ],
-  "references": [],
-  "tools": [
+      "title": "Bitboard CHESS ENGINE in C",
+      "formats": "video",
+      "source": "https://youtu.be/QUNP-UjujBM",
+      "author": "Maksim Korzh",
+      "copyright": "Maksim Korzh",
+      "index": "Korzh, Maksim"
+    },
     {
-      "title": "VisualStudio.gitignore",
-      "formats": [ "ignore list" ],
-      "source": "https://github.com/github/gitignore",
-      "author": "GitHub, Inc.",
-      "resource": "https://github.com/github/gitignore/blob/main/VisualStudio.gitignore",
-      "license": "cc0-1.0",
-      "index": "GitHub, Inc., et al."
+      "title": "BBC (Bit Board Chess)",
+      "formats": [ "c", "c++" ],
+      "source": "https://github.com/maksimKorzh/bbc",
+      "author": "Maksim Korzh",
+      "copyright": "Maksim Korzh",
+      "license": "gpl-3.0",
+      "index": "Korzh, Maksim"
     }
   ]
 }

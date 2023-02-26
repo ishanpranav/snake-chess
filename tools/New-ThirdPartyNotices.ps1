@@ -78,6 +78,10 @@ function Out-Dependencies {
                 $source = $source.Substring(30).Replace('_', "%20") + "%20-%20Wikipedia"
             }
 
+            if ($source.StartsWith("https://youtu.be/")) {
+                $source = "YouTube"
+            }
+            
             Out-ThirdPartyNotices ("- Source: [" + [System.Web.HttpUtility]::UrlDecode($source) + "](" + $dependency.source + ")")
         }
 
@@ -110,7 +114,10 @@ function Out-Dependencies {
                     }
                 }
 
-                $license.text = [string]::Format($license.text, $dependency.copyright)
+                if ($license.title.Contains('_')) {
+                    $license.text = [string]::Format($license.text, $dependency.copyright)
+                }
+
                 $hashtable.Add($dependency.license, $license)
             }
 

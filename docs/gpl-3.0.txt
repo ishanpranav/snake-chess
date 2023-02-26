@@ -1,32 +1,4 @@
-Third-Party Notices
-===================
-This software uses third-party libraries or other resources that may be
-distributed under licenses different than the software.
-
-The attached notices are provided for informational purposes only. Please
-create a new GitHub issue if a required notice is missing. 
-
-For more details, please see the [license](LICENSE.txt).
-
-References
-----------
-This section contains references to parts of the source code based on or
-inspired by third-party open-source software.
-
-### Bitboard CHESS ENGINE in C&emsp;<sub><sup>*video*&ensp;</sup></sub>
-- Author: Maksim Korzh
-- Source: [YouTube](https://youtu.be/QUNP-UjujBM)
-
-### BBC (Bit Board Chess)&emsp;<sub><sup>*c*&ensp;*c++*&ensp;</sup></sub>
-- Author: Maksim Korzh
-- Source: [maksimKorzh/bbc](https://github.com/maksimKorzh/bbc)
-- License: [GNU General Public License v3.0](#gpl-3.0)
-
---------
-
-### <a id='gpl-3.0'>GNU General Public License v3.0</a>
-
-```
+GNU General Public License v3.0
                      GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
@@ -701,5 +673,3 @@ may consider it more useful to permit linking proprietary applications with
 the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <http://www.gnu.org/philosophy/why-not-lgpl.html>.
-```
-________________________________________________________________________________
