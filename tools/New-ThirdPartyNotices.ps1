@@ -114,7 +114,7 @@ function Out-Dependencies {
                     }
                 }
 
-                if ($license.title.Contains('_')) {
+                if ($dependency.license.Contains('_')) {
                     $license.text = [string]::Format($license.text, $dependency.copyright)
                 }
 

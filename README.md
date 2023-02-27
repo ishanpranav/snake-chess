@@ -4,9 +4,13 @@ programming language. This project began by following along with the
 [Bitboard chess engine in C](https://youtu.be/QUNP-UjujBM) YouTube video
 series. The source code from the video series is available from
 [the BBC repository](https://github.com/maksimKorzh/bbc).
+## Bitboard visualizer
+Bitboard programming is rather complicated - I have developed a companion
+JavaScript tool to simplify the process of generating the magic constants
+involved in the board manipulation available [here](tools/index.html). The
+tool enables rapid visualization and experimentation. 
 ## License
-This repository is licensed with the
-[GNU General Public License v3.0](LICENSE.txt).
+This repository is licensed with the [MIT](LICENSE.txt) license.
 ## Attribution
 This software uses third-party libraries or other resources that may be
 distributed under licenses different than the software. Please see the third-

@@ -36,7 +36,7 @@ void bitboard_print(unsigned long long this)
 
         for (int file = 0; file < 8; file++)
         {
-            int square = (rank * 8) + file;
+            enum Square square = (rank * 8) + file;
 
             if (bitboard_get(this, square))
             {

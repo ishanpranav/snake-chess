@@ -12,12 +12,43 @@
     },
     {
       "title": "BBC (Bit Board Chess)",
-      "formats": [ "c", "c++" ],
+      "formats": [
+        "c",
+        "c++"
+      ],
       "source": "https://github.com/maksimKorzh/bbc",
       "author": "Maksim Korzh",
       "copyright": "Maksim Korzh",
       "license": "gpl-3.0",
       "index": "Korzh, Maksim"
+    }
+  ],
+  "tools": [
+    {
+      "title": "Bootstrap",
+      "formats": [
+        "js",
+        "html",
+        "scss",
+        "css"
+      ],
+      "source": "https://github.com/twbs/bootstrap",
+      "author": "The Bootstrap Authors",
+      "copyright": "2011-2013 The Bootstrap Authors",
+      "license": "mit_bootstrap",
+      "index": "Bootstrap Authors, The"
+    },
+    {
+      "title": "Highlight.js",
+      "formats": [
+        "js",
+        "css"
+      ],
+      "source": "https://github.com/highlightjs/highlight.js",
+      "author": "BSD 3-Clause License",
+      "copyright": "2006, Ivan Sagalae.",
+      "license": "bsd-3-clause_sagalae",
+      "index": "Sagalae, Ivan"
     }
   ]
 }

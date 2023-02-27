@@ -1,3 +1,6 @@
+#ifndef SQUARE_H
+#define SQUARE_H
+
 /**
  *
  */
@@ -68,3 +71,5 @@ enum Square
     G1,
     H1,
 };
+
+#endif
