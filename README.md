@@ -9,8 +9,8 @@ series. The source code from the video series is available from
 Bitboard programming is rather complicated - I have developed a companion
 JavaScript tool to simplify the process of generating the magic constants
 involved in the board manipulation available
-[here](https://ishanpranav.github.io/snake-chess/). The tool enables rapid
-visualization and experimentation. 
+[here](https://ishanpranav.github.io/snake-chess/tools/index.html). The tool
+enables rapid visualization and experimentation. 
 ## License
 This repository is licensed with the [MIT](LICENSE.txt) license.
 ## Attribution
