@@ -27,7 +27,7 @@
     {
       "title": "Bootstrap",
       "formats": [
-        "js",
+        "javascript",
         "html",
         "scss",
         "css"
@@ -37,18 +37,6 @@
       "copyright": "2011-2013 The Bootstrap Authors",
       "license": "mit_bootstrap",
       "index": "Bootstrap Authors, The"
-    },
-    {
-      "title": "Highlight.js",
-      "formats": [
-        "js",
-        "css"
-      ],
-      "source": "https://github.com/highlightjs/highlight.js",
-      "author": "BSD 3-Clause License",
-      "copyright": "2006, Ivan Sagalae.",
-      "license": "bsd-3-clause_sagalae",
-      "index": "Sagalae, Ivan"
     }
   ]
 }

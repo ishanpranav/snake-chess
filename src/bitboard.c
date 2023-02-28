@@ -51,5 +51,5 @@ void bitboard_print(unsigned long long this)
         printf("\n");
     }
 
-    printf("\nBitboard: %#018llx\n\n", this);
+    printf("\nBitboard: %llx\n\n", this);
 }

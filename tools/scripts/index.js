@@ -1,3 +1,5 @@
+var bitboard = 0n;
+
 /**
  * 
  */
@@ -28,8 +30,6 @@ function onBodyLoad() {
             index--;
         }
     }
-
-    renderCode("0x0");
 }
 
 function getTextInput(base) {
@@ -40,29 +40,18 @@ function getCheckBoxInput(index) {
     return document.getElementById(`square${index}CheckBoxInput`);
 }
 
-function getBits() {
-    return BigInt(getTextInput(16).value)
-        .toString(2)
-        .padStart(64, '0')
-        .split("");
-}
-
-function getValue(bits) {
-    return BigInt("0b" + bits.join(""));
-}
-
 function onCheckBoxInputChange() {
-    const bits = getBits();
+    bitboard = 0n;
 
     for (let i = 0; i < 64; i++) {
+        bitboard <<= 1n;
+
         if (getCheckBoxInput(i).checked) {
-            bits[i] = '1';
-        } else {
-            bits[i] = '0';
+            bitboard++;
         }
     }
 
-    renderTextInputs(getValue(bits));
+    renderText();
 }
 
 /**
@@ -80,59 +69,66 @@ function onTextInputChange(base) {
         return;
     }
 
-    renderCheckBoxInputs(value.toString(2).split(""));
-    renderTextInputs(value);
+    bitboard = value;
+
+    renderAll();
 }
 
 /**
  * 
  */
 function onNotButtonClick() {
-    const bits = getBits();
+    let result = 0n;
 
-    for (let i = 0; i < 64; i++) {
-        if (bits[i] == '1') {
-            bits[i] = '0';
-        } else {
-            bits[i] = '1';
+    for (let bit of bitboard.toString(2).padStart(64, '0')) {
+        result <<= 1n;
+
+        if (bit == '0') {
+            result++;
         }
     }
 
-    renderCheckBoxInputs(bits);
-    renderTextInputs(getValue(bits));
+    bitboard = result;
+
+    renderAll();
 }
 
-function renderCheckBoxInputs(bits) {
-    for (let i = 0; i < 64; i++) {
-        if (bits[i] == '1') {
+/**
+ * 
+ */
+function onLeftShiftButtonClick() {
+    bitboard <<= 1n;
+
+    renderAll();
+}
+
+/**
+ * 
+ */
+function onRightShiftButtonClick() {
+    bitboard >>= 1n;
+
+    renderAll();
+}
+
+function renderText() {
+    getTextInput(2).value = "0b" + bitboard.toString(2).padStart(64, '0');
+    getTextInput(10).value = bitboard.toString();
+    getTextInput(16).value = "0x" + bitboard.toString(16);
+}
+
+function renderAll() {
+    let i = 0;
+
+    for (let bit of bitboard.toString(2).padStart(64, '0')) {
+        if (bit == '1') {
             getCheckBoxInput(i).checked = true;
         } else {
             getCheckBoxInput(i).checked = false;
         }
-    }
-}
 
-function renderTextInputs(value) {
-    getTextInput(2).value = "0b" + value.toString(2);
-    getTextInput(10).value = value.toString();
-
-    const hex = "0x" + value.toString(16);
-
-    getTextInput(16).value = hex;
-    renderCode(hex);
-}
-
-function renderCode(hex) {
-    let constant = document.getElementById("constantTextInput").value;
-
-    if (constant == "") {
-        constant = "BITBOARD";
+        i++;
     }
 
-    document.getElementById("cCode").innerHTML = `#define ${constant.toUpperCase()} ${hex}`;
-    hljs.highlightAll();
-}
-
-function onConstantTextInputChange() {
-    renderCode(getTextInput(16).value);
+    renderText();
 }

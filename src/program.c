@@ -1,12 +1,15 @@
 #include <stdio.h>
-#include "attacks.h"
+#include "attack_table.h"
 #include "bitboard.h"
 #include "color.h"
 
 int main()
 {
     printf("Snake\n");
-    bitboard_print(mask_pawn_attacks(WHITE, G4));
+
+    struct AttackTable* table = attack_table();
+
+    finalize_attack_table(table);
 
     return 0;
 }

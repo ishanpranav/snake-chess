@@ -29,51 +29,12 @@ This section contains attributions for helpful resources that assisted in the
 development of this software. These elements may be included in the source
 repository but are not redistributed with release versions of the application.
 
-### Bootstrap&emsp;<sub><sup>*js*&ensp;*html*&ensp;*scss*&ensp;*css*&ensp;</sup></sub>
+### Bootstrap&emsp;<sub><sup>*javascript*&ensp;*html*&ensp;*scss*&ensp;*css*&ensp;</sup></sub>
 - Author: The Bootstrap Authors
 - Source: [twbs/bootstrap](https://github.com/twbs/bootstrap)
 - License: [MIT](#mit_bootstrap)
 
-### Highlight.js&emsp;<sub><sup>*js*&ensp;*css*&ensp;</sup></sub>
-- Author: BSD 3-Clause License
-- Source: [highlightjs/highlight.js](https://github.com/highlightjs/highlight.js)
-- License: [BSD 3-Clause “New” or “Revised” License](#bsd-3-clause_sagalae)
-
 --------
-
-### <a id='bsd-3-clause_sagalae'>BSD 3-Clause “New” or “Revised” License</a>
-
-```
-BSD 3-Clause License
-
-Copyright (c) 2006, Ivan Sagalae.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice,
-   this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution.
-
-3. Neither the name of the copyright holder nor the names of its
-   contributors may be used to endorse or promote products derived from
-   this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-```
-________________________________________________________________________________
 
 ### <a id='gpl-3.0'>GNU General Public License v3.0</a>
 
