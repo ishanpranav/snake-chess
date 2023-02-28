@@ -31,7 +31,7 @@ function onBodyLoad() {
         }
     }
 
-    fetch("https://ishanpranav.github.io/snake-chess/src/bitboards.h").then(function (response) {
+    fetch("https://raw.githubusercontent.com/ishanpranav/snake-chess/main/src/bitboards.h").then(function (response) {
         const select = getConstantSelect();
         
         for (const match of response.text().matchAll(/#define ([A-Za-z_]+) (0x)?([0-9A-Fa-f]+)ul/g)) {
