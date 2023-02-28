@@ -3,6 +3,11 @@
 #include <stdbool.h>
 #include "bitboard.h"
 
+unsigned long long bitboard(enum Square square)
+{
+    return 1ull << square;
+}
+
 bool bitboard_get(unsigned long long this, enum Square square)
 {
     // GCC requires result stored in boolean
@@ -26,7 +31,7 @@ void bitboard_reset(unsigned long long *this, enum Square square)
     *this ^= (1ull << square);
 }
 
-void bitboard_print(unsigned long long this)
+void printBitboard(unsigned long long this)
 {
     printf("\n       a b c d e f g h\n\n");
 

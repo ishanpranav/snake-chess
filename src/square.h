@@ -4,6 +4,11 @@
 /**
  *
  */
+#define SQUARES 64
+
+/**
+ *
+ */
 enum Square
 {
     A8,

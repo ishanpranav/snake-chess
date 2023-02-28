@@ -4,6 +4,11 @@
 /**
  *
  */
+#define COLORS 2
+
+/**
+ *
+ */
 enum Color
 {
     WHITE,
