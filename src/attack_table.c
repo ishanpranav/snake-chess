@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <stdio.h> // printf
 #include <stdlib.h>
 #include "attack_table.h"
 #include "bitboard.h"
@@ -9,7 +9,7 @@
 
 struct AttackTable
 {
-    unsigned long long pawns[SQUARES][2];
+    unsigned long long pawns[SQUARES][COLORS];
     unsigned long long knights[SQUARES];
 };
 
@@ -103,7 +103,7 @@ struct AttackTable *attack_table()
 
     for (enum Square square = 0; square < SQUARES; square++)
     {
-        for (enum Color color = 0; color <= COLORS; color++)
+        for (enum Color color = 0; color < COLORS; color++)
         {
             instance->pawns[square][color] = createPawnBitboard(square, color);
         }
