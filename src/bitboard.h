@@ -1,11 +1,5 @@
-#include <stdint.h>
 #include <stdbool.h>
 #include "square.h"
-
-/**
- *
- */
-unsigned long long bitboard(enum Square square);
 
 /**
  *

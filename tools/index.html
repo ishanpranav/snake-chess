@@ -18,7 +18,7 @@
 </head>
 
 <body onload="onBodyLoad()">
-  <div class="col-lg-8 mx-auto p-4 py-md-5">
+  <div class="container col-lg-8 mx-auto p-4 py-md-5">
     <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
       <span class="fs-4">Snake Chess</span>
     </header>
@@ -122,6 +122,16 @@
             &gt;&gt;
           </button>
         </div>
+        <label for="constantSelect"
+               class="form-label">
+          Constant
+        </label>
+        <select id="constantSelect"
+                class="form-select"
+                aria-label="Constant"
+                onchange="onConstantSelectChange()">
+            <option value="0" selected></option>
+        </select>
       </div>
     </main>
     <footer class="pt-5 my-5 text-muted border-top">

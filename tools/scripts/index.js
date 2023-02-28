@@ -30,6 +30,22 @@ function onBodyLoad() {
             index--;
         }
     }
+
+    fetch("https://ishanpranav.github.io/snake-chess/src/bitboards.h").then(function (response) {
+        const select = getConstantSelect();
+        
+        for (const match of response.text().matchAll(/#define ([A-Za-z_]+) (0x)?([0-9A-Fa-f]+)ul/g)) {
+            select.innerHTML += `<option value="${BigInt("0x" + match[3]).toString(16)}">${match[1]}</option>`;
+        }
+    }).then(function (data) {
+        console.log(data);
+    }).catch(function (error) {
+        console.log("Fetch Error :-S", error);
+    });
+}
+
+function getConstantSelect() {
+    return document.getElementById("constantSelect");
 }
 
 function getTextInput(base) {
@@ -61,6 +77,10 @@ function onTextInputChange(base) {
     let value;
     const textInput = getTextInput(base);
 
+    if (textInput.value.endsWith("ul")) {
+        textInput.value = textInput.value.substring(0, textInput.value.length - 2);
+    }
+
     try {
         value = BigInt(textInput.value);
     } catch (error) {
@@ -80,7 +100,7 @@ function onTextInputChange(base) {
 function onNotButtonClick() {
     let result = 0n;
 
-    for (let bit of bitboard.toString(2).padStart(64, '0')) {
+    for (const bit of bitboard.toString(2).padStart(64, '0')) {
         result <<= 1n;
 
         if (bit == '0') {
@@ -112,6 +132,7 @@ function onRightShiftButtonClick() {
 }
 
 function renderText() {
+    getConstantSelect().value = bitboard.toString(16);
     getTextInput(2).value = "0b" + bitboard.toString(2).padStart(64, '0');
     getTextInput(10).value = bitboard.toString();
     getTextInput(16).value = "0x" + bitboard.toString(16);
@@ -120,7 +141,7 @@ function renderText() {
 function renderAll() {
     let i = 0;
 
-    for (let bit of bitboard.toString(2).padStart(64, '0')) {
+    for (const bit of bitboard.toString(2).padStart(64, '0')) {
         if (bit == '1') {
             getCheckBoxInput(i).checked = true;
         } else {
@@ -131,4 +152,13 @@ function renderAll() {
     }
 
     renderText();
+}
+
+/**
+ * 
+ */
+function onConstantSelectChange() {
+    bitboard = BigInt("0x" + getConstantSelect().value);
+
+    renderAll();
 }

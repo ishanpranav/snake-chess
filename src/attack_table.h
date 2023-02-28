@@ -1,6 +1,3 @@
-#include "color.h"
-#include "square.h"
-
 /**
  *
  */

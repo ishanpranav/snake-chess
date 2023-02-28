@@ -1,47 +1,50 @@
-#include <stdio.h> // printf
 #include <stdlib.h>
 #include "attack_table.h"
 #include "bitboard.h"
-#define FILE_NOT_A_MASK 0xfefefefefefefefeul
-#define FILE_NOT_A_NOR_B_MASK 0xfcfcfcfcfcfcfcfc
-#define FILE_NOT_H_MASK 0x7f7f7f7f7f7f7f7ful
-#define FILE_NOT_H_NOR_G_MASK 0x3f3f3f3f3f3f3f3f
+#include "bitboards.h"
+#include "color.h"
+#include "square.h"
 
 struct AttackTable
 {
     unsigned long long pawns[SQUARES][COLORS];
     unsigned long long knights[SQUARES];
+    unsigned long long kings[SQUARES];
 };
 
 unsigned long long createPawnBitboard(enum Square square, enum Color color)
 {
     unsigned long long result = 0ull;
-    unsigned long long value = bitboard(square);
+    unsigned long long value = 1ull << square;
+    unsigned long long h8Direction = value >> 7;
+    unsigned long long a8Direction = value >> 9;
+    unsigned long long a1Direction = value << 7;
+    unsigned long long h1Direction = value << 9;
 
     switch (color)
     {
     case WHITE:
-        if ((value >> 7) & FILE_NOT_A_MASK)
+        if (h8Direction & FILE_NOT_A_MASK)
         {
-            result |= (value >> 7);
+            result |= h8Direction;
         }
 
-        if ((value >> 9) & FILE_NOT_H_MASK)
+        if (a8Direction & FILE_NOT_H_MASK)
         {
-            result |= (value >> 9);
+            result |= a8Direction;
         }
 
         break;
 
     case BLACK:
-        if ((value << 7) & FILE_NOT_H_MASK)
+        if (a1Direction & FILE_NOT_H_MASK)
         {
-            result |= (value << 7);
+            result |= a1Direction;
         }
 
-        if ((value << 9) & FILE_NOT_A_MASK)
+        if (h1Direction & FILE_NOT_A_MASK)
         {
-            result |= (value << 9);
+            result |= h1Direction;
         }
         break;
     }
@@ -52,48 +55,102 @@ unsigned long long createPawnBitboard(enum Square square, enum Color color)
 unsigned long long createKnightBitboard(enum Square square)
 {
     unsigned long long result = 0ull;
-    unsigned long long value = bitboard(square);
+    unsigned long long value = 1ull << square;
+    unsigned long long piSixthsRadians = value >> 6;
+    unsigned long long fivePiSixthsRadians = value >> 10;
+    unsigned long long piThirdsRadians = value >> 15;
+    unsigned long long twoPiThirdsRadians = value >> 17;
+    unsigned long long sevenPiSixthsRadians = value << 6;
+    unsigned long long elevenPiSixthsRadians = value << 10;
+    unsigned long long fourPiThirdsRadians = value << 15;
+    unsigned long long fivePiThirdsRadians = value << 17;
 
-    if ((value >> 17) & FILE_NOT_H_MASK)
+    if (piSixthsRadians & FILE_NOT_A_NOR_B_MASK)
     {
-        result |= (value >> 17);
+        result |= piSixthsRadians;
     }
 
-    if ((value >> 15) & FILE_NOT_A_MASK)
+    if (fivePiSixthsRadians & FILE_NOT_H_NOR_G_MASK)
     {
-        result |= (value >> 15);
+        result |= fivePiSixthsRadians;
     }
 
-    if ((value >> 10) & FILE_NOT_H_NOR_G_MASK)
+    if (piThirdsRadians & FILE_NOT_A_MASK)
     {
-        result |= (value >> 10);
+        result |= piThirdsRadians;
     }
 
-    if ((value >> 6) & FILE_NOT_A_NOR_B_MASK)
+    if (twoPiThirdsRadians & FILE_NOT_H_MASK)
     {
-        result |= (value >> 6);
+        result |= twoPiThirdsRadians;
     }
 
-    if ((value << 17) & FILE_NOT_A_MASK)
+    if (sevenPiSixthsRadians & FILE_NOT_H_NOR_G_MASK)
     {
-        result |= (value << 17);
+        result |= sevenPiSixthsRadians;
     }
 
-    if ((value << 15) & FILE_NOT_H_MASK)
+    if (elevenPiSixthsRadians & FILE_NOT_A_NOR_B_MASK)
     {
-        result |= (value << 15);
+        result |= elevenPiSixthsRadians;
     }
 
-    if ((value << 10) & FILE_NOT_A_NOR_B_MASK)
+    if (fourPiThirdsRadians & FILE_NOT_H_MASK)
     {
-        result |= (value << 10);
+        result |= fourPiThirdsRadians;
     }
 
-    if ((value << 6) & FILE_NOT_H_NOR_G_MASK)
+    if (fivePiThirdsRadians & FILE_NOT_A_MASK)
     {
-        result |= (value << 6);
+        result |= fivePiThirdsRadians;
     }
 
+    return result;
+}
+
+unsigned long long createKingBitboard(enum Square square)
+{
+    unsigned long long value = 1ull << square;
+    unsigned long long fileA = value >> 1;
+    unsigned long long h8 = value >> 7;
+    unsigned long long rank8 = value >> 8;
+    unsigned long long a8 = value >> 9;
+    unsigned long long fileH = value << 1;
+    unsigned long long a1 = value << 7;
+    unsigned long long rank1 = value << 8;
+    unsigned long long h1 = value << 9;
+    unsigned long long result = rank1 | rank8;
+
+    if (fileA & FILE_NOT_H_MASK)
+    {
+        result |= fileA;
+    }
+
+    if (h8 & FILE_NOT_A_MASK)
+    {
+        result |= h8;
+    }
+
+    if (a8 & FILE_NOT_H_MASK)
+    {
+        result |= a8;
+    }
+
+    if (fileH & FILE_NOT_A_MASK)
+    {
+        result |= fileH;
+    }
+
+    if (a1 & FILE_NOT_H_MASK)
+    {
+        result |= a1;
+    }
+
+    if (h1 & FILE_NOT_A_MASK)
+    {
+        result |= h1;
+    }
+    
     return result;
 }
 
@@ -109,6 +166,7 @@ struct AttackTable *attack_table()
         }
 
         instance->knights[square] = createKnightBitboard(square);
+        instance->kings[square] = createKingBitboard(square);
     }
 
     return instance;
