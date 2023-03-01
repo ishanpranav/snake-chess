@@ -69,7 +69,7 @@
                                value="0x0"
                                placeholder="0x0"
                                aria-label="Unsigned hexadecimal representation"
-                               onchange="onTextInputChange(16)" />
+                               onchange="onBase16TextInputChange()" />
                     </div>
                     <div class="col">
                         <label for="base10TextInput"
@@ -82,7 +82,7 @@
                                value="0"
                                placeholder="0"
                                aria-label="Unsigned decimal representation"
-                               onchange="onTextInputChange(10)" />
+                               onchange="onBase10TextInputChange()" />
                     </div>
                 </div>
                 <label for="base2TextInput"
@@ -114,7 +114,7 @@
                            value="0b0000000000000000000000000000000000000000000000000000000000000000"
                            placeholder="0b0000000000000000000000000000000000000000000000000000000000000000"
                            aria-label="Binary representation"
-                           onchange="onTextInputChange(2)" />
+                           onchange="onBas2TextInputChange()" />
                     <button type="button"
                             class="btn btn-light"
                             aria-label="Right shift"

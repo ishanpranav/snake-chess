@@ -1,11 +1,8 @@
 #include <stdlib.h>
 #include "attack_table.h"
-#include "bitboard.h"
 #include "bitboards.h"
 #include "color.h"
 #include "square.h"
-
-#include <stdio.h> // printf
 
 struct AttackTable
 {
@@ -114,16 +111,15 @@ unsigned long long createKnightBitboard(enum Square square)
 
 unsigned long long createBishopBitboard(enum Square square)
 {
-    unsigned long long result = 0ull;
-
     int destinationRank = square / 8;
     int destinationFile = square % 8;
     int rank = destinationRank + 1;
     int file = destinationFile + 1;
+    unsigned long long result = 0ull;
 
-    while (rank <= 6 && file <= 6)
+    while (rank < 7 && file < 7)
     {
-        result |= (1ull << (rank * 8 + file));
+        result |= 1ull << (rank * 8 + file);
         rank++;
         file++;
     }
@@ -131,9 +127,9 @@ unsigned long long createBishopBitboard(enum Square square)
     rank = destinationRank - 1;
     file = destinationFile + 1;
 
-    while (rank >= 1 && file <= 6)
+    while (rank > 0 && file < 7)
     {
-        result |= (1ull << (rank * 8 + file));
+        result |= 1ull << (rank * 8 + file);
         rank--;
         file++;
     }
@@ -141,19 +137,99 @@ unsigned long long createBishopBitboard(enum Square square)
     rank = destinationRank + 1;
     file = destinationFile - 1;
 
-    while (rank <= 6 && file >= 1)
+    while (rank < 7 && file > 0)
     {
-        result |= (1ull << (rank * 8 + file));
+        result |= 1ull << (rank * 8 + file);
         rank++;
         file--;
     }
-    
+
     rank = destinationRank - 1;
     file = destinationFile - 1;
 
-    while (rank >= 1 && file >= 1)
+    while (rank > 0 && file > 0)
     {
-        result |= (1ull << (rank * 8 + file));
+        result |= 1ull << (rank * 8 + file);
+        rank--;
+        file--;
+    }
+
+    return result;
+}
+
+unsigned long long getBishopAttacks(enum Square square, unsigned long long obstacles)
+{
+    int destinationRank = square / 8;
+    int destinationFile = square % 8;
+    int rank = destinationRank + 1;
+    int file = destinationFile + 1;
+    unsigned long long result = 0ull;
+
+    while (rank <= 7 && file <= 7)
+    {
+        unsigned long long destination = 1ull << (rank * 8 + file);
+
+        result |= destination;
+
+        if (destination & obstacles)
+        {
+            break;
+        }
+
+        rank++;
+        file++;
+    }
+
+    rank = destinationRank - 1;
+    file = destinationFile + 1;
+
+    while (rank >= 0 && file <= 7)
+    {
+        unsigned long long destination = 1ull << (rank * 8 + file);
+
+        result |= destination;
+
+        if (destination & obstacles)
+        {
+            break;
+        }
+
+        rank--;
+        file++;
+    }
+
+    rank = destinationRank + 1;
+    file = destinationFile - 1;
+
+    while (rank <= 7 && file >= 0)
+    {
+        unsigned long long destination = 1ull << (rank * 8 + file);
+
+        result |= destination;
+
+        if (destination & obstacles)
+        {
+            break;
+        }
+
+        rank++;
+        file--;
+    }
+
+    rank = destinationRank - 1;
+    file = destinationFile - 1;
+
+    while (rank >= 0 && file >= 0)
+    {
+        unsigned long long destination = 1ull << (rank * 8 + file);
+
+        result |= destination;
+
+        if (destination & obstacles)
+        {
+            break;
+        }
+
         rank--;
         file--;
     }
@@ -163,34 +239,88 @@ unsigned long long createBishopBitboard(enum Square square)
 
 unsigned long long createRookBitboard(enum Square square)
 {
-    unsigned long long result = 0ull;
-
     int destinationRank = square / 8;
     int destinationFile = square % 8;
+    unsigned long long result = 0ull;
 
-    for (int rank = destinationRank + 1; rank <= 6; rank++)
+    for (int rank = destinationRank + 1; rank < 7; rank++)
     {
-        result |= (1ull << (rank * 8 + destinationFile));
+        result |= 1ull << (rank * 8 + destinationFile);
     }
 
-    for (int rank = destinationRank - 1; rank >= 1; rank--)
+    for (int rank = destinationRank - 1; rank > 0; rank--)
     {
-        result |= (1ull << (rank * 8 + destinationFile));
+        result |= 1ull << (rank * 8 + destinationFile);
     }
 
-    for (int file = destinationFile + 1; file <= 6; file++)
+    for (int file = destinationFile + 1; file < 7; file++)
     {
-        result |= (1ull << (destinationRank * 8 + file));
+        result |= 1ull << (destinationRank * 8 + file);
     }
 
-    for (int file = destinationFile - 1; file >= 1; file--)
+    for (int file = destinationFile - 1; file > 0; file--)
     {
-        result |= (1ull << (destinationRank * 8 + file));
+        result |= 1ull << (destinationRank * 8 + file);
     }
-
-    printf("%llx\n", result);
 
     return result;
+}
+
+unsigned long long getRookAttacks(enum Square square, unsigned long long obstacles)
+{
+    int destinationRank = square / 8;
+    int destinationFile = square % 8;
+    unsigned long long result = 0ull;
+
+    for (int rank = destinationRank + 1; rank <= 7; rank++)
+    {
+        unsigned long long destination = 1ull << (rank * 8 + destinationFile);
+
+        result |= destination;
+
+        if (destination & obstacles)
+        {
+            break;
+        }
+    }
+
+    for (int rank = destinationRank - 1; rank >= 0; rank--)
+    {
+        unsigned long long destination = 1ull << (rank * 8 + destinationFile);
+
+        result |= destination;
+
+        if (destination & obstacles)
+        {
+            break;
+        }
+    }
+
+    for (int file = destinationFile + 1; file <= 7; file++)
+    {
+        unsigned long long destination = 1ull << (destinationRank * 8 + file);
+
+        result |= destination;
+
+        if (destination & obstacles)
+        {
+            break;
+        }
+    }
+
+    for (int file = destinationFile - 1; file >= 0; file--)
+    {
+        unsigned long long destination = 1ull << (destinationRank * 8 + file);
+
+        result |= destination;
+
+        if (destination & obstacles)
+        {
+            break;
+        }
+    }
+
+    return result;    
 }
 
 unsigned long long createKingBitboard(enum Square square)

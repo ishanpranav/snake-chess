@@ -3,22 +3,9 @@
 #include <stdbool.h>
 #include "bitboard.h"
 
-bool bitboard_get(unsigned long long this, enum Square square)
-{
-    // GCC requires result stored in boolean
-    bool result = this & (1ull << square);
-
-    return result;
-}
-
-void bitboard_set(unsigned long long *this, enum Square square)
-{
-    *this |= (1ull << square);
-}
-
 void bitboard_reset(unsigned long long *this, enum Square square)
 {
-    if (!bitboard_get(*this, square))
+    if (!(*this & (1ull << square)))
     {
         return;
     }
@@ -38,7 +25,7 @@ void printBitboard(unsigned long long this)
         {
             enum Square square = (rank * 8) + file;
 
-            if (bitboard_get(this, square))
+            if (this & (1ull << square))
             {
                 printf(" 1");
             }

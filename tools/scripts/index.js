@@ -36,7 +36,7 @@ function onBodyLoad() {
         .then(text => {
             const select = getConstantSelect();
 
-            for (const match of text.matchAll(/#define ([A-Za-z_]+)_MASK (0x)?([0-9A-Fa-f]+)ul/g)) {
+            for (const match of text.matchAll(/#define ([A-Za-z_]+)_MASK (0x)?([0-9A-Fa-f]+)ull/g)) {
                 select.innerHTML += `<option value="${BigInt("0x" + match[3]).toString(16)}">Bitmask: ${match[1].replaceAll('_', ' ').toLowerCase()}</option>`;
             }
         })
@@ -45,10 +45,6 @@ function onBodyLoad() {
 
 function getConstantSelect() {
     return document.getElementById("constantSelect");
-}
-
-function getTextInput(base) {
-    return document.getElementById(`base${base}TextInput`);
 }
 
 function getCheckBoxInput(index) {
@@ -72,12 +68,41 @@ function onCheckBoxInputChange() {
 /**
  * 
  */
-function onTextInputChange(base) {
-    let value;
-    const textInput = getTextInput(base);
+function onBase2TextInputChange() {
+    const textInput = document.getElementById("base2TextInput");
 
-    if (textInput.value.endsWith("ul")) {
-        textInput.value = textInput.value.substring(0, textInput.value.length - 2);
+    if (!textInput.value.startsWith("0b")){
+        textInput.value = "0b" + textInput.value;
+    }
+
+    onTextInputChange(textInput);
+}
+
+/**
+ * 
+ */
+function onBase10TextInputChange() {
+    return document.getElementById("base10TextInput");
+}
+
+/**
+ * 
+ */
+function onBase16TextInputChange() {
+    const textInput = document.getElementById("base16TextInput");
+
+    if (!textInput.value.startsWith("0x")){
+        textInput.value = "0x" + textInput.value;
+    }
+    
+    onTextInputChange(textInput);
+}
+
+function onTextInputChange(textInput) {
+    let value;
+
+    if (textInput.value.endsWith("ull")) {
+        textInput.value = textInput.value.substring(0, textInput.value.length - 3);
     }
 
     try {
