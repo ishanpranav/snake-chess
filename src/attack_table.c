@@ -12,6 +12,7 @@ struct AttackTable
     unsigned long long pawns[SQUARES][COLORS];
     unsigned long long knights[SQUARES];
     unsigned long long bishops[SQUARES];
+    unsigned long long rooks[SQUARES];
     unsigned long long kings[SQUARES];
 };
 
@@ -157,6 +158,36 @@ unsigned long long createBishopBitboard(enum Square square)
         file--;
     }
 
+    return result;
+}
+
+unsigned long long createRookBitboard(enum Square square)
+{
+    unsigned long long result = 0ull;
+
+    int destinationRank = square / 8;
+    int destinationFile = square % 8;
+
+    for (int rank = destinationRank + 1; rank <= 6; rank++)
+    {
+        result |= (1ull << (rank * 8 + destinationFile));
+    }
+
+    for (int rank = destinationRank - 1; rank >= 1; rank--)
+    {
+        result |= (1ull << (rank * 8 + destinationFile));
+    }
+
+    for (int file = destinationFile + 1; file <= 6; file++)
+    {
+        result |= (1ull << (destinationRank * 8 + file));
+    }
+
+    for (int file = destinationFile - 1; file >= 1; file--)
+    {
+        result |= (1ull << (destinationRank * 8 + file));
+    }
+
     printf("%llx\n", result);
 
     return result;
@@ -226,6 +257,7 @@ struct AttackTable *attack_table()
 
         instance->knights[square] = createKnightBitboard(square);
         instance->bishops[square] = createBishopBitboard(square);
+        instance->rooks[square] = createRookBitboard(square);
         instance->kings[square] = createKingBitboard(square);
     }
 
