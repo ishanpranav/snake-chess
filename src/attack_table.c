@@ -2,6 +2,7 @@
 #include "attack_table.h"
 #include "bitboards.h"
 #include "color.h"
+#include "compiler.h"
 #include "square.h"
 
 struct AttackTable
@@ -13,7 +14,7 @@ struct AttackTable
     unsigned long long kings[SQUARES];
 };
 
-unsigned long long createPawnBitboard(enum Square square, enum Color color)
+static unsigned long long createPawnBitboard(enum Square square, enum Color color)
 {
     unsigned long long result = 0ull;
     unsigned long long value = 1ull << square;
@@ -53,7 +54,7 @@ unsigned long long createPawnBitboard(enum Square square, enum Color color)
     return result;
 }
 
-unsigned long long createKnightBitboard(enum Square square)
+static unsigned long long createKnightBitboard(enum Square square)
 {
     unsigned long long result = 0ull;
     unsigned long long value = 1ull << square;
@@ -109,7 +110,7 @@ unsigned long long createKnightBitboard(enum Square square)
     return result;
 }
 
-unsigned long long createBishopBitboard(enum Square square)
+static unsigned long long createBishopBitboard(enum Square square)
 {
     int destinationRank = square / 8;
     int destinationFile = square % 8;
@@ -157,7 +158,7 @@ unsigned long long createBishopBitboard(enum Square square)
     return result;
 }
 
-unsigned long long getBishopAttacks(enum Square square, unsigned long long obstacles)
+static unsigned long long getBishopAttacks(enum Square square, unsigned long long obstacles)
 {
     int destinationRank = square / 8;
     int destinationFile = square % 8;
@@ -237,7 +238,7 @@ unsigned long long getBishopAttacks(enum Square square, unsigned long long obsta
     return result;
 }
 
-unsigned long long createRookBitboard(enum Square square)
+static unsigned long long createRookBitboard(enum Square square)
 {
     int destinationRank = square / 8;
     int destinationFile = square % 8;
@@ -266,7 +267,7 @@ unsigned long long createRookBitboard(enum Square square)
     return result;
 }
 
-unsigned long long getRookAttacks(enum Square square, unsigned long long obstacles)
+static unsigned long long getRookAttacks(enum Square square, unsigned long long obstacles)
 {
     int destinationRank = square / 8;
     int destinationFile = square % 8;
@@ -320,10 +321,10 @@ unsigned long long getRookAttacks(enum Square square, unsigned long long obstacl
         }
     }
 
-    return result;    
+    return result;
 }
 
-unsigned long long createKingBitboard(enum Square square)
+static unsigned long long createKingBitboard(enum Square square)
 {
     unsigned long long value = 1ull << square;
     unsigned long long fileA = value >> 1;
@@ -364,6 +365,29 @@ unsigned long long createKingBitboard(enum Square square)
     if (h1 & FILE_NOT_A_MASK)
     {
         result |= h1;
+    }
+
+    return result;
+}
+
+static unsigned long long setOccupancy(int index, int count, unsigned long long mask)
+{
+    unsigned long long result = 0ull;
+
+    for (int i = 0; i < count; i++)
+    {
+        enum Square square = ctzull(mask);
+        unsigned long long destination = 1ull << square;
+
+        if (mask & destination)
+        {
+            mask ^= destination;
+        }
+
+        if (index & (1ull << i))
+        {
+            result |= 1ull << square;
+        }
     }
 
     return result;

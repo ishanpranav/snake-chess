@@ -13,7 +13,7 @@ void bitboard_reset(unsigned long long *this, enum Square square)
     *this ^= (1ull << square);
 }
 
-void printBitboard(unsigned long long this)
+void bitboard_print(unsigned long long this)
 {
     printf("\n       a b c d e f g h\n\n");
 

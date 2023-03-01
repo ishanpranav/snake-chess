@@ -65,11 +65,23 @@ function onCheckBoxInputChange() {
     renderText();
 }
 
+function getBase2TextInput() {
+    return document.getElementById("base2TextInput");
+}
+
+function getBase10TextInput() {
+    return document.getElementById("base10TextInput");
+}
+
+function getBase16TextInput() {
+    return document.getElementById("base16TextInput");
+}
+
 /**
  * 
  */
 function onBase2TextInputChange() {
-    const textInput = document.getElementById("base2TextInput");
+    const textInput = getBase2TextInput();
 
     if (!textInput.value.startsWith("0b")){
         textInput.value = "0b" + textInput.value;
@@ -157,9 +169,9 @@ function onRightShiftButtonClick() {
 
 function renderText() {
     getConstantSelect().value = bitboard.toString(16);
-    getTextInput(2).value = "0b" + bitboard.toString(2).padStart(64, '0');
-    getTextInput(10).value = bitboard.toString();
-    getTextInput(16).value = "0x" + bitboard.toString(16);
+    getBase2TextInput().value = "0b" + bitboard.toString(2).padStart(64, '0');
+    getBase10TextInput().value = bitboard.toString();
+    getBase16TextInput().value = "0x" + bitboard.toString(16);
 }
 
 function renderAll() {
