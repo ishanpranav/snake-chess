@@ -5,10 +5,13 @@
 #include "color.h"
 #include "square.h"
 
+#include <stdio.h> // printf
+
 struct AttackTable
 {
     unsigned long long pawns[SQUARES][COLORS];
     unsigned long long knights[SQUARES];
+    unsigned long long bishops[SQUARES];
     unsigned long long kings[SQUARES];
 };
 
@@ -108,6 +111,57 @@ unsigned long long createKnightBitboard(enum Square square)
     return result;
 }
 
+unsigned long long createBishopBitboard(enum Square square)
+{
+    unsigned long long result = 0ull;
+
+    int destinationRank = square / 8;
+    int destinationFile = square % 8;
+    int rank = destinationRank + 1;
+    int file = destinationFile + 1;
+
+    while (rank <= 6 && file <= 6)
+    {
+        result |= (1ull << (rank * 8 + file));
+        rank++;
+        file++;
+    }
+
+    rank = destinationRank - 1;
+    file = destinationFile + 1;
+
+    while (rank >= 1 && file <= 6)
+    {
+        result |= (1ull << (rank * 8 + file));
+        rank--;
+        file++;
+    }
+
+    rank = destinationRank + 1;
+    file = destinationFile - 1;
+
+    while (rank <= 6 && file >= 1)
+    {
+        result |= (1ull << (rank * 8 + file));
+        rank++;
+        file--;
+    }
+    
+    rank = destinationRank - 1;
+    file = destinationFile - 1;
+
+    while (rank >= 1 && file >= 1)
+    {
+        result |= (1ull << (rank * 8 + file));
+        rank--;
+        file--;
+    }
+
+    printf("%llx\n", result);
+
+    return result;
+}
+
 unsigned long long createKingBitboard(enum Square square)
 {
     unsigned long long value = 1ull << square;
@@ -150,13 +204,18 @@ unsigned long long createKingBitboard(enum Square square)
     {
         result |= h1;
     }
-    
+
     return result;
 }
 
 struct AttackTable *attack_table()
 {
     struct AttackTable *instance = malloc(sizeof *instance);
+
+    if (instance == NULL)
+    {
+        return NULL;
+    }
 
     for (enum Square square = 0; square < SQUARES; square++)
     {
@@ -166,6 +225,7 @@ struct AttackTable *attack_table()
         }
 
         instance->knights[square] = createKnightBitboard(square);
+        instance->bishops[square] = createBishopBitboard(square);
         instance->kings[square] = createKingBitboard(square);
     }
 

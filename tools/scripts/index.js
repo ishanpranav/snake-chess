@@ -31,17 +31,16 @@ function onBodyLoad() {
         }
     }
 
-    fetch("https://raw.githubusercontent.com/ishanpranav/snake-chess/main/src/bitboards.h").then(function (response) {
-        const select = getConstantSelect();
-        
-        for (const match of response.text().matchAll(/#define ([A-Za-z_]+) (0x)?([0-9A-Fa-f]+)ul/g)) {
-            select.innerHTML += `<option value="${BigInt("0x" + match[3]).toString(16)}">${match[1]}</option>`;
-        }
-    }).then(function (data) {
-        console.log(data);
-    }).catch(function (error) {
-        console.log("Fetch Error :-S", error);
-    });
+    fetch("https://raw.githubusercontent.com/ishanpranav/snake-chess/main/src/bitboards.h")
+        .then(response => response.text())
+        .then(text => {
+            const select = getConstantSelect();
+
+            for (const match of text.matchAll(/#define ([A-Za-z_]+)_MASK (0x)?([0-9A-Fa-f]+)ul/g)) {
+                select.innerHTML += `<option value="${BigInt("0x" + match[3]).toString(16)}">Bitmask: ${match[1].replaceAll('_', ' ').toLowerCase()}</option>`;
+            }
+        })
+        .catch(error => console.log("Fetch Error :-S", error));
 }
 
 function getConstantSelect() {
