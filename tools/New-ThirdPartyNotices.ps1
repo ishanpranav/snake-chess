@@ -140,7 +140,7 @@ function Out-Dependencies {
 
 $json = Get-Content -Path "../docs/licenses.json" -Raw | ConvertFrom-Json -AsHashtable   
 
-Out-ThirdPartyNotices "Third-Party Notices
+Out-ThirdPartyNotices "Third-party notices
 ===================
 This software uses third-party libraries or other resources that may be
 distributed under licenses different than the software.

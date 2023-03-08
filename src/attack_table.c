@@ -396,9 +396,9 @@ static UInt64 setOccupancy(int index, int count, UInt64 mask)
 
 AttackTable attack_table()
 {
-    AttackTable instance = malloc(sizeof *instance);
+    AttackTable this = malloc(sizeof *this);
 
-    if (instance == NULL)
+    if (this == NULL)
     {
         return NULL;
     }
@@ -407,16 +407,16 @@ AttackTable attack_table()
     {
         for (Color color = 0; color < COLORS; color++)
         {
-            instance->pawns[square][color] = createPawnBitboard(square, color);
+            this->pawns[square][color] = createPawnBitboard(square, color);
         }
 
-        instance->knights[square] = createKnightBitboard(square);
-        instance->bishops[square] = createBishopBitboard(square);
-        instance->rooks[square] = createRookBitboard(square);
-        instance->kings[square] = createKingBitboard(square);
+        this->knights[square] = createKnightBitboard(square);
+        this->bishops[square] = createBishopBitboard(square);
+        this->rooks[square] = createRookBitboard(square);
+        this->kings[square] = createKingBitboard(square);
     }
 
-    return instance;
+    return this;
 }
 
 void finalize_attack_table(AttackTable this)

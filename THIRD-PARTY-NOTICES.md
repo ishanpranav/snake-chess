@@ -1,4 +1,4 @@
-Third-Party Notices
+Third-party notices
 ===================
 This software uses third-party libraries or other resources that may be
 distributed under licenses different than the software.
