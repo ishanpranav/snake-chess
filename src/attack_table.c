@@ -418,8 +418,3 @@ AttackTable attack_table()
 
     return this;
 }
-
-void finalize_attack_table(AttackTable this)
-{
-    free(this);
-}

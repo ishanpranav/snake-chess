@@ -1,3 +1,6 @@
+#ifndef ATTACK_TABLE_H
+#define ATTACK_TABLE_H
+
 /**
  *
  */
@@ -16,4 +19,9 @@ AttackTable attack_table();
 /**
  *
  */
-void finalize_attack_table(AttackTable this);
+void finalize_attack_table(AttackTable this)
+{
+    free(this);
+}
+
+#endif
