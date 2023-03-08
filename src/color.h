@@ -9,10 +9,10 @@
 /**
  *
  */
-enum Color
+typedef enum
 {
     WHITE,
     BLACK
-};
+} Color;
 
 #endif

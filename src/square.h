@@ -9,7 +9,7 @@
 /**
  *
  */
-enum Square
+typedef enum Square
 {
     A8,
     B8,
@@ -75,6 +75,6 @@ enum Square
     F1,
     G1,
     H1,
-};
+} Square;
 
 #endif

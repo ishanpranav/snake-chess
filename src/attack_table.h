@@ -6,9 +6,14 @@ struct AttackTable;
 /**
  *
  */
-struct AttackTable *attack_table();
+typedef struct AttackTable *AttackTable;
 
 /**
  *
  */
-void finalize_attack_table(struct AttackTable *this);
+AttackTable attack_table();
+
+/**
+ *
+ */
+void finalize_attack_table(AttackTable this);
