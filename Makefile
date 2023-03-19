@@ -2,9 +2,8 @@ CC		= gcc
 CFLAGS	= -g -Wall
 EXT		= .exe
 
-all: \
-	program
-
+all: program
+	
 attack_table: src/attack_table.c
 	$(CC) $(CFLAGS) -c src/$@.c -o obj/$@.o
 

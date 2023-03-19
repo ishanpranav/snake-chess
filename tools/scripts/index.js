@@ -94,7 +94,7 @@ function onBase2TextInputChange() {
  * 
  */
 function onBase10TextInputChange() {
-    return document.getElementById("base10TextInput");
+    onTextInputChange(getBase10TextInput());
 }
 
 /**

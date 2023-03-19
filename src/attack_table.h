@@ -19,9 +19,6 @@ AttackTable attack_table();
 /**
  *
  */
-void finalize_attack_table(AttackTable this)
-{
-    free(this);
-}
+void finalize_attack_table(AttackTable this);
 
 #endif
