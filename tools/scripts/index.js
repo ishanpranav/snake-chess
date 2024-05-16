@@ -1,12 +1,15 @@
 var bitboard = 0n;
 
 /**
- * 
+ *
  */
 function onBodyLoad() {
     // Bootstrap
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    const toolTipList = [...tooltipTriggerList].map(x => new bootstrap.Tooltip(x));
+    const tooltipTriggerList = document.querySelectorAll(
+        '[data-bs-toggle="tooltip"]'
+    );
+
+    [...tooltipTriggerList].map((x) => new bootstrap.Tooltip(x));
 
     let index = 63;
 
@@ -31,16 +34,24 @@ function onBodyLoad() {
         }
     }
 
-    fetch("https://raw.githubusercontent.com/ishanpranav/snake-chess/main/src/bitboards.h")
-        .then(response => response.text())
-        .then(text => {
+    fetch(
+        "https://raw.githubusercontent.com/ishanpranav/snake-chess/main/src/bitboards.h"
+    )
+        .then((response) => response.text())
+        .then((text) => {
             const select = getConstantSelect();
 
-            for (const match of text.matchAll(/#define ([A-Za-z_]+)_MASK (0x)?([0-9A-Fa-f]+)ull/g)) {
-                select.innerHTML += `<option value="${BigInt("0x" + match[3]).toString(16)}">Bitmask: ${match[1].replaceAll('_', ' ').toLowerCase()}</option>`;
+            for (const match of text.matchAll(
+                /#define ([A-Za-z_]+)_MASK (0x)?([0-9A-Fa-f]+)ull/g
+            )) {
+                select.innerHTML += `<option value="${BigInt(
+                    "0x" + match[3]
+                ).toString(16)}">Bitmask: ${match[1]
+                    .replaceAll("_", " ")
+                    .toLowerCase()}</option>`;
             }
         })
-        .catch(error => console.log("Fetch Error :-S", error));
+        .catch((error) => console.log("Fetch Error :-S", error));
 }
 
 function getConstantSelect() {
@@ -78,12 +89,12 @@ function getBase16TextInput() {
 }
 
 /**
- * 
+ *
  */
 function onBase2TextInputChange() {
     const textInput = getBase2TextInput();
 
-    if (!textInput.value.startsWith("0b")){
+    if (!textInput.value.startsWith("0b")) {
         textInput.value = "0b" + textInput.value;
     }
 
@@ -91,22 +102,22 @@ function onBase2TextInputChange() {
 }
 
 /**
- * 
+ *
  */
 function onBase10TextInputChange() {
     onTextInputChange(getBase10TextInput());
 }
 
 /**
- * 
+ *
  */
 function onBase16TextInputChange() {
     const textInput = document.getElementById("base16TextInput");
 
-    if (!textInput.value.startsWith("0x")){
+    if (!textInput.value.startsWith("0x")) {
         textInput.value = "0x" + textInput.value;
     }
-    
+
     onTextInputChange(textInput);
 }
 
@@ -114,7 +125,10 @@ function onTextInputChange(textInput) {
     let value;
 
     if (textInput.value.endsWith("ull")) {
-        textInput.value = textInput.value.substring(0, textInput.value.length - 3);
+        textInput.value = textInput.value.substring(
+            0,
+            textInput.value.length - 3
+        );
     }
 
     try {
@@ -131,15 +145,15 @@ function onTextInputChange(textInput) {
 }
 
 /**
- * 
+ *
  */
 function onNotButtonClick() {
     let result = 0n;
 
-    for (const bit of bitboard.toString(2).padStart(64, '0')) {
+    for (const bit of bitboard.toString(2).padStart(64, "0")) {
         result <<= 1n;
 
-        if (bit == '0') {
+        if (bit == "0") {
             result++;
         }
     }
@@ -150,7 +164,7 @@ function onNotButtonClick() {
 }
 
 /**
- * 
+ *
  */
 function onLeftShiftButtonClick() {
     bitboard <<= 1n;
@@ -159,7 +173,7 @@ function onLeftShiftButtonClick() {
 }
 
 /**
- * 
+ *
  */
 function onRightShiftButtonClick() {
     bitboard >>= 1n;
@@ -169,7 +183,7 @@ function onRightShiftButtonClick() {
 
 function renderText() {
     getConstantSelect().value = bitboard.toString(16);
-    getBase2TextInput().value = "0b" + bitboard.toString(2).padStart(64, '0');
+    getBase2TextInput().value = "0b" + bitboard.toString(2).padStart(64, "0");
     getBase10TextInput().value = bitboard.toString();
     getBase16TextInput().value = "0x" + bitboard.toString(16);
 }
@@ -177,8 +191,8 @@ function renderText() {
 function renderAll() {
     let i = 0;
 
-    for (const bit of bitboard.toString(2).padStart(64, '0')) {
-        if (bit == '1') {
+    for (const bit of bitboard.toString(2).padStart(64, "0")) {
+        if (bit == "1") {
             getCheckBoxInput(i).checked = true;
         } else {
             getCheckBoxInput(i).checked = false;
@@ -191,7 +205,7 @@ function renderAll() {
 }
 
 /**
- * 
+ *
  */
 function onConstantSelectChange() {
     bitboard = BigInt("0x" + getConstantSelect().value);
