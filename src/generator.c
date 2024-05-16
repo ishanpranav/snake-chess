@@ -220,12 +220,42 @@ static uint64_t generate_bishop_mask(Square square)
     return result;
 }
 
+static uint64_t generate_rook_mask(Square square)
+{
+    uint64_t result = 0;
+    Rank targetRank = square / 8;
+    File targetFile = square % 8;
+
+    for (Rank rank = targetRank + 1; rank <= RANK_SEVENTH; rank++)
+    {
+        result |= bitboard(rank * 8 + targetFile);
+    }
+
+    for (int rank = targetRank - 1; rank >= RANK_SECOND; rank--)
+    {
+        result |= bitboard(rank * 8 + targetFile);
+    }
+
+    for (File file = targetFile + 1; file <= FILE_G; file++)
+    {
+        result |= bitboard(targetRank * 8 + file);
+    }
+
+    for (int file = targetFile - 1; file >= FILE_B; file--)
+    {
+        result |= bitboard(targetRank * 8 + file);
+    }
+
+    return result;
+}
+
 static void leaper_attack_table()
 {
     for (Square square = 0; square < SQUARES; square++)
     {
         pawnAttacks[COLOR_WHITE][square] = generate_white_pawn_mask(square);
         pawnAttacks[COLOR_BLACK][square] = generate_black_pawn_mask(square);
+        knightAttacks[square] = generate_knight_mask(square);
         kingAttacks[square] = generate_king_mask(square);
     }
 }
@@ -233,7 +263,7 @@ static void leaper_attack_table()
 int main(void)
 {
     for (Square square = 0; square < SQUARES; square++)
-        bitboard_write_string(stdout, generate_bishop_mask(square));
+        bitboard_write_string(stdout, generate_rook_mask(square));
 
     return 0;
 }
