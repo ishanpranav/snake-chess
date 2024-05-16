@@ -35,14 +35,14 @@ function onBodyLoad() {
     }
 
     fetch(
-        "https://raw.githubusercontent.com/ishanpranav/snake-chess/main/src/bitboards.h"
+        "https://raw.githubusercontent.com/ishanpranav/snake-chess/main/lib/bitboard.h"
     )
         .then((response) => response.text())
         .then((text) => {
             const select = getConstantSelect();
 
             for (const match of text.matchAll(
-                /#define ([A-Za-z_]+)_MASK (0x)?([0-9A-Fa-f]+)ull/g
+                /#define BITBOARD_([A-Za-z_]+) (0x)?([0-9A-Fa-f]+)ull/g
             )) {
                 select.innerHTML += `<option value="${BigInt(
                     "0x" + match[3]
