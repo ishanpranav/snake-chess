@@ -5,7 +5,6 @@
 #include "../lib/color.h"
 #include "../lib/file.h"
 #include "../lib/rank.h"
-#include "../lib/square.h"
 
 uint64_t pawnAttacks[COLORS][SQUARES];
 uint64_t knightAttacks[SQUARES];
@@ -403,11 +402,14 @@ int main(void)
 
     bitboard_set(obstacles, SQUARE_D7);
     bitboard_set(obstacles, SQUARE_D2);
-    bitboard_set(obstacles, SQUARE_C4);
+    bitboard_set(obstacles, SQUARE_D1);
+    bitboard_set(obstacles, SQUARE_B4);
     bitboard_set(obstacles, SQUARE_G4);
 
-    bitboard_write_string(stdout, obstacles);
-    bitboard_write_string(stdout, generate_rook_attacks(SQUARE_D4, obstacles));
+    printf("%s\n", square_to_string(bitboard_first(obstacles)));
+
+    // bitboard_write_string(stdout, obstacles);
+    // bitboard_write_string(stdout, generate_rook_attacks(SQUARE_D4, obstacles));
 
     return 0;
 }

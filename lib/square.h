@@ -73,3 +73,9 @@ enum Square
 
 /** */
 typedef enum Square Square;
+
+/**
+ *
+ * @param value
+*/
+const char* square_to_string(Square value);
