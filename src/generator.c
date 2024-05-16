@@ -11,7 +11,7 @@ uint64_t pawnAttacks[COLORS][SQUARES];
 uint64_t knightAttacks[SQUARES];
 uint64_t kingAttacks[SQUARES];
 
-static uint64_t generate_white_pawn_attacks(Square square)
+static uint64_t generate_white_pawn_mask(Square square)
 {
     uint64_t value = 0;
 
@@ -34,7 +34,7 @@ static uint64_t generate_white_pawn_attacks(Square square)
     return result;
 }
 
-static uint64_t generate_black_pawn_attacks(Square square)
+static uint64_t generate_black_pawn_mask(Square square)
 {
     uint64_t value = 0;
 
@@ -57,7 +57,7 @@ static uint64_t generate_black_pawn_attacks(Square square)
     return result;
 }
 
-static uint64_t generate_knight_attacks(Square square)
+static uint64_t generate_knight_mask(Square square)
 {
     uint64_t value = 0;
     uint64_t result = 0;
@@ -116,7 +116,7 @@ static uint64_t generate_knight_attacks(Square square)
     return result;
 }
 
-static uint64_t generate_king_attacks(Square square)
+static uint64_t generate_king_mask(Square square)
 {
     uint64_t value = 0;
     uint64_t result = 0;
@@ -172,22 +172,68 @@ static uint64_t generate_king_attacks(Square square)
     return result;
 }
 
+static uint64_t generate_bishop_mask(Square square)
+{
+    uint64_t result = 0;
+    Rank targetRank = square / 8;
+    File targetFile = square % 8;
+    int rank = targetRank + 1;
+    int file = targetFile + 1;
+
+    while (rank <= RANK_SEVENTH && file <= FILE_G)
+    {
+        result |= bitboard(rank * 8 + file);
+        rank++;
+        file++;
+    }
+
+    rank = targetRank - 1;
+    file = targetFile + 1;
+
+    while (rank >= RANK_SECOND && file <= FILE_G)
+    {
+        result |= bitboard(rank * 8 + file);
+        rank--;
+        file++;
+    }
+
+    rank = targetRank + 1;
+    file = targetFile - 1;
+
+    while (rank <= RANK_SEVENTH && file >= FILE_B)
+    {
+        result |= bitboard(rank * 8 + file);
+        rank++;
+        file--;
+    }
+
+    rank = targetRank - 1;
+    file = targetFile - 1;
+
+    while (rank >= RANK_SECOND && file >= FILE_B)
+    {
+        result |= bitboard(rank * 8 + file);
+        rank--;
+        file--;
+    }
+
+    return result;
+}
+
 static void leaper_attack_table()
 {
     for (Square square = 0; square < SQUARES; square++)
     {
-        pawnAttacks[COLOR_WHITE][square] = generate_white_pawn_attacks(square);
-        pawnAttacks[COLOR_BLACK][square] = generate_black_pawn_attacks(square);
-        kingAttacks[square] = generate_king_attacks(square);
-
-        bitboard_write_string(stdout, kingAttacks[square]);
+        pawnAttacks[COLOR_WHITE][square] = generate_white_pawn_mask(square);
+        pawnAttacks[COLOR_BLACK][square] = generate_black_pawn_mask(square);
+        kingAttacks[square] = generate_king_mask(square);
     }
 }
 
 int main(void)
 {
-    leaper_attack_table();
-    //bitboard_write_string(stdout, generate_knight_attacks(SQUARE_B4));
+    for (Square square = 0; square < SQUARES; square++)
+        bitboard_write_string(stdout, generate_bishop_mask(square));
 
     return 0;
 }

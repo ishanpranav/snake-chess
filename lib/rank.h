@@ -4,7 +4,15 @@
 /** */
 enum Rank
 {
-    RANKS = 8
+    RANK_FIRST,
+    RANK_SECOND,
+    RANK_THIRD,
+    RANK_FOURTH,
+    RANK_FIFTH,
+    RANK_SIXTH,
+    RANK_SEVENTH,
+    RANK_EIGHTH,
+    RANKS
 };
 
 /** */

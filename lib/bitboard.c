@@ -19,7 +19,7 @@ void bitboard_write_string(FILE* output, uint64_t value)
         {
             Square square = rank * 8 + file;
 
-            fprintf(output, " %d ", bitboard_get(value, square) ? 1 : 0);
+            fprintf(output, " %c ", bitboard_get(value, square) ? '#' : '-');
         }
 
         fprintf(output, "\n");
@@ -27,6 +27,9 @@ void bitboard_write_string(FILE* output, uint64_t value)
 
     fprintf(
         output,
-        "\n      a  b  c  d  e  f  g  h\n\nValue: %" PRIu64 "\n",
+        "\n      a  b  c  d  e  f  g  h" "\n\n"
+        "Dec: %" PRIu64 "\n"
+        "Hex: 0x%" PRIx64 "\n",
+        value,
         value);
 }
