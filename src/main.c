@@ -1,8 +1,10 @@
 // main.c
 // Licensed under the MIT license.
 
-#include <stdio.h>
+#include "../lib/bitboard.h"
+#include "../lib/square.h"
 
 int main(void)
 {
+    return 0;
 }

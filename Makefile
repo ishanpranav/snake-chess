@@ -1,17 +1,7 @@
-CC		= gcc
-CFLAGS	= -g -Wall
-EXT		= .exe
+CC = gcc -O3 -Wall -Wextra
 
-all: program
-	
-attack_table: src/attack_table.c
-	$(CC) $(CFLAGS) -c src/$@.c -o obj/$@.o
+all: bitboard
+	$(CC) src/main.c bitboard.o -o main
 
-program: \
-	attack_table \
-	src/program.c
-
-	$(CC) $(CFLAGS) src/$@.c obj/attack_table.o -o bin/$@$(EXT)
-
-clean:
-	rm -f *~ obj/* bin/* *.gch core a.out
+bitboard:
+	$(CC) -c lib/bitboard.c

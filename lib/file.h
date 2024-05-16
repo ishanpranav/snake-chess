@@ -1,6 +1,7 @@
 // file.h
 // Licensed under the MIT license.
 
+/** */
 enum File
 {
     FILE_A,
@@ -14,4 +15,5 @@ enum File
     FILES
 };
 
+/** */
 typedef enum File File;
