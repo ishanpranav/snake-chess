@@ -6,6 +6,30 @@
 #include "../lib/file.h"
 #include "../lib/rank.h"
 
+const int bishopRelevantOccupancyCounts[] =
+{
+    6, 5, 5, 5, 5, 5, 5, 6,
+    5, 5, 5, 5, 5, 5, 5, 5,
+    5, 5, 7, 7, 7, 7, 5, 5,
+    5, 5, 7, 9, 9, 7, 5, 5,
+    5, 5, 7, 9, 9, 7, 5, 5,
+    5, 5, 7, 7, 7, 7, 5, 5,
+    5, 5, 5, 5, 5, 5, 5, 5,
+    6, 5, 5, 5, 5, 5, 5, 6
+};
+
+const int rookRelevantOccupancyCounts[] =
+{
+    12, 11, 11, 11, 11, 11, 11, 12,
+    11, 10, 10, 10, 10, 10, 10, 11,
+    11, 10, 10, 10, 10, 10, 10, 11,
+    11, 10, 10, 10, 10, 10, 10, 11,
+    11, 10, 10, 10, 10, 10, 10, 11,
+    11, 10, 10, 10, 10, 10, 10, 11,
+    11, 10, 10, 10, 10, 10, 10, 11,
+    12, 11, 11, 11, 11, 11, 11, 12
+};
+
 uint64_t pawnAttacks[COLORS][SQUARES];
 uint64_t knightAttacks[SQUARES];
 uint64_t kingAttacks[SQUARES];
@@ -171,7 +195,7 @@ static uint64_t generate_king_attacks(Square square)
     return result;
 }
 
-static uint64_t generate_bishop_mask(Square square)
+static uint64_t generate_bishop_relevant_occupancies(Square square)
 {
     uint64_t result = 0;
     Rank targetRank = square / 8;
@@ -219,7 +243,7 @@ static uint64_t generate_bishop_mask(Square square)
     return result;
 }
 
-static uint64_t generate_rook_mask(Square square)
+static uint64_t generate_rook_relevant_occupancies(Square square)
 {
     uint64_t result = 0;
     Rank targetRank = square / 8;
@@ -415,18 +439,15 @@ static uint64_t lookup_occupancy(int index, uint64_t attacks, int count)
     return result;
 }
 
+#include "../ishan/random.h"
+
 int main(void)
 {
     leaper_attack_table();
 
-    uint64_t attacks = generate_rook_mask(SQUARE_E4);
+    uint32_t x = 12004;
 
-    for (int i = 0; i < 4096; i++)
-    {
-        uint64_t value = lookup_occupancy(i, attacks, bitboard_count(attacks));
-
-        bitboard_write_string(stdout, value);
-    }
+    printf("%d", (int)xorshift32_random32(&x));
 
     return 0;
 }
