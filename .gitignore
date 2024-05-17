@@ -4,3 +4,4 @@ obj/
 main
 generator
 *.o
+*.a
