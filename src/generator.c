@@ -396,20 +396,37 @@ static void leaper_attack_table()
     }
 }
 
+static uint64_t lookup_occupancy(int index, uint64_t attacks, int count)
+{
+    uint64_t result = 0;
+
+    for (int n = 0; n < count; n++)
+    {
+        Square square = bitboard_first(attacks);
+
+        bitboard_clear(attacks, square);
+
+        if (index & (1 << n))
+        {
+            bitboard_set(result, square);
+        }
+    }
+
+    return result;
+}
+
 int main(void)
 {
-    uint64_t obstacles = 0;
+    leaper_attack_table();
 
-    bitboard_set(obstacles, SQUARE_D7);
-    bitboard_set(obstacles, SQUARE_D2);
-    bitboard_set(obstacles, SQUARE_D1);
-    bitboard_set(obstacles, SQUARE_B4);
-    bitboard_set(obstacles, SQUARE_G4);
+    uint64_t attacks = generate_rook_mask(SQUARE_E4);
 
-    printf("%s\n", square_to_string(bitboard_first(obstacles)));
+    for (int i = 0; i < 4096; i++)
+    {
+        uint64_t value = lookup_occupancy(i, attacks, bitboard_count(attacks));
 
-    // bitboard_write_string(stdout, obstacles);
-    // bitboard_write_string(stdout, generate_rook_attacks(SQUARE_D4, obstacles));
+        bitboard_write_string(stdout, value);
+    }
 
     return 0;
 }
