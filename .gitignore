@@ -3,5 +3,6 @@ bin/
 obj/
 main
 generator
+magic
 *.o
 *.a

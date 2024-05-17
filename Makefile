@@ -1,20 +1,26 @@
 CC = gcc -L. -O3 -Wall -Wextra
 
-all: bitboard square
-	$(CC) src/main.c bitboard.o square.o -o main
+all: libsnake
+	$(CC) src/main.c -o main -lsnake
 
-generator: bitboard square libeuler
-	$(CC) src/generator.c bitboard.o square.o -o generator -leuler
+generator: libeuler libsnake
+	$(CC) src/generator.c -o generator -leuler -lsnake
 
+magic: libeuler libsnake
+	$(CC) src/magic.c -o magic -leuler -lsnake
+	
 libeuler: xorshift32_random
 	ar -r libeuler.a xorshift32_random.o
+
+libsnake: bitboard sliding square
+	ar -r libsnake.a bitboard.o sliding.o square.o
 
 bitboard:
 	$(CC) -c lib/bitboard.c
 
-magic:
-	$(CC) -c lib/magic.c
-	
+sliding:
+	$(CC) -c lib/sliding.c
+
 square:
 	$(CC) -c lib/square.c
 
