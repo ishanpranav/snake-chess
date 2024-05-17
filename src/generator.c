@@ -439,15 +439,9 @@ static uint64_t lookup_occupancy(int index, uint64_t attacks, int count)
     return result;
 }
 
-#include "../ishan/random.h"
-
 int main(void)
 {
     leaper_attack_table();
-
-    uint32_t x = 12004;
-
-    printf("%d", (int)xorshift32_random32(&x));
 
     return 0;
 }

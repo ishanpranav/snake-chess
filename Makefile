@@ -12,6 +12,9 @@ libeuler: xorshift32_random
 bitboard:
 	$(CC) -c lib/bitboard.c
 
+magic:
+	$(CC) -c lib/magic.c
+	
 square:
 	$(CC) -c lib/square.c
 
