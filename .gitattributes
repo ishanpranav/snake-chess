@@ -3,4 +3,4 @@
 
 * text=auto
 THIRD-PARTY-NOTICES.md linguist-generated
-ishan/ linguist-vendored
+docs/** -linguist-documentation
