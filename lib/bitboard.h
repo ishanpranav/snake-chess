@@ -9,11 +9,6 @@
 #define BITBOARD_NOT_FILES_A_OR_B 0xfcfcfcfcfcfcfcfcull
 #define BITBOARD_NOT_FILES_H_OR_G 0x3f3f3f3f3f3f3f3full
 #define bitboard(square) (1ull << (square))
-#define bitboard_get(value, square) (value & bitboard(square))
-#define bitboard_set(value, square) (value |= bitboard(square))
-#define bitboard_toggle(value, square) (value ^= bitboard(square))
-#define bitboard_clear(value, square) \
-    (bitboard_get(value, square) ? bitboard_toggle(value, square) : 0)
 #ifdef __GNUC__
 #define bitboard_count(value) __builtin_popcountll(value)
 #else

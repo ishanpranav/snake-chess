@@ -43,7 +43,7 @@ void bitboard_write_string(FILE* output, uint64_t value)
         {
             Square square = rank * 8 + file;
 
-            fprintf(output, " %c ", bitboard_get(value, square) ? '#' : '.');
+            fprintf(output, " %c ", value & bitboard(square) ? '#' : '.');
         }
 
         fprintf(output, "\n");
