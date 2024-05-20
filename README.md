@@ -14,7 +14,7 @@ The Snake Chess engine is based on the techniques described in the
 
 To visualize and understand the magic constants involved in bitboard
 manipulation, I have created a companion web application available
-[here](https://ishanpranav.github.io/snake-chess/tools/index.html).
+[here](https://ishanpranav.github.io/snake-chess/).
 The tool enables rapid experimentation with bitboard data structures.
 
 ## License

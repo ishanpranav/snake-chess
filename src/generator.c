@@ -408,7 +408,7 @@ static uint64_t lookup_occupancies(
     {
         Square square = bitboard_first(relevantOccupancies);
 
-        relevantOccupancies ^= bitboard(square);
+        relevantOccupancies &= ~bitboard(square);
 
         if (index & (1 << sublength))
         {
