@@ -18,6 +18,19 @@ void board(Board instance)
     memset(instance->pieces, 0, sizeof instance->pieces);
 }
 
+static Piece board_get_occupant(Board instance, uint64_t square)
+{
+    for (Piece piece = 0; piece < PIECES; piece++)
+    {
+        if (instance->pieces[piece] & square)
+        {
+            return piece;
+        }
+    }
+
+    return PIECES;
+}
+
 void board_write_string(Stream output, Board instance, Encoding encoding)
 {
     fprintf(output, "\n");
@@ -28,20 +41,10 @@ void board_write_string(Stream output, Board instance, Encoding encoding)
 
         for (File file = 0; file < FILES; file++)
         {
-            uint64_t squareBitboard = bitboard(rank * 8 + file);
-            Piece occupant = PIECES;
+            uint64_t square = bitboard(rank * 8 + file);
+            Piece piece = board_get_occupant(instance, square);
 
-            for (Piece piece = 0; piece < PIECES; piece++)
-            {
-                if (instance->pieces[piece] & squareBitboard)
-                {
-                    occupant = piece;
-
-                    break;
-                }
-            }
-
-            fprintf(output, " %s ", piece_to_string(occupant, encoding));
+            fprintf(output, " %s ", piece_to_string(piece, encoding));
         }
 
         fprintf(output, "\n");
