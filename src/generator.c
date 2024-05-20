@@ -488,22 +488,16 @@ static uint64_t get_rook_attacks(Square square, uint64_t obstacles)
     return rookAttacks[square][obstacles];
 }
 
+#include "../lib/board.h"
+
 int main(void)
 {
     attack_table();
 
-    uint64_t obstacles = 0;
+    struct Board b;
 
-    obstacles |= bitboard(SQUARE_C5);
-    obstacles |= bitboard(SQUARE_F2);
-    obstacles |= bitboard(SQUARE_G7);
-    obstacles |= bitboard(SQUARE_B2);
-    obstacles |= bitboard(SQUARE_G5);
-    obstacles |= bitboard(SQUARE_E2);
-    obstacles |= bitboard(SQUARE_E7);
-
-    bitboard_write_string(stdout, get_bishop_attacks(SQUARE_D4, obstacles));
-    bitboard_write_string(stdout, get_rook_attacks(SQUARE_E5, obstacles));
+    board(&b);
+    board_write_string(stdout, &b, ENCODING_UNICODE);
 
     return 0;
 }

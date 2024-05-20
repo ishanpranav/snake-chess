@@ -3,6 +3,7 @@
 
 #ifndef SQUARE_47e030336a86415696e9ecf35d9b726c
 #define SQUARE_47e030336a86415696e9ecf35d9b726c
+#include "../ishan/euler.h"
 
 /** */
 enum Square
@@ -80,7 +81,8 @@ typedef enum Square Square;
 /**
  *
  * @param value
+ * @return
 */
-const char* square_to_string(Square value);
+String square_to_string(Square value);
 
 #endif

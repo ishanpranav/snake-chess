@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include "../ishan/stream.h"
 #include "square.h"
 #define BITBOARD_NOT_FILE_A 0xfefefefefefefefeull
 #define BITBOARD_NOT_FILE_H 0x7f7f7f7f7f7f7f7full
@@ -27,4 +28,4 @@ Square bitboard_first(uint64_t value);
  * @param output
  * @param value
 */
-void bitboard_write_string(FILE* output, uint64_t value);
+void bitboard_write_string(Stream output, uint64_t value);
