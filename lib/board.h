@@ -38,6 +38,54 @@ void board_from_fen_string(Board result, String value);
 
 /**
  *
+ * @param instance
+ * @param color
+ * @return
+*/
+uint64_t board_get_pawns(Board instance, Color color);
+
+/**
+ *
+ * @param instance
+ * @param color
+ * @return
+*/
+uint64_t board_get_knights(Board instance, Color color);
+
+/**
+ *
+ * @param instance
+ * @param color
+ * @return
+*/
+uint64_t board_get_bishops(Board instance, Color color);
+
+/**
+ *
+ * @param instance
+ * @param color
+ * @return
+*/
+uint64_t board_get_rooks(Board instance, Color color);
+
+/**
+ *
+ * @param instance
+ * @param color
+ * @return
+*/
+uint64_t board_get_queens(Board instance, Color color);
+
+/**
+ *
+ * @param instance
+ * @param color
+ * @return
+*/
+uint64_t board_get_kings(Board instance, Color color);
+
+/**
+ *
  * @param output
  * @param instance
  * @param encoding

@@ -1,8 +1,6 @@
 // color.h
 // Licensed under the MIT license.
 
-#ifndef COLOR_c4598acdc65d4a60b9ef829a6c11d757
-#define COLOR_c4598acdc65d4a60b9ef829a6c11d757
 #include "../ishan/euler.h"
 
 /** */
@@ -29,5 +27,3 @@ Color color_from_fen_char(char value);
  * @return
 */
 String color_to_string(Color value);
-
-#endif

@@ -1,8 +1,9 @@
 // generator.c
 // Licensed under the MIT license.
 
+#include <stdbool.h>
 #include "../lib/bitboard.h"
-#include "../lib/color.h"
+#include "../lib/board.h"
 #include "../lib/file.h"
 #include "../lib/rank.h"
 
@@ -132,48 +133,45 @@ static uint64_t generate_knight_attacks(Square square)
 
 static uint64_t generate_king_attacks(Square square)
 {
-    uint64_t value = 0;
-    uint64_t result = bitboard(square);
+    uint64_t result = 0;
+    uint64_t value = bitboard(square);
     uint64_t a = value >> 1;
+    uint64_t b = value >> 7;
+    uint64_t c = value >> 8;
+    uint64_t d = value >> 9;
+    uint64_t e = value << 1;
+    uint64_t f = value << 7;
+    uint64_t g = value << 8;
+    uint64_t h = value << 9;
 
     if (a & BITBOARD_NOT_FILE_H)
     {
         result |= a;
     }
 
-    uint64_t b = value >> 7;
-
     if (b & BITBOARD_NOT_FILE_A)
     {
         result |= b;
     }
 
-    result |= (value >> 8);
-
-    uint64_t d = value >> 9;
+    result |= c;
 
     if (d & BITBOARD_NOT_FILE_H)
     {
         result |= d;
     }
 
-    uint64_t e = value << 1;
-
     if (e & BITBOARD_NOT_FILE_A)
     {
         result |= e;
     }
-
-    uint64_t f = value << 7;
 
     if (f & BITBOARD_NOT_FILE_H)
     {
         result |= f;
     }
 
-    result |= (value << 8);
-
-    uint64_t h = value << 9;
+    result |= g;
 
     if (h & BITBOARD_NOT_FILE_A)
     {
@@ -488,19 +486,50 @@ static uint64_t get_rook_attacks(Square square, uint64_t obstacles)
     return rookAttacks[square][obstacles];
 }
 
-static uint64_t get_queen_attacks(Square square, uint64_t obstacles)
+static bool is_square_attacked(Board board, Square square, Color color)
 {
-    uint64_t bishopAttacks = get_bishop_attacks(square, obstacles);
-    uint64_t rookAttacks = get_rook_attacks(square, obstacles);
+    if ((knightAttacks[square] & board_get_knights(board, color)) ||
+        (kingAttacks[square] & board_get_kings(board, color)) ||
+        (pawnAttacks[!color][square] & board_get_pawns(board, color)))
+    {
+        return true;
+    }
 
-    return bishopAttacks | rookAttacks;
+    uint64_t bishopAttacks = get_bishop_attacks(square, board->squares);
+
+    if (bishopAttacks & board_get_bishops(board, color))
+    {
+        return true;
+    }
+
+    uint64_t rookAttacks = get_rook_attacks(square, board->squares);
+
+    if (rookAttacks & board_get_rooks(board, color))
+    {
+        return true;
+    }
+
+    return (bishopAttacks | rookAttacks) & board_get_queens(board, color);
 }
-
-#include "../lib/board.h"
 
 int main(void)
 {
     attack_table();
+
+    struct Board b;
+
+    board_from_fen_string(&b, BOARD_INITIAL);
+    board_write_string(stdout, &b, ENCODING_UNICODE);
+
+    uint64_t bb = 0;
+
+    for (Square s = 0; s < SQUARES; s++) {
+        if (is_square_attacked(&b, s, COLOR_BLACK)) {
+            bb |= bitboard(s);
+        }
+    }
+
+    bitboard_write_string(stdout, bb);
 
     return 0;
 }

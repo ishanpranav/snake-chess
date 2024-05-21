@@ -85,6 +85,36 @@ void board_from_fen_string(Board result, String value)
     }
 }
 
+uint64_t board_get_pawns(Board instance, Color color)
+{
+    return instance->pieces[color ? PIECE_BLACK_PAWN : PIECE_WHITE_PAWN];
+}
+
+uint64_t board_get_knights(Board instance, Color color)
+{
+    return instance->pieces[color ? PIECE_BLACK_KNIGHT : PIECE_WHITE_KNIGHT];
+}
+
+uint64_t board_get_bishops(Board instance, Color color)
+{
+    return instance->pieces[color ? PIECE_BLACK_BISHOP : PIECE_WHITE_BISHOP];
+}
+
+uint64_t board_get_rooks(Board instance, Color color)
+{
+    return instance->pieces[color ? PIECE_BLACK_ROOK : PIECE_WHITE_ROOK];
+}
+
+uint64_t board_get_queens(Board instance, Color color)
+{
+    return instance->pieces[color ? PIECE_BLACK_QUEEN : PIECE_WHITE_QUEEN];
+}
+
+uint64_t board_get_kings(Board instance, Color color)
+{
+    return instance->pieces[color ? PIECE_BLACK_KING : PIECE_WHITE_KING];
+}
+
 void board_write_string(Stream output, Board instance, Encoding encoding)
 {
     fprintf(output, "\n");
