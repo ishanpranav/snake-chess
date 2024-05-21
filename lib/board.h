@@ -15,9 +15,9 @@ struct Board
     uint64_t squares;
     uint64_t colors[COLORS];
     uint64_t pieces[PIECES];
-    CastlingRights castlingRights;
-    Color color;
-    Square enPassant;
+    enum CastlingRights castlingRights;
+    enum Color color;
+    enum Square enPassant;
 };
 
 /** */

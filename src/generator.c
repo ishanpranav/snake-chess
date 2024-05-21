@@ -488,16 +488,19 @@ static uint64_t get_rook_attacks(Square square, uint64_t obstacles)
     return rookAttacks[square][obstacles];
 }
 
+static uint64_t get_queen_attacks(Square square, uint64_t obstacles)
+{
+    uint64_t bishopAttacks = get_bishop_attacks(square, obstacles);
+    uint64_t rookAttacks = get_rook_attacks(square, obstacles);
+
+    return bishopAttacks | rookAttacks;
+}
+
 #include "../lib/board.h"
 
 int main(void)
 {
     attack_table();
-
-    struct Board b;
-
-    board_from_fen_string(&b, BOARD_INITIAL);
-    board_write_string(stdout, &b, ENCODING_UNICODE);
 
     return 0;
 }
