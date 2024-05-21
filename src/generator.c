@@ -14,8 +14,8 @@ static bool is_square_attacked(
     Square square,
     Color color)
 {
-    if ((attacks->knights[square] & board_get_knights(board, color)) ||
-        (attacks->kings[square] & board_get_kings(board, color)) ||
+    if ((attacks->kings[square] & board_get_kings(board, color)) ||
+        (attacks->knights[square] & board_get_knights(board, color)) ||
         (attacks->pawns[!color][square] & board_get_pawns(board, color)))
     {
         return true;

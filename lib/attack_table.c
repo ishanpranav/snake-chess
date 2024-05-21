@@ -436,12 +436,12 @@ void attack_table(AttackTable instance)
 {
     for (Square square = 0; square < SQUARES; square++)
     {
+        instance->kings[square] = attack_table_generate_kings(square);
+        instance->knights[square] = attack_table_generate_knights(square);
         instance->pawns[COLOR_WHITE][square] =
             attack_table_generate_white_pawns(square);
         instance->pawns[COLOR_BLACK][square] =
             attack_table_generate_black_pawns(square);
-        instance->knights[square] = attack_table_generate_knights(square);
-        instance->kings[square] = attack_table_generate_kings(square);
 
         uint64_t relevantOccupancies =
             attack_table_generate_bishop_relevant_occupancies(square);
