@@ -1,3 +1,7 @@
+<!-- Makefile -->
+<!-- Copyright (c) 2024 Ishan Pranav -->
+<!-- Licensed under the MIT license. -->
+
 # Snake
 
 This is a student-developed chess engine that I created as an exercise to gain a
