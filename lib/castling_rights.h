@@ -1,6 +1,7 @@
 // castling_rights.h
 // Licensed under the MIT license.
 
+#include "../ishan/euler.h"
 #include "../ishan/stream.h"
 
 /** */
@@ -15,6 +16,13 @@ enum CastlingRights
 
 /** */
 typedef enum CastlingRights CastlingRights;
+
+/**
+ *
+ * @param value
+ * @return
+*/
+CastlingRights castling_rights_from_fen_string(String value);
 
 /**
  *

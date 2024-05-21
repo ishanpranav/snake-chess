@@ -38,17 +38,50 @@ void board_from_fen_string(Board result, String value)
 
     for (Rank rank = 0; rank < RANKS; rank++)
     {
-        for (File file = 0; file < FILES; file++)
+        for (File file = 0; file < FILES; value++)
         {
-            char symbol = value[0];
+            Piece piece = piece_from_fen_char(*value);
 
-            if (isalpha(symbol))
+            if (piece != PIECES)
             {
-                Piece piece = piece_from_ascii_char(symbol);
-
                 result->pieces[piece] |= bitboard(rank * 8 + file);
+                file++;
+
+                continue;
+            }
+
+            if (isdigit(*value))
+            {
+                int offset = *value - '0';
+
+                file += offset;
             }
         }
+    }
+
+    value++;
+    result->color = color_from_fen_char(*value);
+    value += 2;
+    result->castlingRights = castling_rights_from_fen_string(value);
+
+    for (; *value && *value != ' '; value++) {}
+
+    value++;
+    result->enPassant = square_from_fen_string(value);
+
+    for (Piece piece = PIECE_WHITE_PAWN; piece <= PIECE_WHITE_KING; piece++)
+    {
+        result->colors[COLOR_WHITE] |= result->pieces[piece];
+    }
+
+    for (Piece piece = PIECE_BLACK_PAWN; piece <= PIECE_BLACK_KING; piece++)
+    {
+        result->colors[COLOR_BLACK] |= result->pieces[piece];
+    }
+
+    for (Color color = 0; color < COLORS; color++)
+    {
+        result->squares |= result->colors[color];
     }
 }
 
@@ -75,7 +108,7 @@ void board_write_string(Stream output, Board instance, Encoding encoding)
         output,
         "\n      a  b  c  d  e  f  g  h\n\n"
         "%s to move\n"
-        "en passant: %s    castle: ",
+        "en passant: %s  castle: ",
         color_to_string(instance->color),
         square_to_string(instance->enPassant));
     castling_rights_write_string(output, instance->castlingRights);

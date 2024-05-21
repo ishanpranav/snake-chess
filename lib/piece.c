@@ -19,24 +19,24 @@ static String PIECE_STRINGS[][PIECES + 1] =
     }
 };
 
-static const Piece CHAR_PIECE_MAPPING[] =
+Piece piece_from_fen_char(char value)
 {
-    ['P'] = PIECE_WHITE_PAWN,
-    ['N'] = PIECE_WHITE_KNIGHT,
-    ['B'] = PIECE_WHITE_BISHOP,
-    ['R'] = PIECE_WHITE_ROOK,
-    ['Q'] = PIECE_WHITE_QUEEN,
-    ['K'] = PIECE_WHITE_KING,
-    ['p'] = PIECE_BLACK_PAWN,
-    ['n'] = PIECE_BLACK_KNIGHT,
-    ['b'] = PIECE_BLACK_BISHOP,
-    ['q'] = PIECE_BLACK_QUEEN,
-    ['k'] = PIECE_BLACK_KING
-};
-
-Piece piece_from_ascii_char(char value)
-{
-    return CHAR_PIECE_MAPPING[(int)value];
+    switch (value)
+    {
+    case 'P': return PIECE_WHITE_PAWN;
+    case 'N': return PIECE_WHITE_KNIGHT;
+    case 'B': return PIECE_WHITE_BISHOP;
+    case 'R': return PIECE_WHITE_ROOK;
+    case 'Q': return PIECE_WHITE_QUEEN;
+    case 'K': return PIECE_WHITE_KING;
+    case 'p': return PIECE_BLACK_PAWN;
+    case 'n': return PIECE_BLACK_KNIGHT;
+    case 'b': return PIECE_BLACK_BISHOP;
+    case 'r': return PIECE_BLACK_ROOK;
+    case 'q': return PIECE_BLACK_QUEEN;
+    case 'k': return PIECE_BLACK_KING;
+    default: return PIECES;
+    }
 }
 
 String piece_to_string(Piece piece, Encoding encoding)

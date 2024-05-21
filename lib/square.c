@@ -1,8 +1,9 @@
 // square.c
 // Licensed under the MIT license.
 
+#include <ctype.h>
 #include "square.h"
-
+#include <stdio.h>
 static String SQUARE_STRINGS[] =
 {
     "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8",
@@ -16,7 +17,17 @@ static String SQUARE_STRINGS[] =
     "--"
 };
 
-const char* square_to_string(Square value)
+Square square_from_fen_string(String value)
+{
+    if (!isalpha(value[0]) || !isdigit(value[1]))
+    {
+        return SQUARES;
+    }
+
+    return (8 - (value[1] - '0')) * 8 + value[0] - 'a';
+}
+
+String square_to_string(Square value)
 {
     return SQUARE_STRINGS[value];
 }

@@ -31,7 +31,7 @@ typedef enum Piece Piece;
  * @param value
  * @return
 */
-Piece piece_from_ascii_char(char value);
+Piece piece_from_fen_char(char value);
 
 /**
  *

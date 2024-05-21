@@ -83,6 +83,13 @@ typedef enum Square Square;
  * @param value
  * @return
 */
+Square square_from_fen_string(String value);
+
+/**
+ *
+ * @param value
+ * @return
+*/
 String square_to_string(Square value);
 
 #endif

@@ -496,7 +496,7 @@ int main(void)
 
     struct Board b;
 
-    board(&b);
+    board_from_fen_string(&b, BOARD_INITIAL);
     board_write_string(stdout, &b, ENCODING_UNICODE);
 
     return 0;
