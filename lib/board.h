@@ -6,6 +6,8 @@
 #include "castling_rights.h"
 #include "piece.h"
 #include "square.h"
+#define BOARD_EMPTY "8/8/8/8/8/8/8/8 w - -"
+#define BOARD_INITIAL "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
 /** */
 struct Board
@@ -26,6 +28,13 @@ typedef struct Board* Board;
  * @param instance
 */
 void board(Board instance);
+
+/**
+ *
+ * @param result
+ * @param value
+*/
+void board_from_fen_string(Board result, String value);
 
 /**
  *

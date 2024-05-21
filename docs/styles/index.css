@@ -1,3 +1,11 @@
-select {
+/* index.css */
+/* Copyright (c) 2024 Ishan Pranav */
+/* Licensed under the MIT license. */
+
+.snake-board {
+    width: 25%;
+}
+
+.snake-select {
     text-transform: capitalize;
 }

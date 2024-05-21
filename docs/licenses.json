@@ -1,7 +1,6 @@
 {
   "licenses": {},
-  "dependencies": [],
-  "references": [
+  "dependencies": [
     {
       "title": "Bitboard CHESS ENGINE in C",
       "formats": ["video"],
@@ -20,6 +19,7 @@
       "license": "mit_ishanpranav"
     }
   ],
+  "references": [],
   "tools": [
     {
       "title": "Bootstrap",
@@ -29,6 +29,132 @@
       "copyright": "2011-2013 The Bootstrap Authors",
       "license": "mit_bootstrap",
       "index": "Bootstrap Authors, The"
+    },
+    {
+      "title": "JQuery",
+      "formats": ["javascript"],
+      "source": "https://github.com/jquery/jquery",
+      "author": "OpenJS Foundation and other contributors",
+      "copyright": "OpenJS Foundation and other contributors, https://openjsf.org/",
+      "index": "OpenJS Foundation",
+      "license": "mit_openjs"
+    },
+    {
+      "title": "chessboard.js",
+      "formats": ["javascript", "css"],
+      "source": "https://github.com/oakmac/chessboardjs",
+      "author": "Chris Oakman",
+      "copyright": "2019 Chris Oakman",
+      "index": "Oakman, Chris",
+      "license": "mit_oakman"
+    },
+    {
+      "title": "Chess kdt45",
+      "formats": ["svg"],
+      "source": "https://commons.wikimedia.org/wiki/File:Chess_kdt45.svg",
+      "author": "Cburnett",
+      "copyright": "2006 Cburnett",
+      "index": "Cburnett",
+      "license": "ccbysa30_cburnett"
+    },
+    {
+      "title": "Chess klt45",
+      "formats": ["svg"],
+      "source": "https://commons.wikimedia.org/wiki/File:Chess_klt45.svg",
+      "author": "Cburnett",
+      "copyright": "2006 Cburnett",
+      "index": "Cburnett",
+      "license": "ccbysa30_cburnett"
+    },
+    {
+      "title": "Chess qdt45",
+      "formats": ["svg"],
+      "source": "https://commons.wikimedia.org/wiki/File:Chess_qdt45.svg",
+      "author": "Cburnett",
+      "copyright": "2006 Cburnett",
+      "index": "Cburnett",
+      "license": "ccbysa30_cburnett"
+    },
+    {
+      "title": "Chess qlt45",
+      "formats": ["svg"],
+      "source": "https://commons.wikimedia.org/wiki/File:Chess_qlt45.svg",
+      "author": "Cburnett",
+      "copyright": "2006 Cburnett",
+      "index": "Cburnett",
+      "license": "ccbysa30_cburnett"
+    },
+    {
+      "title": "Chess rdt45",
+      "formats": ["svg"],
+      "source": "https://commons.wikimedia.org/wiki/File:Chess_rdt45.svg",
+      "author": "Cburnett",
+      "copyright": "2006 Cburnett",
+      "index": "Cburnett",
+      "license": "ccbysa30_cburnett"
+    },
+    {
+      "title": "Chess rlt45",
+      "formats": ["svg"],
+      "source": "https://commons.wikimedia.org/wiki/File:Chess_rlt45.svg",
+      "author": "Cburnett",
+      "copyright": "2006 Cburnett",
+      "index": "Cburnett",
+      "license": "ccbysa30_cburnett"
+    },
+    {
+      "title": "Chess bdt45",
+      "formats": ["svg"],
+      "source": "https://commons.wikimedia.org/wiki/File:Chess_bdt45.svg",
+      "author": "Cburnett",
+      "copyright": "2006 Cburnett",
+      "index": "Cburnett",
+      "license": "ccbysa30_cburnett"
+    },
+    {
+      "title": "Chess blt45",
+      "formats": ["svg"],
+      "source": "https://commons.wikimedia.org/wiki/File:Chess_blt45.svg",
+      "author": "Cburnett",
+      "copyright": "2006 Cburnett",
+      "index": "Cburnett",
+      "license": "ccbysa30_cburnett"
+    },
+    {
+      "title": "Chess ndt45",
+      "formats": ["svg"],
+      "source": "https://commons.wikimedia.org/wiki/File:Chess_ndt45.svg",
+      "author": "Cburnett",
+      "copyright": "2006 Cburnett",
+      "index": "Cburnett",
+      "license": "ccbysa30_cburnett"
+    },
+    {
+      "title": "Chess nlt45",
+      "formats": ["svg"],
+      "source": "https://commons.wikimedia.org/wiki/File:Chess_nlt45.svg",
+      "author": "Cburnett",
+      "copyright": "2006 Cburnett",
+      "index": "Cburnett",
+      "license": "ccbysa30_cburnett"
+    },
+    {
+      "title": "Chess pdt45",
+      "formats": ["svg"],
+      "source": "https://commons.wikimedia.org/wiki/File:Chess_pdt45.svg",
+      "author": "Cburnett",
+      "copyright": "2006 Cburnett",
+      "index": "Cburnett",
+      "license": "ccbysa30_cburnett"
+    },
+    {
+      "title": "Chess plt45",
+      "formats": ["svg"],
+      "source": "https://commons.wikimedia.org/wiki/File:Chess_plt45.svg",
+      "author": "Cburnett",
+      "copyright": "2006 Cburnett",
+      "index": "Cburnett",
+      "license": "ccbysa30_cburnett"
     }
   ]
 }

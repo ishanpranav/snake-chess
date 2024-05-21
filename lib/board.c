@@ -1,6 +1,7 @@
 // board.c
 // Licensed under the MIT license.
 
+#include <ctype.h>
 #include <string.h>
 #include "bitboard.h"
 #include "board.h"
@@ -29,6 +30,26 @@ static Piece board_get_occupant(Board instance, uint64_t square)
     }
 
     return PIECES;
+}
+
+void board_from_fen_string(Board result, String value)
+{
+    board(result);
+
+    for (Rank rank = 0; rank < RANKS; rank++)
+    {
+        for (File file = 0; file < FILES; file++)
+        {
+            char symbol = value[0];
+
+            if (isalpha(symbol))
+            {
+                Piece piece = piece_from_ascii_char(symbol);
+
+                result->pieces[piece] |= bitboard(rank * 8 + file);
+            }
+        }
+    }
 }
 
 void board_write_string(Stream output, Board instance, Encoding encoding)

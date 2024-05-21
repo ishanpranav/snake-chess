@@ -78,6 +78,10 @@ function Out-Dependencies {
                 $source = $source.Substring(30).Replace('_', "%20") + "%20-%20Wikipedia"
             }
 
+            if ($source.StartsWith("https://commons.wikimedia.org/wiki/")) {
+                $source = $source.Substring(35).Replace('_', "%20") + "%20-%20Wikimedia Commons"
+            }
+
             if ($source.StartsWith("https://youtu.be/")) {
                 $source = "YouTube"
             }
@@ -153,8 +157,8 @@ For more details, please see the [license](LICENSE.txt)."
 Out-Dependencies $json.dependencies "
 Dependencies
 ------------
-This section contains notices for binary dependencies redistributed alongside
-the application."
+This section contains notices for binary and source-code dependencies
+redistributed alongside the application."
 
 Out-Dependencies $json.references "
 References

@@ -1,9 +1,14 @@
-var bitboard = 0n;
+// index.js
+// Copyright (c) 2024 Ishan Pranav
+// Licensed under the MIT license.
+
+let bitboard = 0n;
+let chessboard;
 
 /**
  *
  */
-function onBodyLoad() {
+async function onBodyLoad() {
     // Bootstrap
     const tooltipTriggerList = document.querySelectorAll(
         '[data-bs-toggle="tooltip"]'
@@ -34,24 +39,24 @@ function onBodyLoad() {
         }
     }
 
-    fetch(
+    const response = await fetch(
         "https://raw.githubusercontent.com/ishanpranav/snake-chess/main/lib/bitboard.h"
-    )
-        .then((response) => response.text())
-        .then((text) => {
-            const select = getConstantSelect();
+    );
+    const select = getConstantSelect();
+    const text = await response.text();
 
-            for (const match of text.matchAll(
-                /#define BITBOARD_([A-Za-z_]+) (0x)?([0-9A-Fa-f]+)ull/g
-            )) {
-                select.innerHTML += `<option value="${BigInt(
-                    "0x" + match[3]
-                ).toString(16)}">Bitmask: ${match[1]
-                    .replaceAll("_", " ")
-                    .toLowerCase()}</option>`;
-            }
-        })
-        .catch((error) => console.log("Fetch Error :-S", error));
+    for (const match of text.matchAll(
+        /#define BITBOARD_([A-Za-z_]+) (0x)?([0-9A-Fa-f]+)ull/g
+    )) {
+        select.innerHTML += `<option value="${BigInt("0x" + match[3]).toString(
+            16
+        )}">Bitmask: ${match[1].replaceAll("_", " ").toLowerCase()}</option>`;
+    }
+
+    chessboard = Chessboard("chessboard", {
+        pieceTheme: "images/{piece}.png",
+        position: "start",
+    });
 }
 
 function getConstantSelect() {
@@ -211,4 +216,11 @@ function onConstantSelectChange() {
     bitboard = BigInt("0x" + getConstantSelect().value);
 
     renderAll();
+}
+
+/** */
+function onPositionTextInputChange() {
+    const positionTextInput = document.getElementById("positionTextInput");
+
+    chessboard.position(positionTextInput.value);
 }
