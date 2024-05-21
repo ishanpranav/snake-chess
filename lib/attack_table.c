@@ -175,14 +175,14 @@ static uint64_t attack_table_generate_kings(Square square)
 uint64_t attack_table_generate_bishop_relevant_occupancies(Square square)
 {
     uint64_t result = 0;
-    Rank targetRank = square / 8;
-    File targetFile = square % 8;
+    Rank targetRank = square / FILES;
+    File targetFile = square % FILES;
     int rank = targetRank + 1;
     int file = targetFile + 1;
 
     while (rank <= RANK_SEVENTH && file <= FILE_G)
     {
-        result |= bitboard(rank * 8 + file);
+        result |= bitboard(rank * FILES + file);
         rank++;
         file++;
     }
@@ -192,7 +192,7 @@ uint64_t attack_table_generate_bishop_relevant_occupancies(Square square)
 
     while (rank >= RANK_SECOND && file <= FILE_G)
     {
-        result |= bitboard(rank * 8 + file);
+        result |= bitboard(rank * FILES + file);
         rank--;
         file++;
     }
@@ -202,7 +202,7 @@ uint64_t attack_table_generate_bishop_relevant_occupancies(Square square)
 
     while (rank <= RANK_SEVENTH && file >= FILE_B)
     {
-        result |= bitboard(rank * 8 + file);
+        result |= bitboard(rank * FILES + file);
         rank++;
         file--;
     }
@@ -212,7 +212,7 @@ uint64_t attack_table_generate_bishop_relevant_occupancies(Square square)
 
     while (rank >= RANK_SECOND && file >= FILE_B)
     {
-        result |= bitboard(rank * 8 + file);
+        result |= bitboard(rank * FILES + file);
         rank--;
         file--;
     }
@@ -223,27 +223,27 @@ uint64_t attack_table_generate_bishop_relevant_occupancies(Square square)
 uint64_t attack_table_generate_rook_relevant_occupancies(Square square)
 {
     uint64_t result = 0;
-    Rank targetRank = square / 8;
-    File targetFile = square % 8;
+    Rank targetRank = square / FILES;
+    File targetFile = square % FILES;
 
     for (Rank rank = targetRank + 1; rank <= RANK_SEVENTH; rank++)
     {
-        result |= bitboard(rank * 8 + targetFile);
+        result |= bitboard(rank * FILES + targetFile);
     }
 
     for (int rank = targetRank - 1; rank >= RANK_SECOND; rank--)
     {
-        result |= bitboard(rank * 8 + targetFile);
+        result |= bitboard(rank * FILES + targetFile);
     }
 
     for (File file = targetFile + 1; file <= FILE_G; file++)
     {
-        result |= bitboard(targetRank * 8 + file);
+        result |= bitboard(targetRank * FILES + file);
     }
 
     for (int file = targetFile - 1; file >= FILE_B; file--)
     {
-        result |= bitboard(targetRank * 8 + file);
+        result |= bitboard(targetRank * FILES + file);
     }
 
     return result;
@@ -252,14 +252,14 @@ uint64_t attack_table_generate_rook_relevant_occupancies(Square square)
 uint64_t attack_table_generate_bishops(Square square, uint64_t obstacles)
 {
     uint64_t result = 0;
-    Rank targetRank = square / 8;
-    File targetFile = square % 8;
+    Rank targetRank = square / FILES;
+    File targetFile = square % FILES;
     int rank = targetRank + 1;
     int file = targetFile + 1;
 
     while (rank < RANKS && file < FILES)
     {
-        uint64_t target = bitboard(rank * 8 + file);
+        uint64_t target = bitboard(rank * FILES + file);
 
         result |= target;
 
@@ -277,7 +277,7 @@ uint64_t attack_table_generate_bishops(Square square, uint64_t obstacles)
 
     while (rank >= 0 && file < FILES)
     {
-        uint64_t target = bitboard(rank * 8 + file);
+        uint64_t target = bitboard(rank * FILES + file);
 
         result |= target;
 
@@ -295,7 +295,7 @@ uint64_t attack_table_generate_bishops(Square square, uint64_t obstacles)
 
     while (rank < RANKS && file >= 0)
     {
-        uint64_t target = bitboard(rank * 8 + file);
+        uint64_t target = bitboard(rank * FILES + file);
 
         result |= target;
 
@@ -313,7 +313,7 @@ uint64_t attack_table_generate_bishops(Square square, uint64_t obstacles)
 
     while (rank >= 0 && file >= 0)
     {
-        uint64_t target = bitboard(rank * 8 + file);
+        uint64_t target = bitboard(rank * FILES + file);
 
         result |= target;
 
@@ -332,12 +332,12 @@ uint64_t attack_table_generate_bishops(Square square, uint64_t obstacles)
 uint64_t attack_table_generate_rooks(Square square, uint64_t obstacles)
 {
     uint64_t result = 0;
-    Rank targetRank = square / 8;
-    File targetFile = square % 8;
+    Rank targetRank = square / FILES;
+    File targetFile = square % FILES;
 
     for (Rank rank = targetRank + 1; rank < RANKS; rank++)
     {
-        uint64_t target = bitboard(rank * 8 + targetFile);
+        uint64_t target = bitboard(rank * FILES + targetFile);
 
         result |= target;
 
@@ -349,7 +349,7 @@ uint64_t attack_table_generate_rooks(Square square, uint64_t obstacles)
 
     for (int rank = targetRank - 1; rank >= 0; rank--)
     {
-        uint64_t target = bitboard(rank * 8 + targetFile);
+        uint64_t target = bitboard(rank * FILES + targetFile);
 
         result |= target;
 
@@ -361,7 +361,7 @@ uint64_t attack_table_generate_rooks(Square square, uint64_t obstacles)
 
     for (File file = targetFile + 1; file < FILES; file++)
     {
-        uint64_t target = bitboard(targetRank * 8 + file);
+        uint64_t target = bitboard(targetRank * FILES + file);
 
         result |= target;
 
@@ -373,7 +373,7 @@ uint64_t attack_table_generate_rooks(Square square, uint64_t obstacles)
 
     for (int file = targetFile - 1; file >= 0; file--)
     {
-        uint64_t target = bitboard(targetRank * 8 + file);
+        uint64_t target = bitboard(targetRank * FILES + file);
 
         result |= target;
 

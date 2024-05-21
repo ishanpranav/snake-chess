@@ -37,11 +37,11 @@ void bitboard_write_string(FILE* output, uint64_t value)
 
     for (Rank rank = 0; rank < RANKS; rank++)
     {
-        fprintf(output, "  %d  ", 8 - rank);
+        fprintf(output, "  %d  ", RANKS - rank);
 
         for (File file = 0; file < FILES; file++)
         {
-            Square square = rank * 8 + file;
+            Square square = rank * FILES + file;
 
             fprintf(output, " %c ", value & bitboard(square) ? '#' : '.');
         }

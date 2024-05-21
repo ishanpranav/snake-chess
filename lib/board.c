@@ -44,7 +44,7 @@ void board_from_fen_string(Board result, String value)
 
             if (piece != PIECES)
             {
-                result->pieces[piece] |= bitboard(rank * 8 + file);
+                result->pieces[piece] |= bitboard(rank * FILES + file);
                 file++;
 
                 continue;
@@ -121,11 +121,11 @@ void board_write_string(Stream output, Board instance, Encoding encoding)
 
     for (Rank rank = 0; rank < RANKS; rank++)
     {
-        fprintf(output, "  %d  ", 8 - rank);
+        fprintf(output, "  %d  ", RANKS - rank);
 
         for (File file = 0; file < FILES; file++)
         {
-            uint64_t square = bitboard(rank * 8 + file);
+            uint64_t square = bitboard(rank * FILES + file);
             Piece piece = board_get_occupant(instance, square);
 
             fprintf(output, " %s ", piece_to_string(piece, encoding));

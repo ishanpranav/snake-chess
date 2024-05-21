@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 #include <ctype.h>
+#include "file.h"
 #include "square.h"
 
 static String SQUARE_STRINGS[] =
@@ -24,7 +25,7 @@ Square square_from_fen_string(String value)
         return SQUARES;
     }
 
-    return (8 - (value[1] - '0')) * 8 + value[0] - 'a';
+    return (8 - (value[1] - '0')) * FILES + value[0] - 'a';
 }
 
 String square_to_string(Square value)
