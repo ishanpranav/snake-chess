@@ -45,19 +45,40 @@ static bool is_square_attacked(
     return (bishopAttacks | rookAttacks) & board_get_queens(board, color);
 }
 
-static void generate_white_pawn_moves(Board board, AttackTable table)
+static void generate_pawn_moves(Board board, AttackTable table)
 {
+    int direction;
+    Square startSquare;
+    Square promotionSquare;
+    Piece piece;
+
+    if (board->color)
+    {
+        direction = 1;
+        startSquare = SQUARE_A7;
+        promotionSquare = SQUARE_A2;
+        piece = PIECE_BLACK_PAWN;
+    }
+    else
+    {
+        direction = -1;
+        startSquare = SQUARE_A2;
+        promotionSquare = SQUARE_A7;
+        piece = PIECE_WHITE_PAWN;
+    }
+
     struct BitboardIterator pawn;
 
-    for (bitboard_begin(&pawn, board->pieces[PIECE_WHITE_PAWN]);
+    for (bitboard_begin(&pawn, board->pieces[piece]);
         pawn.value;
         bitboard_next(&pawn))
     {
-        int target = pawn.current - FILES;
+        int target = pawn.current + direction * FILES;
 
-        if (target >= 0 && !(board->squares & bitboard(target)))
+        if (target < SQUARES && !(board->squares & bitboard(target)))
         {
-            if (pawn.current >= SQUARE_A7 && pawn.current <= SQUARE_H7)
+            if (pawn.current >= promotionSquare &&
+                pawn.current < promotionSquare + FILES)
             {
                 printf("%s%s=Q\n",
                     square_to_string(pawn.current),
@@ -78,24 +99,26 @@ static void generate_white_pawn_moves(Board board, AttackTable table)
                     square_to_string(pawn.current),
                     square_to_string(target));
 
-                if (pawn.current >= SQUARE_A2 && pawn.current <= SQUARE_H2 &&
-                    !(board->squares & bitboard(target - FILES)))
+                if (pawn.current >= startSquare &&
+                    pawn.current < startSquare + FILES &&
+                    !(board->squares & bitboard(target + direction * FILES)))
                 {
                     printf("%s%s\n",
                         square_to_string(pawn.current),
-                        square_to_string(target - FILES));
+                        square_to_string(target + direction * FILES));
                 }
             }
         }
 
         struct BitboardIterator attack;
-        uint64_t attacks = table->pawns[COLOR_WHITE][pawn.current];
+        uint64_t attacks = table->pawns[board->color][pawn.current];
 
-        for (bitboard_begin(&attack, attacks& board->colors[COLOR_BLACK]);
+        for (bitboard_begin(&attack, attacks& board->colors[!board->color]);
             attack.value;
             bitboard_next(&attack))
         {
-            if (pawn.current >= SQUARE_A7 && pawn.current <= SQUARE_H7)
+            if (pawn.current >= promotionSquare &&
+                pawn.current < promotionSquare + FILES)
             {
                 printf("%sx%s=Q\n",
                     square_to_string(pawn.current),
@@ -134,106 +157,53 @@ static void generate_white_pawn_moves(Board board, AttackTable table)
     }
 }
 
-static void generate_black_pawn_moves(Board board, AttackTable table)
+static void generate_castle_moves(Board board, AttackTable table)
 {
-    struct BitboardIterator pawn;
+    Square square;
+    CastlingRights kingside;
+    CastlingRights queenside;
 
-    for (bitboard_begin(&pawn, board->pieces[PIECE_BLACK_PAWN]);
-        pawn.value;
-        bitboard_next(&pawn))
+    if (board->color)
     {
-        Square target = pawn.current + FILES;
+        square = SQUARE_A8;
+        kingside = CASTLING_RIGHTS_BLACK_KINGSIDE;
+        queenside = CASTLING_RIGHTS_BLACK_QUEENSIDE;
+    }
+    else
+    {
+        square = SQUARE_A1;
+        kingside = CASTLING_RIGHTS_WHITE_KINGSIDE;
+        queenside = CASTLING_RIGHTS_WHITE_QUEENSIDE;
+    }
 
-        if (target < SQUARES && !(board->squares & bitboard(target)))
+    if (board->castlingRights & kingside)
+    {
+        if (!(board->squares & bitboard(square + FILE_F)) &&
+            !(board->squares & bitboard(square + FILE_G)) &&
+            !is_square_attacked(board, table, square + FILE_E, !board->color) &&
+            !is_square_attacked(board, table, square + FILE_F, !board->color))
         {
-            if (pawn.current >= SQUARE_A2 && pawn.current <= SQUARE_H2)
-            {
-                printf("%s%s=Q\n",
-                    square_to_string(pawn.current),
-                    square_to_string(target));
-                printf("%s%s=R\n",
-                    square_to_string(pawn.current),
-                    square_to_string(target));
-                printf("%s%s=B\n",
-                    square_to_string(pawn.current),
-                    square_to_string(target));
-                printf("%s%s=N\n",
-                    square_to_string(pawn.current),
-                    square_to_string(target));
-            }
-            else
-            {
-                printf("%s%s\n",
-                    square_to_string(pawn.current),
-                    square_to_string(target));
-
-                if (pawn.current >= SQUARE_A7 && pawn.current <= SQUARE_H7 &&
-                    !(board->squares & bitboard(target + FILES)))
-                {
-                    printf("%s%s\n",
-                        square_to_string(pawn.current),
-                        square_to_string(target + FILES));
-                }
-            }
+            printf("O-O\n");
         }
+    }
 
-        struct BitboardIterator attack;
-        uint64_t attacks = table->pawns[COLOR_BLACK][pawn.current];
-
-        for (bitboard_begin(&attack, attacks& board->colors[COLOR_WHITE]);
-            attack.value;
-            bitboard_next(&attack))
+    if (board->castlingRights & queenside)
+    {
+        if (!(board->squares & bitboard(square + FILE_B)) &&
+            !(board->squares & bitboard(square + FILE_C)) &&
+            !(board->squares & bitboard(square + FILE_D)) &&
+            !is_square_attacked(board, table, square + FILE_D, !board->color) &&
+            !is_square_attacked(board, table, square + FILE_E, !board->color))
         {
-            if (pawn.current >= SQUARE_A2 && pawn.current <= SQUARE_H2)
-            {
-                printf("%sx%s=Q\n",
-                    square_to_string(pawn.current),
-                    square_to_string(attack.current));
-                printf("%sx%s=R\n",
-                    square_to_string(pawn.current),
-                    square_to_string(attack.current));
-                printf("%sx%s=B\n",
-                    square_to_string(pawn.current),
-                    square_to_string(attack.current));
-                printf("%sx%s=N\n",
-                    square_to_string(pawn.current),
-                    square_to_string(attack.current));
-            }
-            else
-            {
-                printf("%sx%s\n",
-                    square_to_string(pawn.current),
-                    square_to_string(attack.current));
-            }
-        }
-
-        if (board->enPassant != SQUARES)
-        {
-            uint64_t enPassantAttack = attacks & bitboard(board->enPassant);
-
-            if (enPassantAttack)
-            {
-                target = bitboard_first(enPassantAttack);
-
-                printf("%sx%s e.p.\n",
-                    square_to_string(pawn.current),
-                    square_to_string(target));
-            }
+            printf("O-O-O\n");
         }
     }
 }
 
 static void generate_moves(Board board, AttackTable table)
 {
-    switch (board->color)
-    {
-    case COLOR_WHITE:
-        generate_white_pawn_moves(board, table);
-        break;
-    case COLOR_BLACK:
-        generate_black_pawn_moves(board, table);
-        break;
-    }
+    generate_pawn_moves(board, table);
+    generate_castle_moves(board, table);
 
     for (Piece piece = 0; piece < PIECES; piece++)
     {
@@ -252,9 +222,10 @@ int main(void)
 
     board_from_fen_string(
         &b,
-        "r3k2r/p11pqpb1/bn2pnp1/2pPN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq c6 0 1");
+        "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1");
     board_write_string(stdout, &b, ENCODING_UNICODE);
     generate_moves(&b, a);
+    free(a);
 
     return 0;
 }
