@@ -3,8 +3,6 @@
 
 #include "color.h"
 
-static String COLOR_STRINGS[] = { "white", "black", "none" };
-
 Color color_from_fen_char(char value)
 {
     switch (value)
@@ -17,5 +15,10 @@ Color color_from_fen_char(char value)
 
 String color_to_string(Color value)
 {
-    return COLOR_STRINGS[value];
+    switch (value)
+    {
+    case COLOR_WHITE: return "white";
+    case COLOR_BLACK: return "black";
+    default: return "none";
+    }
 }

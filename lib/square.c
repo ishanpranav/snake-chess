@@ -3,7 +3,7 @@
 
 #include <ctype.h>
 #include "square.h"
-#include <stdio.h>
+
 static String SQUARE_STRINGS[] =
 {
     "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8",
