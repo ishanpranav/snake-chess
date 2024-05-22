@@ -7,7 +7,7 @@
 #include "piece.h"
 #include "square.h"
 #define BOARD_EMPTY "8/8/8/8/8/8/8/8 w - -"
-#define BOARD_INITIAL "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1"
+#define BOARD_INITIAL "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
 
 /** */
 struct Board

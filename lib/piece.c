@@ -5,6 +5,12 @@
 
 static String PIECE_STRINGS[][PIECES + 1] =
 {
+    [ENCODING_ALGEBRAIC] =
+    {
+        "", "N", "B", "R", "Q", "K",
+        "", "N", "B", "R", "Q", "K",
+        "?"
+    },
     [ENCODING_ASCII] =
     {
         "P", "N", "B", "R", "Q", "K",

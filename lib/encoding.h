@@ -4,8 +4,9 @@
 /** */
 enum Encoding
 {
+    ENCODING_ALGEBRAIC,
     ENCODING_ASCII,
-    ENCODING_UNICODE,
+    ENCODING_UNICODE
 };
 
 /** */

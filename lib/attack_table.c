@@ -6,22 +6,22 @@
 #include "rank.h"
 #include "file.h"
 
-static const uint64_t ATTACK_TABLE_BISHOP_MAGICS[] =
+const uint64_t ATTACK_TABLE_BISHOP_MAGICS[] =
 {
     #include "../data/bishop-magics.csv"
 };
 
-static const int ATTACK_TABLE_BISHOP_OCCUPANCY_LENGTHS[] =
+const int ATTACK_TABLE_BISHOP_OCCUPANCY_LENGTHS[] =
 {
     #include "../data/bishop-occupancy-lengths.csv"
 };
 
-static const uint64_t ATTACK_TABLE_ROOK_MAGICS[] =
+const uint64_t ATTACK_TABLE_ROOK_MAGICS[] =
 {
     #include "../data/rook-magics.csv"
 };
 
-static const int ATTACK_TABLE_ROOK_OCCUPANCY_LENGTHS[] =
+const int ATTACK_TABLE_ROOK_OCCUPANCY_LENGTHS[] =
 {
     #include "../data/rook-occupancy-lengths.csv"
 };
@@ -406,30 +406,6 @@ static uint64_t attack_table_lookup_occupancies(
     }
 
     return result;
-}
-
-uint64_t attack_table_get_bishop(
-    AttackTable instance,
-    Square square,
-    uint64_t obstacles)
-{
-    obstacles &= instance->bishopRelevantOccupancies[square];
-    obstacles *= ATTACK_TABLE_BISHOP_MAGICS[square];
-    obstacles >>= 64 - ATTACK_TABLE_BISHOP_OCCUPANCY_LENGTHS[square];
-
-    return instance->bishops[square][obstacles];
-}
-
-uint64_t attack_table_get_rook(
-    AttackTable instance,
-    Square square,
-    uint64_t obstacles)
-{
-    obstacles &= instance->rookRelevantOccupancies[square];
-    obstacles *= ATTACK_TABLE_ROOK_MAGICS[square];
-    obstacles >>= 64 - ATTACK_TABLE_ROOK_OCCUPANCY_LENGTHS[square];
-
-    return instance->rooks[square][obstacles];
 }
 
 void attack_table(AttackTable instance)

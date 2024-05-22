@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
-#include "../lib/attack_table.h"
+#include "../lib/attack_provider.h"
 #include "../lib/bitboard_iterator.h"
 #include "../lib/board.h"
 #include "../lib/file.h"
@@ -22,7 +22,7 @@ static bool is_square_attacked(
         return true;
     }
 
-    uint64_t bishopAttacks = attack_table_get_bishop(
+    uint64_t bishopAttacks = bishop_attack_provider(
         attacks,
         square,
         board->squares);
@@ -32,7 +32,7 @@ static bool is_square_attacked(
         return true;
     }
 
-    uint64_t rookAttacks = attack_table_get_rook(
+    uint64_t rookAttacks = rook_attack_provider(
         attacks,
         square,
         board->squares);
@@ -200,16 +200,57 @@ static void generate_castle_moves(Board board, AttackTable table)
     }
 }
 
+static void generate_piece_moves(
+    Board board,
+    AttackTable table,
+    AttackProvider factory,
+    Piece piece)
+{
+    if (board->color)
+    {
+        piece = piece + PIECE_BLACK_PAWN;
+    }
+
+    struct BitboardIterator item;
+
+    for (bitboard_begin(&item, board->pieces[piece]);
+        item.value;
+        bitboard_next(&item))
+    {
+        uint64_t attacks = factory(table, item.current, board->squares);
+        struct BitboardIterator attack;
+
+        for (bitboard_begin(&attack, attacks & ~board->colors[board->color]);
+            attack.value;
+            bitboard_next(&attack))
+        {
+            if (board->colors[!board->color] & bitboard(attack.current))
+            {
+                printf("%s%sx%s\n",
+                    piece_to_string(piece, ENCODING_ALGEBRAIC),
+                    square_to_string(item.current),
+                    square_to_string(attack.current));
+            }
+            else
+            {
+                printf("%s%s%s\n",
+                    piece_to_string(piece, ENCODING_ALGEBRAIC),
+                    square_to_string(item.current),
+                    square_to_string(attack.current));
+            }
+        }
+    }
+}
+
 static void generate_moves(Board board, AttackTable table)
 {
     generate_pawn_moves(board, table);
     generate_castle_moves(board, table);
-
-    for (Piece piece = 0; piece < PIECES; piece++)
-    {
-        uint64_t copy = board->pieces[piece];
-
-    }
+    generate_piece_moves(board, table, knight_attack_provider, PIECE_KNIGHT);
+    generate_piece_moves(board, table, bishop_attack_provider, PIECE_BISHOP);
+    generate_piece_moves(board, table, rook_attack_provider, PIECE_ROOK);
+    generate_piece_moves(board, table, queen_attack_provider, PIECE_QUEEN);
+    generate_piece_moves(board, table, king_attack_provider, PIECE_KING);
 }
 
 int main(void)
@@ -222,7 +263,7 @@ int main(void)
 
     board_from_fen_string(
         &b,
-        "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R b KQkq - 0 1");
+        "r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1");
     board_write_string(stdout, &b, ENCODING_UNICODE);
     generate_moves(&b, a);
     free(a);

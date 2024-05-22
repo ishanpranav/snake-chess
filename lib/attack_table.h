@@ -6,6 +6,18 @@
 #include "square.h"
 
 /** */
+extern const uint64_t ATTACK_TABLE_BISHOP_MAGICS[];
+
+/** */
+extern const int ATTACK_TABLE_BISHOP_OCCUPANCY_LENGTHS[];
+
+/** */
+extern const uint64_t ATTACK_TABLE_ROOK_MAGICS[];
+
+/** */
+extern const int ATTACK_TABLE_ROOK_OCCUPANCY_LENGTHS[];
+
+/** */
 struct AttackTable
 {
     uint64_t kings[SQUARES];
@@ -25,27 +37,3 @@ typedef struct AttackTable* AttackTable;
  * @param instance
 */
 void attack_table(AttackTable instance);
-
-/**
- *
- * @param instance
- * @param square
- * @param obstacles
- * @return
-*/
-uint64_t attack_table_get_bishop(
-    AttackTable instance,
-    Square square,
-    uint64_t obstacles);
-
-/**
- *
- * @param instance
- * @param square
- * @param obstacles
- * @return
-*/
-uint64_t attack_table_get_rook(
-    AttackTable instance,
-    Square square,
-    uint64_t obstacles);

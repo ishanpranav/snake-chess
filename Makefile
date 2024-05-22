@@ -10,9 +10,12 @@ all: libsnake
 generator: libsnake
 	$(CC) src/generator.c -o generator -leuler -lsnake
 
-libsnake: attack_table bitboard bitboard_iterator board castling_rights color \
-	piece square
-	ar -r libsnake.a attack_table.o bitboard.o bitboard_iterator.o board.o castling_rights.o color.o piece.o square.o
+libsnake: attack_provider attack_table bitboard bitboard_iterator board castling_rights \
+	color piece square
+	ar -r libsnake.a *.o
+
+attack_provider:
+	$(CC) -c lib/attack_providers/*.c
 
 attack_table:
 	$(CC) -c lib/attack_table.c
