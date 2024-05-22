@@ -12,6 +12,8 @@
 #define bitboard(square) (1ull << (square))
 #ifdef __GNUC__
 #define bitboard_count(value) __builtin_popcountll(value)
+#elif _MSC_VER
+#define bitboard_count(value) __popcnt64(value)
 #else
 #warning "There is no 'popcountll' available."
 int bitboard_count(uint64_t value);

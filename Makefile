@@ -2,13 +2,13 @@
 # Copyright (c) 2024 Ishan Pranav
 # Licensed under the MIT license.
 
-CC = gcc -L. -O3 -Wall -Wextra
+CC = gcc -L. -march=native -O3 -Wall -Wextra
 
 all: libsnake snake_perft
 	$(CC) src/main.c -o main -lsnake
 
 snake_perft: libsnake
-	$(CC) src/snake_perft.c -o snake_perft -lsnake
+	$(CC) src/snake_perft.c -D ENCODING_STANDARD=ENCODING_UNICODE -o snake_perft -lsnake
 
 libsnake: attack_provider attack_table bitboard bitboard_iterator board \
 	castling_rights check color move perft piece spawn square

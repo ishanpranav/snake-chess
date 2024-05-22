@@ -40,7 +40,7 @@ int main(int count, String args[])
 
     attack_table(table);
     board_from_fen_string(&state, position);
-    board_write_string(stdout, &state, ENCODING_UNICODE);
+    board_write_string(stdout, &state, ENCODING_STANDARD);
 
     clock_t start = clock();
     long long result = perft(&state, table, depth);
@@ -48,10 +48,10 @@ int main(int count, String args[])
     double speed = result / elapsed;
 
     printf(
-        "result: %lld positions\n"
         "elapsed: %lf s\n"
-        "speed: %0.lf positions/s\n",
-        result, elapsed, speed);
+        "speed: %0.lf positions/s\n"
+        "result: %lld positions\n",
+        elapsed, speed, result);
 
     free(table);
 

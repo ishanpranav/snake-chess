@@ -32,7 +32,7 @@ Square bitboard_first(uint64_t value)
 }
 #endif
 
-void bitboard_write_string(FILE* output, uint64_t value)
+void bitboard_write_string(Stream output, uint64_t value)
 {
     fprintf(output, "\n");
 

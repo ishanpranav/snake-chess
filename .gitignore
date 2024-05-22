@@ -9,3 +9,4 @@ main
 snake_perft
 *.o
 *.a
+*.exe
