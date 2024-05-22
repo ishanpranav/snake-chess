@@ -32,30 +32,26 @@ void move_write_string(Stream output, Move instance)
 
     fprintf(output, "%s", square_to_string(instance->target));
 
-    if (instance->type & MOVE_TYPES_PROMOTION_KNIGHT)
+    if (instance->type & MOVE_TYPES_PROMOTION)
     {
-        fprintf(output, "=N");
-
-        return;
+        fprintf(output, "=");
     }
 
-    if (instance->type & MOVE_TYPES_PROMOTION_BISHOP)
+    if (instance->type & MOVE_TYPES_KNIGHT)
     {
-        fprintf(output, "=B");
-
-        return;
+        fprintf(output, "N");
     }
-
-    if (instance->type & MOVE_TYPES_PROMOTION_ROOK)
+    else if (instance->type & MOVE_TYPES_BISHOP)
     {
-        fprintf(output, "=R");
-
-        return;
+        fprintf(output, "B");
     }
-
-    if (instance->type & MOVE_TYPES_PROMOTION_QUEEN)
+    else if (instance->type & MOVE_TYPES_ROOK)
     {
-        fprintf(output, "=Q");
+        fprintf(output, "R");
+    }
+    else if (instance->type & MOVE_TYPES_QUEEN)
+    {
+        fprintf(output, "Q");
     }
     
     if (instance->type & MOVE_TYPES_EN_PASSANT)
@@ -75,28 +71,17 @@ void move_write_uci_string(Stream output, Move instance)
     if (instance->type & MOVE_TYPES_PROMOTION_KNIGHT)
     {
         fprintf(output, "n");
-
-        return;
     }
-    
-    if (instance->type & MOVE_TYPES_PROMOTION_BISHOP)
+    else  if (instance->type & MOVE_TYPES_PROMOTION_BISHOP)
     {
         fprintf(output, "b");
-
-        return;
     }
-
-    if (instance->type & MOVE_TYPES_PROMOTION_ROOK)
+    else if (instance->type & MOVE_TYPES_PROMOTION_ROOK)
     {
         fprintf(output, "r");
-
-        return;
     }
-
-    if (instance->type & MOVE_TYPES_PROMOTION_QUEEN)
+    else if (instance->type & MOVE_TYPES_PROMOTION_QUEEN)
     {
         fprintf(output, "q");
-
-        return;
     }
 }
