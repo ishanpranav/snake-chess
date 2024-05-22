@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 #include "../ishan/stream.h"
-#include "move_type.h"
+#include "move_types.h"
 #include "piece.h"
 #include "square.h"
 
@@ -13,8 +13,7 @@ struct Move
     enum Square source;
     enum Square target;
     enum Piece piece;
-    enum Piece promotion;
-    enum MoveType type;
+    enum MoveTypes type;
 };
 
 /** */

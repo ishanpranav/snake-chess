@@ -5,17 +5,18 @@
 
 void move_write_string(Stream output, Move instance)
 {
-    switch (instance->type)
+    if (instance->type & MOVE_TYPES_CASTLE_KINGSIDE)
     {
-    case MOVE_TYPE_CASTLE_KINGSIDE:
         fprintf(output, "O-O");
-        return;
 
-    case MOVE_TYPE_CASTLE_QUEENSIDE:
+        return;
+    }
+
+    if (instance->type & MOVE_TYPES_CASTLE_QUEENSIDE)
+    {
         fprintf(output, "O-O-O");
-        return;
 
-    default: break;
+        return;
     }
 
     fprintf(
@@ -24,23 +25,40 @@ void move_write_string(Stream output, Move instance)
         piece_to_string(instance->piece, ENCODING_ALGEBRAIC),
         square_to_string(instance->source));
 
-    if (instance->type == MOVE_TYPE_CAPTURE ||
-        instance->type == MOVE_TYPE_EN_PASSANT)
+    if (instance->type & MOVE_TYPES_CAPTURE)
     {
         fprintf(output, "x");
     }
 
     fprintf(output, "%s", square_to_string(instance->target));
 
-    if (instance->promotion != PIECES)
+    if (instance->type & MOVE_TYPES_PROMOTION_KNIGHT)
     {
-        fprintf(
-            output,
-            "=%s",
-            piece_to_string(instance->promotion, ENCODING_ALGEBRAIC));
+        fprintf(output, "=N");
+
+        return;
     }
 
-    if (instance->type == MOVE_TYPE_EN_PASSANT)
+    if (instance->type & MOVE_TYPES_PROMOTION_BISHOP)
+    {
+        fprintf(output, "=B");
+
+        return;
+    }
+
+    if (instance->type & MOVE_TYPES_PROMOTION_ROOK)
+    {
+        fprintf(output, "=R");
+
+        return;
+    }
+
+    if (instance->type & MOVE_TYPES_PROMOTION_QUEEN)
+    {
+        fprintf(output, "=Q");
+    }
+    
+    if (instance->type & MOVE_TYPES_EN_PASSANT)
     {
         fprintf(output, " e.p.");
     }
@@ -48,8 +66,37 @@ void move_write_string(Stream output, Move instance)
 
 void move_write_uci_string(Stream output, Move instance)
 {
-    fprintf(output, "%s%s%s",
+    fprintf(
+        output,
+        "%s%s",
         square_to_string(instance->source),
-        square_to_string(instance->target),
-        piece_to_string(instance->promotion, ENCODING_UCI));
+        square_to_string(instance->target));
+
+    if (instance->type & MOVE_TYPES_PROMOTION_KNIGHT)
+    {
+        fprintf(output, "n");
+
+        return;
+    }
+    
+    if (instance->type & MOVE_TYPES_PROMOTION_BISHOP)
+    {
+        fprintf(output, "b");
+
+        return;
+    }
+
+    if (instance->type & MOVE_TYPES_PROMOTION_ROOK)
+    {
+        fprintf(output, "r");
+
+        return;
+    }
+
+    if (instance->type & MOVE_TYPES_PROMOTION_QUEEN)
+    {
+        fprintf(output, "q");
+
+        return;
+    }
 }

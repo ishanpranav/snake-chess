@@ -43,90 +43,118 @@ static bool is_square_attacked(
     return (bishopAttacks | rookAttacks) & board_get(board, color, PIECE_QUEEN);
 }
 
-static void spawner_promotion(List results, Move move)
+static void spawner_move(
+    List results,
+    Square source,
+    Square target,
+    Piece piece,
+    MoveTypes type)
 {
-    Piece promotion = move->promotion;
+    struct Move result =
+    {
+        .source = source,
+        .target = target,
+        .piece = piece,
+        .type = type
+    };
 
-    euler_ok(list_ensure_capacity(results, 4));
+    euler_ok(list_add(results, &result));
+}
 
-    move->promotion = PIECE_QUEEN;
-
-    list_add(results, move);
-
-    move->promotion = PIECE_ROOK;
-
-    list_add(results, move);
-
-    move->promotion = PIECE_BISHOP;
-
-    list_add(results, move);
-
-    move->promotion = PIECE_KNIGHT;
-
-    list_add(results, move);
-
-    move->promotion = promotion;
+static void spawner_promotion(
+    List results,
+    Square source,
+    Square target,
+    Piece piece,
+    MoveTypes promotionType)
+{
+    spawner_move(
+        results, 
+        source, 
+        target, 
+        piece,
+        MOVE_TYPES_PROMOTION_KNIGHT | promotionType);
+    spawner_move(
+        results, 
+        source, 
+        target, 
+        piece,
+        MOVE_TYPES_PROMOTION_BISHOP | promotionType);
+    spawner_move(
+        results, 
+        source, 
+        target, 
+        piece,
+        MOVE_TYPES_PROMOTION_ROOK | promotionType);
+    spawner_move(
+        results, 
+        source, 
+        target, 
+        piece,
+        MOVE_TYPES_PROMOTION_QUEEN | promotionType);
 }
 
 static void spawner_pawn(List results, Board board, AttackTable table)
 {
     int direction;
-    Piece coloredPiece;
+    Piece piece;
     Square startSquare;
     Square promotionSquare;
-    struct Move result =
-    {
-        .piece = PIECE_PAWN,
-        .promotion = PIECES
-    };
 
     if (board->color)
     {
         direction = 1;
         startSquare = SQUARE_A7;
         promotionSquare = SQUARE_A2;
-        coloredPiece = PIECE_BLACK_PAWN;
+        piece = PIECE_BLACK_PAWN;
     }
     else
     {
         direction = -1;
         startSquare = SQUARE_A2;
         promotionSquare = SQUARE_A7;
-        coloredPiece = PIECE_WHITE_PAWN;
+        piece = PIECE_WHITE_PAWN;
     }
 
     struct BitboardIterator pawn;
 
-    for (bitboard_begin(&pawn, board->pieces[coloredPiece]);
-        pawn.value;
-        bitboard_next(&pawn))
+    for (bitboard_begin(&pawn, board->pieces[piece]);
+         pawn.value;
+         bitboard_next(&pawn))
     {
         int target = pawn.current + direction * FILES;
-
-        result.source = pawn.current;
-        result.target = target;
-        result.type = MOVE_TYPE_QUIET;
 
         if (target < SQUARES && !(board->squares & bitboard(target)))
         {
             if (pawn.current >= promotionSquare &&
                 pawn.current < promotionSquare + FILES)
             {
-                spawner_promotion(results, &result);
+                spawner_promotion(
+                    results,
+                    pawn.current,
+                    target,
+                    piece,
+                    MOVE_TYPES_QUIET);
             }
             else
             {
-                euler_ok(list_add(results, &result));
+                spawner_move(
+                    results,
+                    pawn.current,
+                    target,
+                    piece,
+                    MOVE_TYPES_QUIET);
 
                 if (pawn.current >= startSquare &&
                     pawn.current < startSquare + FILES &&
                     !(board->squares & bitboard(target + direction * FILES)))
                 {
-                    result.type = MOVE_TYPE_DOUBLE_PUSH;
-
-                    euler_ok(list_add(results, &result));
-
-                    result.type = MOVE_TYPE_QUIET;
+                    spawner_move(
+                        results,
+                        pawn.current,
+                        target + direction * FILES,
+                        piece,
+                        MOVE_TYPES_DOUBLE_PUSH);
                 }
             }
         }
@@ -134,20 +162,28 @@ static void spawner_pawn(List results, Board board, AttackTable table)
         struct BitboardIterator attack;
         uint64_t attacks = table->pawns[board->color][pawn.current];
 
-        result.type = MOVE_TYPE_CAPTURE;
-
-        for (bitboard_begin(&attack, attacks& board->colors[!board->color]);
-            attack.value;
-            bitboard_next(&attack))
+        for (bitboard_begin(&attack, attacks & board->colors[!board->color]);
+             attack.value;
+             bitboard_next(&attack))
         {
             if (pawn.current >= promotionSquare &&
                 pawn.current < promotionSquare + FILES)
             {
-                spawner_promotion(results, &result);
+                spawner_promotion(
+                    results,
+                    pawn.current,
+                    attack.current,
+                    piece,
+                    MOVE_TYPES_CAPTURE);
             }
             else
             {
-                euler_ok(list_add(results, &result));
+                spawner_move(
+                    results,
+                    pawn.current,
+                    attack.current,
+                    piece,
+                    MOVE_TYPES_CAPTURE);
             }
         }
 
@@ -157,13 +193,12 @@ static void spawner_pawn(List results, Board board, AttackTable table)
 
             if (enPassantAttack)
             {
-                target = bitboard_first(enPassantAttack);
-
-                result.type = MOVE_TYPE_EN_PASSANT;
-
-                euler_ok(list_add(results, &result));
-
-                result.type = MOVE_TYPE_QUIET;
+                spawner_move(
+                    results,
+                    pawn.current,
+                    bitboard_first(enPassantAttack),
+                    piece,
+                    MOVE_TYPES_EN_PASSANT_CAPTURE);
             }
         }
     }
@@ -171,6 +206,7 @@ static void spawner_pawn(List results, Board board, AttackTable table)
 
 static void spawner_castle(List results, Board board, AttackTable table)
 {
+    Piece piece;
     Square square;
     CastlingRights kingside;
     CastlingRights queenside;
@@ -180,19 +216,15 @@ static void spawner_castle(List results, Board board, AttackTable table)
         square = SQUARE_A8;
         kingside = CASTLING_RIGHTS_BLACK_KINGSIDE;
         queenside = CASTLING_RIGHTS_BLACK_QUEENSIDE;
+        piece = PIECE_BLACK_KING;
     }
     else
     {
         square = SQUARE_A1;
         kingside = CASTLING_RIGHTS_WHITE_KINGSIDE;
         queenside = CASTLING_RIGHTS_WHITE_QUEENSIDE;
+        piece = PIECE_WHITE_KING;
     }
-
-    struct Move result =
-    {
-        .piece = PIECE_KING,
-        .promotion = PIECES
-    };
 
     if (board->castlingRights & kingside)
     {
@@ -201,11 +233,12 @@ static void spawner_castle(List results, Board board, AttackTable table)
             !is_square_attacked(board, table, square + FILE_E, !board->color) &&
             !is_square_attacked(board, table, square + FILE_F, !board->color))
         {
-            result.source = square + FILE_E;
-            result.target = square + FILE_G;
-            result.type = MOVE_TYPE_CASTLE_KINGSIDE;
-
-            euler_ok(list_add(results, &result));
+            spawner_move(
+                results,
+                square + FILE_E,
+                square + FILE_G,
+                piece,
+                MOVE_TYPES_CASTLE_KINGSIDE);
         }
     }
 
@@ -217,11 +250,12 @@ static void spawner_castle(List results, Board board, AttackTable table)
             !is_square_attacked(board, table, square + FILE_D, !board->color) &&
             !is_square_attacked(board, table, square + FILE_E, !board->color))
         {
-            result.source = square + FILE_E;
-            result.target = square + FILE_C;
-            result.type = MOVE_TYPE_CASTLE_QUEENSIDE;
-
-            euler_ok(list_add(results, &result));
+            spawner_move(
+                results,
+                square + FILE_E,
+                square + FILE_C,
+                piece,
+                MOVE_TYPES_CASTLE_QUEENSIDE);
         }
     }
 }
@@ -233,48 +267,36 @@ static void spawner_piece(
     AttackProvider factory,
     Piece piece)
 {
-    Piece coloredPiece;
-
     if (board->color)
     {
-        coloredPiece = piece + PIECE_BLACK_PAWN;
-    }
-    else
-    {
-        coloredPiece = piece;
+        piece = piece + PIECE_BLACK_PAWN;
     }
 
     struct BitboardIterator item;
 
-    for (bitboard_begin(&item, board->pieces[coloredPiece]);
-        item.value;
-        bitboard_next(&item))
+    for (bitboard_begin(&item, board->pieces[piece]);
+         item.value;
+         bitboard_next(&item))
     {
         uint64_t attacks = factory(table, item.current, board->squares);
         struct BitboardIterator attack;
 
         for (bitboard_begin(&attack, attacks & ~board->colors[board->color]);
-            attack.value;
-            bitboard_next(&attack))
+             attack.value;
+             bitboard_next(&attack))
         {
-            struct Move result =
-            {
-                .source = item.current,
-                .target = attack.current,
-                .piece = piece,
-                .promotion = PIECES
-            };
+            MoveTypes type;
 
             if (board->colors[!board->color] & bitboard(attack.current))
             {
-                result.type = MOVE_TYPE_CAPTURE;
+                type = MOVE_TYPES_CAPTURE;
             }
             else
             {
-                result.type = MOVE_TYPE_QUIET;
+                type = MOVE_TYPES_QUIET;
             }
 
-            euler_ok(list_add(results, &result));
+            spawner_move(results, item.current, attack.current, piece, type);
         }
     }
 }
