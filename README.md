@@ -4,22 +4,12 @@
 
 # Snake
 
-This is a student-developed chess engine that I created as an exercise to gain a
-deeper understanding of the C programming language. NYU's Computer Systems
-Organization course (CSCI-UA 201) first introduced me to C - my new favorite
-language and inspired me to resume this project.
-
 The Snake Chess engine is based on the techniques described in the
 [Bitboard chess engine in C](https://youtu.be/QUNP-UjujBM) video series.
-
-## Components
-
-### Bitboard visualizer
 
 To visualize and understand the magic constants involved in bitboard
 manipulation, I have created a companion web application available
 [here](https://ishanpranav.github.io/snake-chess/).
-The tool enables rapid experimentation with bitboard data structures.
 
 ## License
 
