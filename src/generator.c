@@ -15,9 +15,9 @@ static bool is_square_attacked(
     Square square,
     Color color)
 {
-    if ((attacks->kings[square] & board_get_kings(board, color)) ||
-        (attacks->knights[square] & board_get_knights(board, color)) ||
-        (attacks->pawns[!color][square] & board_get_pawns(board, color)))
+    if ((attacks->kings[square] & board_get(board, color, PIECE_KING)) ||
+        (attacks->knights[square] & board_get(board, color, PIECE_KNIGHT)) ||
+        (attacks->pawns[!color][square] & board_get(board, color, PIECE_PAWN)))
     {
         return true;
     }
@@ -27,7 +27,7 @@ static bool is_square_attacked(
         square,
         board->squares);
 
-    if (bishopAttacks & board_get_bishops(board, color))
+    if (bishopAttacks & board_get(board, color, PIECE_BISHOP))
     {
         return true;
     }
@@ -37,12 +37,12 @@ static bool is_square_attacked(
         square,
         board->squares);
 
-    if (rookAttacks & board_get_rooks(board, color))
+    if (rookAttacks & board_get(board, color, PIECE_ROOK))
     {
         return true;
     }
 
-    return (bishopAttacks | rookAttacks) & board_get_queens(board, color);
+    return (bishopAttacks | rookAttacks) & board_get(board, color, PIECE_QUEEN);
 }
 
 static void generate_pawn_moves(Board board, AttackTable table)
