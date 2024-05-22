@@ -1,9 +1,9 @@
 // spawner.h
 // Licensed under the MIT license.
 
-#include "../ishan/list.h"
 #include "attack_table.h"
 #include "board.h"
+#include "move_collection.h"
 
 /**
  *
@@ -11,4 +11,4 @@
  * @param board
  * @param table
 */
-void spawn_moves(List results, Board board, AttackTable table);
+void spawn_moves(MoveCollection results, Board board, AttackTable table);

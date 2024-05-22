@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "../lib/attack_table.h"
-#include "../lib/board.h"
 #include "../lib/perft.h"
 
 int main(int count, String args[])

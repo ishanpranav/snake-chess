@@ -3,7 +3,6 @@
 
 // https://www.chessprogramming.org/Perft
 
-#include "move.h"
 #include "check.h"
 #include "spawn.h"
 
@@ -15,9 +14,9 @@ long long perft(Board board, AttackTable table, int depth)
     }
 
     long long result = 0;
-    struct List results;
+    struct MoveCollection results;
 
-    euler_ok(list(&results, sizeof(struct Move), 0));
+    results.count = 0;
 
     spawn_moves(&results, board, table);
 
@@ -40,8 +39,6 @@ long long perft(Board board, AttackTable table, int depth)
         result += perft(board, table, depth - 1);
         *board = clone;
     }
-
-    finalize_list(&results);
 
     return result;
 }
