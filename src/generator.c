@@ -9,12 +9,8 @@
 
 static void make_move(Board board, Move move)
 {
-    struct Board clone;
-
-    board_copy(&clone, board);
-
-    clone.pieces[move->piece] &= ~bitboard(move->source);
-    clone.pieces[move->piece] |= bitboard(move->target);
+    board->pieces[move->piece] &= ~bitboard(move->source);
+    board->pieces[move->piece] |= bitboard(move->target);
 }
 
 int main(void)
@@ -40,11 +36,15 @@ int main(void)
 
     for (Move move = begin; move < end; move++)
     {
-        // make_move(&b, move);
-        move_write_string(stdout, move);
+        struct Board clone = b;
+
+        make_move(&b, move);
+        move_write_string(stdout, move);    
         fprintf(stdout, "\n");
-        // board_write_string(stdout, &b, ENCODING_UNICODE);
-        // getchar();
+        board_write_string(stdout, &b, ENCODING_UNICODE);
+        getchar();
+        
+        b = clone;
     }
 
     finalize_list(&moves);

@@ -95,11 +95,6 @@ uint64_t board_get(Board instance, Color color, Piece piece)
     return instance->pieces[piece];
 }
 
-void board_copy(Board result, Board instance)
-{
-    memcpy(result, instance, sizeof * instance);
-}
-
 void board_write_string(Stream output, Board instance, Encoding encoding)
 {
     fprintf(output, "\n");

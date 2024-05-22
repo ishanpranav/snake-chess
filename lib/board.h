@@ -45,13 +45,6 @@ void board_from_fen_string(Board result, String value);
 uint64_t board_get(Board instance, Color color, Piece piece);
 
 /**
- * 
- * @param result
- * @param instance
-*/
-void board_copy(Board result, Board instance);
-
-/**
  *
  * @param output
  * @param instance
