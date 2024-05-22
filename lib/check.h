@@ -13,3 +13,10 @@
  * @param color
 */
 bool check_test(Board board, AttackTable table, Square square, Color color);
+
+/**
+ *
+ * @param board
+ * @param table
+*/
+bool check_test_position(Board board, AttackTable table);

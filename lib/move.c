@@ -2,7 +2,6 @@
 // Licensed under the MIT license.
 
 #include "bitboard.h"
-#include "check.h"
 #include "move.h"
 #include "file.h"
 
@@ -12,9 +11,8 @@ static void move_put(Board board, Piece piece, uint64_t source, uint64_t target)
     board->pieces[piece] |= target;
 }
 
-bool move_try(Move instance, Board board, AttackTable table)
+void move_apply(Move instance, Board board)
 {
-    struct Board clone = *board;
     uint64_t source = bitboard(instance->source);
     uint64_t target = bitboard(instance->target);
 
@@ -111,21 +109,9 @@ bool move_try(Move instance, Board board, AttackTable table)
     castlingRights = castling_rights_remove(castlingRights, instance->source);
     castlingRights = castling_rights_remove(castlingRights, instance->target);
     board->castlingRights = castlingRights;
-
-    board_save_changes(board);
-
-    Square kingSquare = bitboard_first(board->pieces[friendBegin + PIECE_KING]);
-
-    if (check_test(board, table, kingSquare, !board->color))
-    {
-        *board = clone;
-
-        return false;
-    }
-
     board->color = !board->color;
 
-    return true;
+    board_save_changes(board);
 }
 
 void move_write_string(Stream output, Move instance)
