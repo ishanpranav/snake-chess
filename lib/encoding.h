@@ -6,7 +6,6 @@ enum Encoding
 {
     ENCODING_ALGEBRAIC,
     ENCODING_ASCII,
-    ENCODING_UCI,
     ENCODING_UNICODE
 };
 

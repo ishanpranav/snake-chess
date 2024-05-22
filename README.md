@@ -19,7 +19,7 @@ This repository is licensed with the [MIT](LICENSE.txt) license.
 
 I'd like to thank Kaylee Kim, Eric Ho, and Aren Balian for supporting me on my
 journey (descent?) into the madness of bitboards. "Project Snake" began as our
-high-school aspiration in Irvine, California; this software hopes to make that
+high-school aspiration in Irvine, California. This software hopes to make that
 vision a reality in the form of a working UCI-compatible chess engine.
 
 ## Attribution
