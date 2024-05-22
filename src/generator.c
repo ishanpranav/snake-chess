@@ -13,12 +13,19 @@ static void make_move(Board board, Move move)
     board->pieces[move->piece] &= ~bitboard(move->source);
     board->pieces[move->piece] |= bitboard(move->target);
 
-    Piece enemyBegin = 0;
+    int direction;
+    Piece enemyBegin;
     uint64_t target = bitboard(move->target);
 
-    if (!board->color)
+    if (board->color)
     {
-        enemyBegin += PIECE_BLACK_PAWN;
+        direction = -1;
+        enemyBegin = PIECE_WHITE_PAWN;
+    }
+    else
+    {
+        direction = 1;
+        enemyBegin = PIECE_BLACK_PAWN;
     }
 
     if (move->type & MOVE_TYPES_CAPTURE)
@@ -67,18 +74,16 @@ static void make_move(Board board, Move move)
 
     if (move->type & MOVE_TYPES_EN_PASSANT)
     {
-        int target = move->target;
+        Square enPassantTarget = move->target + direction * FILES;
 
-        if (board->color)
-        {
-            target -= FILES;
-        }
-        else
-        {
-            target += FILES;
-        }
+        board->pieces[enemyBegin + PIECE_PAWN] &= ~bitboard(enPassantTarget);
+    }
 
-        board->pieces[enemyBegin + PIECE_PAWN] &= ~bitboard(target);
+    board->enPassant = SQUARES;
+
+    if (move->type & MOVE_TYPES_DOUBLE_PUSH)
+    {
+        board->enPassant = move->target + direction * FILES;
     }
 }
 
@@ -95,7 +100,7 @@ int main(void)
 
     board_from_fen_string(
         &b,
-        "r3k2r/p11pqpb1/bn2pnp1/2pPN3/Pp2P3/2N2Q1p/1PPBBPPP/R3K2R b KQkq a3 0 1");
+        "r3k2r/p11pqpb1/bn2pnp1/2pPN3/Pp2P3/2N2Q1p/1PPBBPPP/R3K2R w KQkq a3 0 1");
     spawner_generate_moves(&moves, &b, a);
     free(a);
     board_write_string(stdout, &b, ENCODING_UNICODE);
