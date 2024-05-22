@@ -1,6 +1,8 @@
 // encoding.h
 // Licensed under the MIT license.
 
+#define ENCODING_STANDARD ENCODING_UNICODE
+
 /** */
 enum Encoding
 {

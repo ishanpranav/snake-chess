@@ -42,9 +42,9 @@ int main(int count, String args[])
     board_from_fen_string(&state, position);
     board_write_string(stdout, &state, ENCODING_STANDARD);
 
-    clock_t start = clock();
+    time_t start = time(NULL);
     long long result = perft(&state, table, depth);
-    double elapsed = (double)(clock() - start) / CLOCKS_PER_SEC;
+    double elapsed = difftime(time(NULL), start);
     double speed = result / elapsed;
 
     printf(
