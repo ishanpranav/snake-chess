@@ -4,14 +4,14 @@
 
 CC = gcc -L. -O3 -Wall -Wextra
 
-all: libsnake
+all: libsnake generator
 	$(CC) src/main.c -o main -lsnake
 
 generator: libsnake
 	$(CC) src/generator.c -o generator -leuler -lsnake
 
-libsnake: attack_provider attack_table bitboard bitboard_iterator board castling_rights \
-	color piece square
+libsnake: attack_provider attack_table bitboard bitboard_iterator board \
+	castling_rights color piece square list
 	ar -r libsnake.a *.o
 
 attack_provider:
@@ -40,3 +40,6 @@ piece:
 
 square:
 	$(CC) -c lib/square.c
+
+list:
+	$(CC) -c ishan/list.c

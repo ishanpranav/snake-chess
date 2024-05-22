@@ -17,6 +17,12 @@ static String PIECE_STRINGS[][PIECES + 1] =
         "p", "n", "b", "r", "q", "k",
         "."
     },
+    [ENCODING_UCI] =
+    {
+        "", "n", "b", "r", "q", "*",
+        "", "n", "b", "r", "q", "*",
+        "?"
+    },
     [ENCODING_UNICODE] =
     {
         "\u2659", "\u2658", "\u2657", "\u2656", "\u2655", "\u2654",

@@ -7,6 +7,7 @@
 #include "../lib/bitboard_iterator.h"
 #include "../lib/board.h"
 #include "../lib/file.h"
+#include "../lib/move.h"
 #include "../lib/rank.h"
 
 static bool is_square_attacked(
@@ -253,9 +254,14 @@ static void generate_moves(Board board, AttackTable table)
     generate_piece_moves(board, table, king_attack_provider, PIECE_KING);
 }
 
+#include "../ishan/list.h"
+
 int main(void)
 {
     AttackTable a = malloc(sizeof * a);
+    struct List l;
+
+    euler_ok(list(&l, sizeof(struct Move), 0));
 
     attack_table(a);
 

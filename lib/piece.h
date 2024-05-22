@@ -1,6 +1,8 @@
 // piece.h
 // Licensed under the MIT license.
 
+#ifndef PIECE_db8a1b354e774782808dc92d4060d7be
+#define PIECE_db8a1b354e774782808dc92d4060d7be
 #include "../ishan/euler.h"
 #include "color.h"
 #include "encoding.h"
@@ -45,3 +47,5 @@ Piece piece_from_fen_char(char value);
  * @return
 */
 String piece_to_string(Piece piece, Encoding encoding);
+
+#endif
