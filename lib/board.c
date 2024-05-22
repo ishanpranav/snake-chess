@@ -8,14 +8,20 @@
 #include "file.h"
 #include "rank.h"
 
+static void board_clean(Board instance)
+{
+    instance->squares = 0;
+
+    memset(instance->colors, 0, sizeof instance->colors);
+}
+
 void board(Board instance)
 {
     instance->castlingRights = CASTLING_RIGHTS_NONE;
     instance->color = COLOR_WHITE;
     instance->enPassant = SQUARES;
-    instance->squares = 0;
 
-    memset(instance->colors, 0, sizeof instance->colors);
+    board_clean(instance);
     memset(instance->pieces, 0, sizeof instance->pieces);
 }
 
@@ -32,9 +38,29 @@ static Piece board_get_occupant(Board instance, uint64_t square)
     return PIECES;
 }
 
+void board_save_changes(Board instance)
+{
+    board_clean(instance);
+
+    for (Piece piece = PIECE_WHITE_PAWN; piece <= PIECE_WHITE_KING; piece++)
+    {
+        instance->colors[COLOR_WHITE] |= instance->pieces[piece];
+    }
+
+    for (Piece piece = PIECE_BLACK_PAWN; piece <= PIECE_BLACK_KING; piece++)
+    {
+        instance->colors[COLOR_BLACK] |= instance->pieces[piece];
+    }
+
+    for (Color color = 0; color < COLORS; color++)
+    {
+        instance->squares |= instance->colors[color];
+    }
+}
+
 void board_from_fen_string(Board result, String value)
 {
-    board(result);
+    memset(result->pieces, 0, sizeof result->pieces);
 
     for (Rank rank = 0; rank < RANKS; rank++)
     {
@@ -69,30 +95,7 @@ void board_from_fen_string(Board result, String value)
     value++;
     result->enPassant = square_from_fen_string(value);
 
-    for (Piece piece = PIECE_WHITE_PAWN; piece <= PIECE_WHITE_KING; piece++)
-    {
-        result->colors[COLOR_WHITE] |= result->pieces[piece];
-    }
-
-    for (Piece piece = PIECE_BLACK_PAWN; piece <= PIECE_BLACK_KING; piece++)
-    {
-        result->colors[COLOR_BLACK] |= result->pieces[piece];
-    }
-
-    for (Color color = 0; color < COLORS; color++)
-    {
-        result->squares |= result->colors[color];
-    }
-}
-
-uint64_t board_get(Board instance, Color color, Piece piece)
-{
-    if (color)
-    {
-        piece += PIECE_BLACK_PAWN;
-    }
-
-    return instance->pieces[piece];
+    board_save_changes(result);
 }
 
 void board_write_string(Stream output, Board instance, Encoding encoding)

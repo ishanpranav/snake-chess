@@ -3,6 +3,8 @@
 
 #include <stdbool.h>
 #include "../ishan/stream.h"
+#include "attack_table.h"
+#include "board.h"
 #include "move_types.h"
 #include "piece.h"
 #include "square.h"
@@ -18,6 +20,15 @@ struct Move
 
 /** */
 typedef struct Move* Move;
+
+/**
+ *
+ * @param instance
+ * @param board
+ * @param table
+ * @return
+*/
+bool move_try(Move instance, Board board, AttackTable table);
 
 /**
  *

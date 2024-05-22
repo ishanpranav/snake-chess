@@ -6,9 +6,9 @@
 #include "board.h"
 
 /**
- * 
+ *
  * @param results
  * @param board
  * @param table
 */
-void spawner_generate_moves(List results, Board board, AttackTable table);
+void spawn_moves(List results, Board board, AttackTable table);

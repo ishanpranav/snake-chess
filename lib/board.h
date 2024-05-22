@@ -1,6 +1,8 @@
 // board.h
 // Licensed under the MIT license.
 
+#ifndef BOARD_f50ed6f74b684b76ba9d00fa2bbdb84b
+#define BOARD_f50ed6f74b684b76ba9d00fa2bbdb84b
 #include <stdint.h>
 #include "../ishan/stream.h"
 #include "castling_rights.h"
@@ -39,10 +41,8 @@ void board_from_fen_string(Board result, String value);
 /**
  *
  * @param instance
- * @param color
- * @return
 */
-uint64_t board_get(Board instance, Color color, Piece piece);
+void board_save_changes(Board instance);
 
 /**
  *
@@ -51,3 +51,5 @@ uint64_t board_get(Board instance, Color color, Piece piece);
  * @param encoding
 */
 void board_write_string(Stream output, Board instance, Encoding encoding);
+
+#endif

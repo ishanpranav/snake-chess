@@ -3,6 +3,7 @@
 
 #include "../ishan/euler.h"
 #include "../ishan/stream.h"
+#include "square.h"
 
 /** */
 enum CastlingRights
@@ -16,6 +17,14 @@ enum CastlingRights
 
 /** */
 typedef enum CastlingRights CastlingRights;
+
+/**
+ *
+ * @param value
+ * @param square
+ * @return
+*/
+CastlingRights castling_rights_remove(CastlingRights value, Square square);
 
 /**
  *
