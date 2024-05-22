@@ -8,7 +8,7 @@ all: libsnake generator
 	$(CC) src/main.c -o main -lsnake
 
 generator: libsnake
-	$(CC) src/generator.c -o generator -leuler -lsnake
+	$(CC) src/generator.c -o generator -lsnake
 
 libsnake: attack_provider attack_table bitboard bitboard_iterator board \
 	castling_rights color move piece spawner square list

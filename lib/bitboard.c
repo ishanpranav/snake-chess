@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 #include <inttypes.h>
+#include <string.h>
 #include "bitboard.h"
 #include "file.h"
 #include "rank.h"
