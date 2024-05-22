@@ -105,6 +105,7 @@ static void spawner_pawn(List results, Board board, AttackTable table)
 
         result.source = pawn.current;
         result.target = target;
+        result.type = MOVE_TYPE_QUIET;
 
         if (target < SQUARES && !(board->squares & bitboard(target)))
         {
@@ -121,11 +122,11 @@ static void spawner_pawn(List results, Board board, AttackTable table)
                     pawn.current < startSquare + FILES &&
                     !(board->squares & bitboard(target + direction * FILES)))
                 {
-                    result.doublePush = true;
+                    result.type = MOVE_TYPE_DOUBLE_PUSH;
 
                     euler_ok(list_add(results, &result));
 
-                    result.doublePush = false;
+                    result.type = MOVE_TYPE_QUIET;
                 }
             }
         }
@@ -133,7 +134,7 @@ static void spawner_pawn(List results, Board board, AttackTable table)
         struct BitboardIterator attack;
         uint64_t attacks = table->pawns[board->color][pawn.current];
 
-        result.capture = true;
+        result.type = MOVE_TYPE_CAPTURE;
 
         for (bitboard_begin(&attack, attacks& board->colors[!board->color]);
             attack.value;
@@ -158,15 +159,13 @@ static void spawner_pawn(List results, Board board, AttackTable table)
             {
                 target = bitboard_first(enPassantAttack);
 
-                result.enPassant = true;
+                result.type = MOVE_TYPE_EN_PASSANT;
 
                 euler_ok(list_add(results, &result));
 
-                result.enPassant = false;
+                result.type = MOVE_TYPE_QUIET;
             }
         }
-
-        result.capture = false;
     }
 }
 
@@ -192,8 +191,7 @@ static void spawner_castle(List results, Board board, AttackTable table)
     struct Move result =
     {
         .piece = PIECE_KING,
-        .promotion = PIECES,
-        .castle = true
+        .promotion = PIECES
     };
 
     if (board->castlingRights & kingside)
@@ -205,6 +203,7 @@ static void spawner_castle(List results, Board board, AttackTable table)
         {
             result.source = square + FILE_E;
             result.target = square + FILE_G;
+            result.type = MOVE_TYPE_CASTLE_KINGSIDE;
 
             euler_ok(list_add(results, &result));
         }
@@ -220,6 +219,7 @@ static void spawner_castle(List results, Board board, AttackTable table)
         {
             result.source = square + FILE_E;
             result.target = square + FILE_C;
+            result.type = MOVE_TYPE_CASTLE_QUEENSIDE;
 
             euler_ok(list_add(results, &result));
         }
@@ -261,11 +261,18 @@ static void spawner_piece(
             {
                 .source = item.current,
                 .target = attack.current,
-                .capture =
-                    board->colors[!board->color] & bitboard(attack.current),
                 .piece = piece,
                 .promotion = PIECES
             };
+
+            if (board->colors[!board->color] & bitboard(attack.current))
+            {
+                result.type = MOVE_TYPE_CAPTURE;
+            }
+            else
+            {
+                result.type = MOVE_TYPE_QUIET;
+            }
 
             euler_ok(list_add(results, &result));
         }

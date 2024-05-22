@@ -5,16 +5,17 @@
 
 void move_write_string(Stream output, Move instance)
 {
-    if (instance->castle)
+    switch (instance->type)
     {
+    case MOVE_TYPE_CASTLE_KINGSIDE:
         fprintf(output, "O-O");
-
-        if (instance->source - instance->target == 4)
-        {
-            fprintf(output, "-O");
-        }
-
         return;
+
+    case MOVE_TYPE_CASTLE_QUEENSIDE:
+        fprintf(output, "O-O-O");
+        return;
+
+    default: break;
     }
 
     fprintf(
@@ -23,7 +24,8 @@ void move_write_string(Stream output, Move instance)
         piece_to_string(instance->piece, ENCODING_ALGEBRAIC),
         square_to_string(instance->source));
 
-    if (instance->capture)
+    if (instance->type == MOVE_TYPE_CAPTURE ||
+        instance->type == MOVE_TYPE_EN_PASSANT)
     {
         fprintf(output, "x");
     }
@@ -38,7 +40,7 @@ void move_write_string(Stream output, Move instance)
             piece_to_string(instance->promotion, ENCODING_ALGEBRAIC));
     }
 
-    if (instance->enPassant)
+    if (instance->type == MOVE_TYPE_EN_PASSANT)
     {
         fprintf(output, " e.p.");
     }
