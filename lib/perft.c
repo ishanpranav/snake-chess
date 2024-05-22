@@ -20,28 +20,17 @@ long long perft(Board board, AttackTable table, int depth)
 
     spawn_moves(&results, board, table);
 
-    if (depth == 1)
-    {
-        return results.count;
-    }
-
-    Move begin = results.items;
-    Move end = begin + results.count;
-
-    for (Move move = begin; move < end; move++)
+    for (int i = 0; i < results.count; i++)
     {
         struct Board clone = *board;
 
-        move_apply(move, board);
+        move_apply(results.items + i, board);
 
-        if (check_test_position(board, table))
+        if (!check_test_position(board, table))
         {
-            *board = clone;
-
-            continue;
+            result += perft(board, table, depth - 1);
         }
 
-        result += perft(board, table, depth - 1);
         *board = clone;
     }
 
