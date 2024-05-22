@@ -8,6 +8,7 @@
 
 #ifndef EULER_2363b2bd9868485c9651b89fbe7082ba
 #define EULER_2363b2bd9868485c9651b89fbe7082ba
+#include <stdlib.h>
 #include "exception.h"
 #define macro do {
 #define end_macro } while (0)

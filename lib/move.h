@@ -25,14 +25,14 @@ typedef struct Move* Move;
 /**
  *
  * @param output
- * @param value
+ * @param instance
  * @return
 */
-void move_write_string(Stream output, Move value);
+void move_write_string(Stream output, Move instance);
 
 /**
  *
  * @param output
- * @param value
+ * @param instance
 */
-void move_write_uci_string(Stream output, Move value);
+void move_write_uci_string(Stream output, Move instance);

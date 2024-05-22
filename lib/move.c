@@ -3,13 +3,13 @@
 
 #include "move.h"
 
-void move_write_string(Stream output, Move value)
+void move_write_string(Stream output, Move instance)
 {
-    if (value->castle)
+    if (instance->castle)
     {
         fprintf(output, "O-O");
 
-        if (value->source - value->target == 4)
+        if (instance->source - instance->target == 4)
         {
             fprintf(output, "-O");
         }
@@ -19,34 +19,35 @@ void move_write_string(Stream output, Move value)
 
     fprintf(
         output,
-        "%s",
-        piece_to_string(value->piece, ENCODING_ALGEBRAIC));
+        "%s%s",
+        piece_to_string(instance->piece, ENCODING_ALGEBRAIC),
+        square_to_string(instance->source));
 
-    if (value->capture)
+    if (instance->capture)
     {
         fprintf(output, "x");
     }
 
-    fprintf(output, "%s", value->target);
+    fprintf(output, "%s", square_to_string(instance->target));
 
-    if (value->promotion != PIECES)
+    if (instance->promotion != PIECES)
     {
         fprintf(
             output,
             "=%s",
-            piece_to_string(value->promotion, ENCODING_ALGEBRAIC));
+            piece_to_string(instance->promotion, ENCODING_ALGEBRAIC));
     }
 
-    if (value->enPassant)
+    if (instance->enPassant)
     {
         fprintf(output, " e.p.");
     }
 }
 
-void move_write_uci_string(Stream output, Move value)
+void move_write_uci_string(Stream output, Move instance)
 {
     fprintf(output, "%s%s%s",
-        square_to_string(value->source),
-        square_to_string(value->target),
-        square_to_string(value->promotion));
+        square_to_string(instance->source),
+        square_to_string(instance->target),
+        piece_to_string(instance->promotion, ENCODING_UCI));
 }

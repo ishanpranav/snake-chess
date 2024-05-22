@@ -1,6 +1,8 @@
 // attack_table.h
 // Licensed under the MIT license.
 
+#ifndef ATTACK_TABLE_6983fe1ab8974ea3a5afeaf19e004d72
+#define ATTACK_TABLE_6983fe1ab8974ea3a5afeaf19e004d72
 #include <stdint.h>
 #include "color.h"
 #include "square.h"
@@ -37,3 +39,5 @@ typedef struct AttackTable* AttackTable;
  * @param instance
 */
 void attack_table(AttackTable instance);
+
+#endif

@@ -10,6 +10,7 @@
 #define LIST_95a94c0379b44bd3967523c81d4caa55
 #include <stdbool.h>
 #include <stddef.h>
+#include "exception.h"
 #include "object.h"
 
 /** Represents a list of objects that can be accessed by index. */

@@ -11,7 +11,7 @@ generator: libsnake
 	$(CC) src/generator.c -o generator -leuler -lsnake
 
 libsnake: attack_provider attack_table bitboard bitboard_iterator board \
-	castling_rights color piece square list
+	castling_rights color move piece spawner square list
 	ar -r libsnake.a *.o
 
 attack_provider:
@@ -35,8 +35,14 @@ castling_rights:
 color:
 	$(CC) -c lib/color.c
 
+move:
+	$(CC) -c lib/move.c
+	
 piece:
 	$(CC) -c lib/piece.c
+
+spawner:
+	$(CC) -c lib/spawner.c
 
 square:
 	$(CC) -c lib/square.c
