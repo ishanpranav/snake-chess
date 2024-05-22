@@ -11,7 +11,7 @@ snake_perft: libsnake
 	$(CC) src/snake_perft.c -o snake_perft -lsnake
 
 libsnake: attack_provider attack_table bitboard bitboard_iterator board \
-	castling_rights check color move perft piece spawn square list
+	castling_rights check color move perft piece spawn square
 	ar -r libsnake.a *.o
 
 attack_provider:
@@ -52,6 +52,3 @@ spawn:
 
 square:
 	$(CC) -c lib/square.c
-
-list:
-	$(CC) -c ishan/list.c

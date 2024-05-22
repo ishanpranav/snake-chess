@@ -1,6 +1,7 @@
 // main.c
 // Licensed under the MIT license.
 
+#include <stdlib.h>
 #include "../lib/attack_table.h"
 #include "../lib/board.h"
 

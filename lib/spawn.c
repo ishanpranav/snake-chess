@@ -5,11 +5,10 @@
 #include "bitboard_iterator.h"
 #include "check.h"
 #include "file.h"
-#include "move.h"
 #include "spawn.h"
 
 static void spawn_move(
-    List results,
+    MoveCollection results,
     Square source,
     Square target,
     Piece piece,
@@ -23,11 +22,12 @@ static void spawn_move(
         .type = type
     };
 
-    euler_ok(list_add(results, &result));
+    results->items[results->count] = result;
+    results->count++;
 }
 
 static void spawn_promotion(
-    List results,
+    MoveCollection results,
     Square source,
     Square target,
     Piece piece,
@@ -59,7 +59,7 @@ static void spawn_promotion(
         MOVE_TYPES_PROMOTION_QUEEN | promotionType);
 }
 
-static void spawn_pawn(List results, Board board, AttackTable table)
+static void spawn_pawn(MoveCollection results, Board board, AttackTable table)
 {
     int direction;
     Piece piece;
@@ -169,7 +169,7 @@ static void spawn_pawn(List results, Board board, AttackTable table)
     }
 }
 
-static void spawn_castle(List results, Board board, AttackTable table)
+static void spawn_castle(MoveCollection results, Board board, AttackTable table)
 {
     Piece piece;
     Square square;
@@ -226,7 +226,7 @@ static void spawn_castle(List results, Board board, AttackTable table)
 }
 
 static void spawn_piece(
-    List results,
+    MoveCollection results,
     Board board,
     AttackTable table,
     AttackProvider factory,
@@ -266,7 +266,7 @@ static void spawn_piece(
     }
 }
 
-void spawn_moves(List results, Board board, AttackTable table)
+void spawn_moves(MoveCollection results, Board board, AttackTable table)
 {
     spawn_pawn(results, board, table);
     spawn_castle(results, board, table);

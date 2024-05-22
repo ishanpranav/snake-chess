@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "../lib/attack_table.h"
-#include "../lib/board.h"
 #include "../lib/perft.h"
 
 int main(int count, String args[])
@@ -46,12 +44,15 @@ int main(int count, String args[])
 
     clock_t start = clock();
     long long result = perft(&state, table, depth);
+    double elapsed = (double)(clock() - start) / CLOCKS_PER_SEC;
+    double speed = result / elapsed;
 
     printf(
-        "result: %lld\n"
-        "elapsed: %lf\n",
-        result,
-        (double)(clock() - start) / CLOCKS_PER_SEC);
+        "result: %lld positions\n"
+        "elapsed: %lf s\n"
+        "speed: %0.lf positions/s\n",
+        result, elapsed, speed);
+
     free(table);
 
     return 0;
