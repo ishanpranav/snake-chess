@@ -20,6 +20,11 @@ long long perft(Board board, AttackTable table, int depth)
 
     spawn_moves(&results, board, table);
 
+    if (depth == 1)
+    {
+        return results.count;
+    }
+
     Move begin = results.items;
     Move end = begin + results.count;
 
