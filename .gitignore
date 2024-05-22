@@ -6,6 +6,6 @@
 bin/
 obj/
 main
-generator
+snake_perft
 *.o
 *.a
