@@ -1,9 +1,35 @@
 // move.c
 // Licensed under the MIT license.
 
+#include <string.h>
 #include "bitboard.h"
-#include "move.h"
 #include "file.h"
+#include "spawn.h"
+
+bool move_from_string(Move result, String value, Board board, AttackTable table)
+{
+    struct MoveCollection moves;
+
+    moves.count = 0;
+
+    spawn_moves(&moves, board, table);
+
+    for (int i = 0; i < moves.count; i++)
+    {
+        char buffer[8];
+
+        move_write_uci_string(buffer, moves.items + i);
+
+        if (strcmp(buffer, value) == 0)
+        {
+            *result = moves.items[i];
+
+            return true;
+        }
+    }
+
+    return false;
+}
 
 static void move_put(Board board, Piece piece, uint64_t source, uint64_t target)
 {
@@ -71,8 +97,7 @@ void move_apply(Move instance, Board board)
             board->pieces[friendBegin + PIECE_QUEEN] |= target;
         }
     }
-
-    if (instance->type & MOVE_TYPES_EN_PASSANT)
+    else if (instance->type & MOVE_TYPES_EN_PASSANT)
     {
         Square enPassantTarget = instance->target + direction * FILES;
 
@@ -85,8 +110,7 @@ void move_apply(Move instance, Board board)
     {
         board->enPassant = instance->target + direction * FILES;
     }
-
-    if (instance->type & MOVE_TYPES_KINGSIDE)
+    else if (instance->type & MOVE_TYPES_KINGSIDE)
     {
         move_put(
             board,
@@ -94,8 +118,7 @@ void move_apply(Move instance, Board board)
             bitboard(instance->source + 3),
             bitboard(instance->source + 1));
     }
-
-    if (instance->type & MOVE_TYPES_QUEENSIDE)
+    else if (instance->type & MOVE_TYPES_QUEENSIDE)
     {
         move_put(
             board,
@@ -174,28 +197,28 @@ void move_write_string(Stream output, Move instance)
     }
 }
 
-void move_write_uci_string(Stream output, Move instance)
+void move_write_uci_string(char buffer[], Move instance)
 {
-    fprintf(
-        output,
+    sprintf(
+        buffer,
         "%s%s",
         square_to_string(instance->source),
         square_to_string(instance->target));
 
     if (instance->type & MOVE_TYPES_PROMOTION_KNIGHT)
     {
-        fprintf(output, "n");
+        sprintf(buffer, "n");
     }
     else  if (instance->type & MOVE_TYPES_PROMOTION_BISHOP)
     {
-        fprintf(output, "b");
+        sprintf(buffer, "b");
     }
     else if (instance->type & MOVE_TYPES_PROMOTION_ROOK)
     {
-        fprintf(output, "r");
+        sprintf(buffer, "r");
     }
     else if (instance->type & MOVE_TYPES_PROMOTION_QUEEN)
     {
-        fprintf(output, "q");
+        sprintf(buffer, "q");
     }
 }

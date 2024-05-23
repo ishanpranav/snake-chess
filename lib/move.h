@@ -1,7 +1,9 @@
 // move.h
 // Licensed under the MIT license.
 
+#include <stdbool.h>
 #include "../ishan/stream.h"
+#include "attack_table.h"
 #include "board.h"
 #include "move_types.h"
 #include "piece.h"
@@ -18,6 +20,20 @@ struct Move
 
 /** */
 typedef struct Move* Move;
+
+/**
+ *
+ * @param result
+ * @param value
+ * @param board
+ * @param table
+ * @return
+*/
+bool move_from_string(
+    Move result,
+    String value,
+    Board board,
+    AttackTable table);
 
 /**
  *
@@ -40,4 +56,4 @@ void move_write_string(Stream output, Move instance);
  * @param output
  * @param instance
 */
-void move_write_uci_string(Stream output, Move instance);
+void move_write_uci_string(char buffer[], Move instance);
