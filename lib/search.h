@@ -9,4 +9,10 @@
  * 
  * @param 
 */
-void search(Move result, Board board, AttackTable table);
+void search(Move result, Board board, AttackTable table, int depth);
+
+/**
+ * 
+ * @param 
+*/
+void negamax_search(Move result, Board board, AttackTable table, int depth);

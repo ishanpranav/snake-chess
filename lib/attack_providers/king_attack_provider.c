@@ -6,7 +6,7 @@
 uint64_t king_attack_provider(
     AttackTable table,
     Square square,
-    uint64_t obstacles)
+    EULER_UNUSED uint64_t obstacles)
 {
     return table->kings[square];
 }

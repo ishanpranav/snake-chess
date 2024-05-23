@@ -24,6 +24,12 @@ struct Move
 typedef struct Move* Move;
 
 /**
+ * 
+ * @param result
+*/
+void move_from_null(Move result);
+
+/**
  *
  * @param result
  * @param value

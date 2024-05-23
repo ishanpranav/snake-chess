@@ -23,14 +23,12 @@ long long perft(Board board, AttackTable table, int depth)
     {
         struct Board clone = *board;
 
-        move_apply(moves.items + i, board);
+        move_apply(moves.items + i, &clone);
 
-        if (!check_test_position(board, table))
+        if (!check_test_position(&clone, table))
         {
-            result += perft(board, table, depth - 1);
+            result += perft(&clone, table, depth - 1);
         }
-
-        *board = clone;
     }
 
     return result;

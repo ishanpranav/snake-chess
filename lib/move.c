@@ -7,6 +7,14 @@
 #include "file.h"
 #include "spawn.h"
 
+void move_from_null(Move result)
+{
+    result->piece = PIECES;
+    result->source = SQUARES;
+    result->target = SQUARES;
+    result->type = MOVE_TYPES_QUIET;
+}
+
 bool move_from_uci_string(
     Move result,
     String value,

@@ -1,10 +1,10 @@
 // search.c
 // Licensed under the MIT license.
 
-#include "search.h"
-#include "spawn.h"
+#include "../search.h"
+#include "../spawn.h"
 
-void search(Move result, Board board, AttackTable table)
+void search(Move result, Board board, AttackTable table, EULER_UNUSED int depth)
 {
     struct MoveCollection moves;
 
@@ -21,7 +21,5 @@ void search(Move result, Board board, AttackTable table)
         }
     }
 
-    result->source = SQUARES;
-    result->target = SQUARES;
-    result->type = MOVE_TYPES_QUIET;
+    move_from_null(result);
 }

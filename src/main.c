@@ -5,8 +5,6 @@
 #include <string.h>
 #include "../lib/uci.h"
 
-#include "../lib/spawn.h"
-
 int main(void)
 {
     Uci state = malloc(sizeof * state);
@@ -24,17 +22,5 @@ int main(void)
 
     free(state);
 
-    // board_from_fen_string(&state->board, BOARD_INITIAL);
-
-    // struct MoveCollection moves;
-
-    // move_collection(&moves);
-    // spawn(&moves, &state->board, &state->table);
-
-    // for (int i = 0; i < moves.count; i++)
-    // {
-    //     move_write_string(stdout, moves.items + i);
-    //     printf("\n");
-    // }
     return 0;
 }

@@ -7,6 +7,7 @@
 #include <string.h>
 #include <time.h>
 #include "../ishan/euler.h"
+#include "evaluation.h"
 #include "perft.h"
 #include "search.h"
 #include "uci.h"
@@ -88,7 +89,7 @@ static bool uci_evaluate_position(Uci instance, String value)
 
 static bool uci_evaluate_go(Uci instance, String value)
 {
-    int depth = 0;
+    int depth = 4;
     int nodes = 0;
     int mate = 0;
     int moveTime = 0;
@@ -107,7 +108,8 @@ static bool uci_evaluate_go(Uci instance, String value)
 
         euler_assert(argument - 1);
 
-        int depth = atoi(argument);
+        depth = atoi(argument);
+
         time_t start = time(NULL);
         long long result = perft(&instance->board, &instance->table, depth);
         double elapsed = difftime(time(NULL), start);
@@ -217,12 +219,19 @@ static bool uci_evaluate_go(Uci instance, String value)
         infinite = true;
     }
 
+    euler_assert(depth > 0);
+
     instance->started = true;
 
-    char buffer[8] = { 0 };
+    char buffer[8] = {0};
     struct Move bestMove;
 
-    search(&bestMove, &instance->board, &instance->table);
+    fprintf(instance->output,
+            "info depth %d\n"
+            "info score cp %d\n",
+            depth,
+            evaluation(&instance->board));
+    negamax_search(&bestMove, &instance->board, &instance->table, depth);
     move_write_uci_string(buffer, &bestMove);
     fprintf(instance->output, "bestmove %s\n", buffer);
 

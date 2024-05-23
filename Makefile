@@ -8,12 +8,15 @@ all: libsnake
 	$(CC) src/main.c -o main -lsnake
 
 libsnake: attack_provider attack_table bitboard bitboard_iterator board \
-	castling_rights check color move move_collection perft piece search spawn \
-	square	uci ishan_string
+	castling_rights check color evaluation move move_collection perft piece \
+	search spawn square	uci ishan_string
 	ar -r libsnake.a *.o
 
 attack_provider:
 	$(CC) -c lib/attack_providers/*.c
+
+search:
+	$(CC) -c lib/searches/*.c
 
 attack_table:
 	$(CC) -c lib/attack_table.c
@@ -36,6 +39,9 @@ check:
 color:
 	$(CC) -c lib/color.c
 
+evaluation:
+	$(CC) -c lib/evaluation.c
+
 move:
 	$(CC) -c lib/move.c
 
@@ -47,9 +53,6 @@ perft:
 
 piece:
 	$(CC) -c lib/piece.c
-
-search:
-	$(CC) -c lib/search.c
 
 spawn:
 	$(CC) -c lib/spawn.c
