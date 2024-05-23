@@ -14,8 +14,7 @@ bool move_from_uci_string(
 {
     struct MoveCollection moves;
 
-    moves.count = 0;
-
+    move_collection(&moves);
     spawn_moves(&moves, board, table);
 
     for (int i = 0; i < moves.count; i++)

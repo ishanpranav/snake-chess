@@ -4,14 +4,12 @@
 
 CC = gcc -L. -march=native -O3 -Wall -Wextra
 
-all: libsnake snake_perft
+all: libsnake
 	$(CC) src/main.c -o main -lsnake
 
-snake_perft: libsnake
-	$(CC) src/perft.c -o snake_perft -lsnake
-
 libsnake: attack_provider attack_table bitboard bitboard_iterator board \
-	castling_rights check color move perft piece spawn square uci ishan_string
+	castling_rights check color move move_collection perft piece spawn square \
+	uci ishan_string
 	ar -r libsnake.a *.o
 
 attack_provider:
@@ -40,6 +38,9 @@ color:
 
 move:
 	$(CC) -c lib/move.c
+
+move_collection:
+	$(CC) -c lib/move_collection.c
 
 perft:
 	$(CC) -c lib/perft.c

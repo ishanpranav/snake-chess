@@ -12,3 +12,9 @@ struct MoveCollection
 
 /** */
 typedef struct MoveCollection* MoveCollection;
+
+/**
+ * 
+ * @param instance
+*/
+void move_collection(MoveCollection instance);

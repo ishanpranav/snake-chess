@@ -5,99 +5,212 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "../ishan/euler.h"
-#include "attack_table.h"
-#include "board.h"
+#include "move.h"
+#include "perft.h"
 #include "uci.h"
 
-static bool uci_evaluate_debug(Stream output, String value)
+void uci(Uci instance, Stream output)
+{
+    board(&instance->board);
+    attack_table(&instance->table);
+
+    instance->output = output;
+}
+
+static bool uci_evaluate_debug(Uci instance, String value)
 {
     return true;
 }
 
-static bool uci_evaluate_set_option(Stream output, String value)
+static bool uci_evaluate_set_option(Uci instance, String value)
 {
     return true;
 }
 
-static bool uci_evaluate_new_game(Stream output)
+static bool uci_evaluate_new_game(Uci instance)
 {
     return true;
 }
 
-static bool uci_evaluate_position(Stream output, String value)
+static bool uci_evaluate_position(Uci instance, String value)
 {
-    return true;
-}
+    value = strchr(value, ' ') + 1;
 
-static bool uci_evaluate_go_perft(Stream output, String value)
-{
-    value = strchr(value, ' ');
+    char *argument;
 
-    if (!value)
+    if ((argument = strstr(value, "startpos")))
     {
-        return false;
+        argument = strchr(argument, ' ') + 1;
+
+        board_from_fen_string(&instance->board, BOARD_INITIAL);
     }
 
+    if ((argument = strstr(value, "fen")))
+    {
+        argument = strchr(argument, ' ') + 1;
+
+        board_from_fen_string(&instance->board, argument);
+    }
+
+    if ((argument = strstr(value, "moves")))
+    {
+        argument = strchr(argument, ' ') + 1;
+
+        for (char *token = strtok(argument, " \n"); 
+            token; 
+            token = strtok(NULL, " \n"))
+        {
+            struct Move move;
+
+            if (move_from_uci_string(
+                    &move,
+                    tok,
+                    &instance->board,
+                    &instance->table))
+            {
+                move_apply(&move, &instance->board);
+            }
+        }
+    }
+
+    return true;
+}
+
+static bool uci_evaluate_go_perft(Uci instance, String value)
+{
+    value = strchr(value, ' ') + 1;
+
     int depth = atoi(value);
-    AttackTable table = malloc(sizeof * table);
-    struct Board state;
-
-    attack_table(table);
-    board_from_fen_string(&state, BOARD_INITIAL);
-    board_write_string(stdout, &state, ENCODING_STANDARD);
-
     time_t start = time(NULL);
-    long long result = perft(&state, table, depth);
+    long long result = perft(&instance->board, &instance->table, depth);
     double elapsed = difftime(time(NULL), start);
     double speed = result / elapsed;
 
-    printf(
-        "elapsed: %lf s\n"
-        "speed: %0.lf positions/s\n"
-        "result: %lld positions\n",
-        elapsed, speed, result);
-
-    free(table);
+    fprintf(instance->output,
+            "info x-elapsed %lf s\n"
+            "info x-speed %0.lf positions/s\n"
+            "info x-result %lld positions\n",
+            elapsed, speed, result);
 
     return true;
 }
 
-static bool uci_evaluate_go(Stream output, String value)
+static bool uci_evaluate_go(Uci instance, String value)
 {
+    bool infinite = false;
+    bool ponder = false;
+    int depth = 0;
+    int nodes = 0;
+    int mate = 0;
+    int moveTime = 0;
+    int whiteTime = 0;
+    int blackTime = 0;
+    int whiteIncrement = 0;
+    int blackIncrement = 0;
+    int movesRemaining = 0;
     String argument = NULL;
-
-    if ((argument = strstr(value, "")))
-    {
-
-    }
 
     if ((argument = strstr(value, "perft")))
     {
-        return uci_evaluate_go_perft(output, argument);
+        return uci_evaluate_go_perft(instance, argument);
+    }
+
+    if ((argument = strstr(value, "searchmoves")))
+    {
+    }
+
+    if (strstr(value, "ponder"))
+    {
+        ponder = true;
+    }
+
+    if ((argument = strstr(value, "wtime")))
+    {
+        argument = strchr(argument, ' ') + 1;
+        whiteTime = atoi(argument);
+    }
+
+    if ((argument = strstr(value, "btime")))
+    {
+        argument = strchr(argument, ' ') + 1;
+        blackTime = atoi(argument);
+    }
+
+    if ((argument = strstr(value, "winc")))
+    {
+        argument = strchr(argument, ' ') + 1;
+        whiteIncrement = atoi(argument);
+    }
+
+    if ((argument = strstr(value, "binc")))
+    {
+        argument = strchr(argument, ' ') + 1;
+        blackIncrement = atoi(argument);
+    }
+
+    if ((argument = strstr(value, "movestogo")))
+    {
+        argument = strchr(argument, ' ') + 1;
+        movesRemaining = atoi(argument);
+    }
+
+    if ((argument = strstr(value, "depth")))
+    {
+        argument = strchr(argument, ' ') + 1;
+        depth = atoi(argument);
+    }
+
+    if ((argument = strstr(value, "nodes")))
+    {
+        argument = strchr(argument, ' ') + 1;
+        nodes = atoi(argument);
+    }
+
+    if ((argument = strstr(value, "mate")))
+    {
+        argument = strchr(argument, ' ') + 1;
+        mate = atoi(argument);
+    }
+
+    if ((argument = strstr(value, "movetime")))
+    {
+        argument = strchr(argument, ' ') + 1;
+        moveTime = atoi(argument);
+    }
+
+    if (strstr(value, " infinite"))
+    {
+        infinite = true;
     }
 
     return true;
 }
 
-static bool uci_evaluate_stop(Stream output)
+static bool uci_evaluate_stop(Uci instance)
 {
     return true;
 }
 
-static bool uci_evaluate_ponder_hit(Stream output)
+static bool uci_evaluate_ponder_hit(Uci instance)
 {
     return true;
 }
 
-bool uci_evaluate(Stream output, String value)
+bool uci_evaluate(Uci instance, String value)
 {
-    if (string_starts_with(value, "uci"))
+    if (strstr(value, "ucinewgame"))
     {
-        fprintf(output,
-            "id name snake-chess\n"
-            "id author Ishan Pranav\n"
-            "uciok\n");
+        return uci_evaluate_new_game(instance);
+    }
+
+    if (strstr(value, "uci"))
+    {
+        fprintf(instance->output,
+                "id name snake-chess\n"
+                "id author Ishan Pranav\n"
+                "uciok\n");
 
         return true;
     }
@@ -106,44 +219,49 @@ bool uci_evaluate(Stream output, String value)
 
     if ((command = strstr(value, "debug")))
     {
-        return uci_evaluate_debug(output, command);
+        return uci_evaluate_debug(instance, command);
     }
 
-    if (string_starts_with(value, "isready"))
+    if (strstr(value, "isready"))
     {
-        fprintf(output, "readyok\n");
+        fprintf(instance->output, "readyok\n");
 
         return true;
     }
 
     if ((command = strstr(value, "setoption")))
     {
-        return uci_evaluate_set_option(output, command);
-    }
-
-    if (string_starts_with(value, "ucinewgame"))
-    {
-        return uci_evaluate_new_game(output);
+        return uci_evaluate_set_option(instance, command);
     }
 
     if ((command = strstr(value, "position")))
     {
-        return uci_evaluate_position(output, command);
+        return uci_evaluate_position(instance, command);
     }
 
     if ((command = strstr(value, "go")))
     {
-        return uci_evaluate_go(output, command);
+        return uci_evaluate_go(instance, command);
     }
 
-    if (string_starts_with(value, "stop"))
+    if (strstr(value, "stop"))
     {
-        return uci_evaluate_stop(output);
+        return uci_evaluate_stop(instance);
     }
 
-    if (string_starts_with(value, "ponderhit"))
+    if (strstr(value, "ponderhit"))
     {
-        return uci_evaluate_ponder_hit(output);
+        return uci_evaluate_ponder_hit(instance);
+    }
+
+    if (strstr(value, "x-write"))
+    {
+        board_write_string(
+            instance->output,
+            &instance->board,
+            ENCODING_STANDARD);
+
+        return true;
     }
 
     return !strstr(value, "quit");
