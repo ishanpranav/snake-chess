@@ -7,3 +7,9 @@ void move_collection(MoveCollection instance)
 {
     instance->count = 0;
 }
+
+void move_collection_add(MoveCollection instance, Move item)
+{
+    instance->items[instance->count] = *item;
+    instance->count++;
+}

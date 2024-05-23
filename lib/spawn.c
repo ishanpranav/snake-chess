@@ -22,8 +22,7 @@ static void spawn_move(
         .type = type
     };
 
-    results->items[results->count] = result;
-    results->count++;
+    move_collection_add(results, &result);
 }
 
 static void spawn_promotion(
@@ -234,7 +233,7 @@ static void spawn_piece(
 {
     if (board->color)
     {
-        piece = piece + PIECE_BLACK_PAWN;
+        piece += PIECE_BLACK_PAWN;
     }
 
     struct BitboardIterator item;

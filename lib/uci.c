@@ -17,6 +17,7 @@ void uci(Uci instance, Stream output)
     attack_table(&instance->table);
 
     instance->output = output;
+    instance->started = false;
 }
 
 static bool uci_evaluate_debug(Uci instance, String value)
@@ -225,6 +226,8 @@ static bool uci_evaluate_go(Uci instance, String value)
     move_write_uci_string(buffer, &bestMove);
     fprintf(instance->output, "bestmove %s\n", buffer);
 
+    instance->started = false;
+
     return true;
 }
 
@@ -294,16 +297,6 @@ bool uci_evaluate(Uci instance, String value)
     if (strstr(value, "ponderhit"))
     {
         return uci_evaluate_ponder_hit(instance);
-    }
-
-    if (strstr(value, ".write"))
-    {
-        board_write_string(
-            instance->output,
-            &instance->board,
-            ENCODING_STANDARD);
-
-        return true;
     }
 
     return !strstr(value, "quit");

@@ -145,12 +145,10 @@ bool move_is_legal(Move instance, Board board, AttackTable table)
 {
     struct Board clone = *board;
 
-    move_apply(instance, board);
+    move_apply(instance, &clone);
 
-    bool result = !check_test_position(board, table);
+    bool result = !check_test_position(&clone, table);
     
-    *board = clone;
-
     return result;
 }
 

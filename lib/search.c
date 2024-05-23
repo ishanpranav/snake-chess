@@ -8,6 +8,7 @@ void search(Move result, Board board, AttackTable table)
 {
     struct MoveCollection moves;
 
+    move_collection(&moves);
     spawn(&moves, board, table);
 
     for (int i = 0; i < moves.count; i++)

@@ -4,4 +4,4 @@
 
 Del *.o
 clang -march=native -O3 -c lib/*.c lib/attack_providers/*.c
-clang -march=native -D ENCODING_STANDARD=ENCODING_ASCII -O3 src/snake_perft.c *.o -o snake_perft.exe
+clang -march=native -D ENCODING_STANDARD=ENCODING_ASCII -O3 src/main.c *.o -o main.exe
