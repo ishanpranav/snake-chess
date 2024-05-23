@@ -6,7 +6,11 @@
 #include "file.h"
 #include "spawn.h"
 
-bool move_from_string(Move result, String value, Board board, AttackTable table)
+bool move_from_uci_string(
+    Move result,
+    String value,
+    Board board,
+    AttackTable table)
 {
     struct MoveCollection moves;
 

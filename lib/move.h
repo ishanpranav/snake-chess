@@ -29,7 +29,7 @@ typedef struct Move* Move;
  * @param table
  * @return
 */
-bool move_from_string(
+bool move_from_uci_string(
     Move result,
     String value,
     Board board,
