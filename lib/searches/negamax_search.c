@@ -11,7 +11,10 @@
 #include "../search.h"
 #include "../spawn.h"
 
-int negamax_search_impl(Board board, AttackTable table, int depth)
+int negamax_search_impl(
+    Board board,
+    AttackTable table,
+    int depth)
 {
     if (!depth)
     {
@@ -29,13 +32,16 @@ int negamax_search_impl(Board board, AttackTable table, int depth)
         struct Board clone = *board;
 
         move_apply(moves.items + i, &clone);
-        
+
         if (check_test_position(&clone, table))
         {
             continue;
         }
 
-        int score = -negamax_search_impl(&clone, table, depth - 1);
+        int score = -negamax_search_impl(
+            &clone,
+            table,
+            depth - 1);
 
         if (score > max)
         {
@@ -66,7 +72,10 @@ void negamax_search(Move result, Board board, AttackTable table, int depth)
             continue;
         }
 
-        int score = negamax_search_impl(&clone, table, depth);
+        int score = -negamax_search_impl(
+            &clone,
+            table,
+            depth);
 
         if (score > max)
         {
