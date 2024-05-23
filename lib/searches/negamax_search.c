@@ -4,6 +4,7 @@
 // https://en.wikipedia.org/wiki/Negamax
 // https://www.chessprogramming.org/Negamax
 // https://www.chessprogramming.org/Unmake_Move
+// https://www.chessprogramming.org/Alpha-Beta
 
 #include <limits.h>
 #include "../check.h"
@@ -14,6 +15,8 @@
 int negamax_search_impl(
     Board board,
     AttackTable table,
+    int alpha,
+    int beta,
     int depth)
 {
     if (!depth)
@@ -21,7 +24,6 @@ int negamax_search_impl(
         return evaluation(board);
     }
 
-    int max = INT_MIN;
     struct MoveCollection moves;
 
     move_collection(&moves);
@@ -41,15 +43,22 @@ int negamax_search_impl(
         int score = -negamax_search_impl(
             &clone,
             table,
+            -beta,
+            -alpha,
             depth - 1);
-
-        if (score > max)
+        
+        if (score >= beta)
         {
-            max = score;
+            return beta;
+        }
+
+        if (score > alpha)
+        {
+            alpha = score;
         }
     }
 
-    return max;
+    return alpha;
 }
 
 void negamax_search(Move result, Board board, AttackTable table, int depth)
@@ -75,6 +84,8 @@ void negamax_search(Move result, Board board, AttackTable table, int depth)
         int score = -negamax_search_impl(
             &clone,
             table,
+            -INT_MAX,
+            INT_MAX,
             depth);
 
         if (score > max)
