@@ -2,7 +2,7 @@
 # Copyright (c) 2024 Ishan Pranav
 # Licensed under the MIT license.
 
-CC = gcc -L. -Wall -Wextra
+CC = gcc -L. -march=native -O3 -Wall -Wextra
 
 all: libsnake
 	$(CC) src/main.c -o main -lsnake

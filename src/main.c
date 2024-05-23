@@ -19,7 +19,7 @@ int main(void)
     while (fgets(buffer, sizeof buffer, stdin) && uci_evaluate(state, buffer))
     {
         fflush(state->output);
-        board_write_string(state->output, &state->board, ENCODING_ASCII);
+        board_write_string(state->output, &state->board, ENCODING_STANDARD);
     }
 
     free(state);

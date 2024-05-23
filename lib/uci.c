@@ -219,7 +219,7 @@ static bool uci_evaluate_go(Uci instance, String value)
 
     instance->started = true;
 
-    char buffer[8];
+    char buffer[8] = { 0 };
     struct Move bestMove;
 
     search(&bestMove, &instance->board, &instance->table);

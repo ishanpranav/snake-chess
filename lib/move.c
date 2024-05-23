@@ -20,7 +20,7 @@ bool move_from_uci_string(
 
     for (int i = 0; i < moves.count; i++)
     {
-        char buffer[8];
+        char buffer[8] = { 0 };
 
         move_write_uci_string(buffer, moves.items + i);
 
@@ -214,26 +214,31 @@ void move_write_string(Stream output, Move instance)
 
 void move_write_uci_string(char buffer[], Move instance)
 {
-    sprintf(
-        buffer,
-        "%s%s",
-        square_to_string(instance->source),
-        square_to_string(instance->target));
+    String promotion;
 
-    if (instance->type & MOVE_TYPES_PROMOTION_KNIGHT)
+    if (instance->type & MOVE_TYPES_KNIGHT)
     {
-        sprintf(buffer, "n");
+        promotion = "n";
     }
-    else if (instance->type & MOVE_TYPES_PROMOTION_BISHOP)
+    else if (instance->type & MOVE_TYPES_BISHOP)
     {
-        sprintf(buffer, "b");
+        promotion = "b";
     }
-    else if (instance->type & MOVE_TYPES_PROMOTION_ROOK)
+    else if (instance->type & MOVE_TYPES_ROOK)
     {
-        sprintf(buffer, "r");
+        promotion = "r";
     }
-    else if (instance->type & MOVE_TYPES_PROMOTION_QUEEN)
+    else if (instance->type & MOVE_TYPES_QUEEN)
     {
-        sprintf(buffer, "q");
+        promotion = "q";
     }
+    else
+    {
+        promotion = "";
+    }
+
+    sprintf(buffer, "%s%s%s",
+        square_to_string(instance->source),
+        square_to_string(instance->target),
+        promotion);
 }
