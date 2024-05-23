@@ -17,7 +17,7 @@ long long perft(Board board, AttackTable table, int depth)
     struct MoveCollection moves;
 
     move_collection(&moves);
-    spawn_moves(&moves, board, table);
+    spawn(&moves, board, table);
 
     for (int i = 0; i < moves.count; i++)
     {

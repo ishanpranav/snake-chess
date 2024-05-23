@@ -1,6 +1,8 @@
 // move.h
 // Licensed under the MIT license.
 
+#ifndef MOVE_351d83c941e240319a15515b2aa24a1d
+#define MOVE_351d83c941e240319a15515b2aa24a1d
 #include <stdbool.h>
 #include "../ishan/stream.h"
 #include "attack_table.h"
@@ -44,6 +46,14 @@ bool move_from_uci_string(
 void move_apply(Move instance, Board board);
 
 /**
+ * 
+ * @param instance
+ * @param board
+ * @param table
+*/
+bool move_is_legal(Move instance, Board board, AttackTable table);
+
+/**
  *
  * @param output
  * @param instance
@@ -57,3 +67,5 @@ void move_write_string(Stream output, Move instance);
  * @param instance
 */
 void move_write_uci_string(char buffer[], Move instance);
+
+#endif

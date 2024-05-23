@@ -9,9 +9,10 @@
 /** */
 struct Uci
 {
+    FILE* output;
     struct Board board;
     struct AttackTable table;
-    FILE* output;
+    bool started;
 };
 
 /** */

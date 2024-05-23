@@ -266,7 +266,7 @@ static void spawn_piece(
     }
 }
 
-void spawn_moves(MoveCollection results, Board board, AttackTable table)
+void spawn(MoveCollection results, Board board, AttackTable table)
 {
     spawn_pawn(results, board, table);
     spawn_castle(results, board, table);

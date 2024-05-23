@@ -11,4 +11,4 @@
  * @param board
  * @param table
 */
-void spawn_moves(MoveCollection results, Board board, AttackTable table);
+void spawn(MoveCollection results, Board board, AttackTable table);

@@ -3,6 +3,7 @@
 
 #include <string.h>
 #include "bitboard.h"
+#include "check.h"
 #include "file.h"
 #include "spawn.h"
 
@@ -15,7 +16,7 @@ bool move_from_uci_string(
     struct MoveCollection moves;
 
     move_collection(&moves);
-    spawn_moves(&moves, board, table);
+    spawn(&moves, board, table);
 
     for (int i = 0; i < moves.count; i++)
     {
@@ -140,6 +141,19 @@ void move_apply(Move instance, Board board)
     board_save_changes(board);
 }
 
+bool move_is_legal(Move instance, Board board, AttackTable table)
+{
+    struct Board clone = *board;
+
+    move_apply(instance, board);
+
+    bool result = !check_test_position(board, table);
+    
+    *board = clone;
+
+    return result;
+}
+
 void move_write_string(Stream output, Move instance)
 {
     if (instance->type & MOVE_TYPES_KINGSIDE)
@@ -212,7 +226,7 @@ void move_write_uci_string(char buffer[], Move instance)
     {
         sprintf(buffer, "n");
     }
-    else  if (instance->type & MOVE_TYPES_PROMOTION_BISHOP)
+    else if (instance->type & MOVE_TYPES_PROMOTION_BISHOP)
     {
         sprintf(buffer, "b");
     }

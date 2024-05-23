@@ -7,8 +7,8 @@
 #include <string.h>
 #include <time.h>
 #include "../ishan/euler.h"
-#include "move.h"
 #include "perft.h"
+#include "search.h"
 #include "uci.h"
 
 void uci(Uci instance, Stream output)
@@ -31,12 +31,16 @@ static bool uci_evaluate_set_option(Uci instance, String value)
 
 static bool uci_evaluate_new_game(Uci instance)
 {
+    board_from_fen_string(&instance->board, BOARD_INITIAL);
+
     return true;
 }
 
 static bool uci_evaluate_position(Uci instance, String value)
 {
     value = strchr(value, ' ') + 1;
+
+    euler_assert(value - 1);
 
     char *argument;
 
@@ -51,6 +55,7 @@ static bool uci_evaluate_position(Uci instance, String value)
     {
         argument = strchr(argument, ' ') + 1;
 
+        euler_assert(argument - 1);
         board_from_fen_string(&instance->board, argument);
     }
 
@@ -58,15 +63,17 @@ static bool uci_evaluate_position(Uci instance, String value)
     {
         argument = strchr(argument, ' ') + 1;
 
-        for (char *token = strtok(argument, " \n"); 
-            token; 
-            token = strtok(NULL, " \n"))
+        euler_assert(argument - 1);
+
+        for (char *token = strtok(argument, " \n");
+             token;
+             token = strtok(NULL, " \n"))
         {
             struct Move move;
 
             if (move_from_uci_string(
                     &move,
-                    tok,
+                    token,
                     &instance->board,
                     &instance->table))
             {
@@ -78,29 +85,8 @@ static bool uci_evaluate_position(Uci instance, String value)
     return true;
 }
 
-static bool uci_evaluate_go_perft(Uci instance, String value)
-{
-    value = strchr(value, ' ') + 1;
-
-    int depth = atoi(value);
-    time_t start = time(NULL);
-    long long result = perft(&instance->board, &instance->table, depth);
-    double elapsed = difftime(time(NULL), start);
-    double speed = result / elapsed;
-
-    fprintf(instance->output,
-            "info x-elapsed %lf s\n"
-            "info x-speed %0.lf positions/s\n"
-            "info x-result %lld positions\n",
-            elapsed, speed, result);
-
-    return true;
-}
-
 static bool uci_evaluate_go(Uci instance, String value)
 {
-    bool infinite = false;
-    bool ponder = false;
     int depth = 0;
     int nodes = 0;
     int mate = 0;
@@ -110,11 +96,29 @@ static bool uci_evaluate_go(Uci instance, String value)
     int whiteIncrement = 0;
     int blackIncrement = 0;
     int movesRemaining = 0;
+    bool ponder = false;
+    bool infinite = false;
     String argument = NULL;
 
     if ((argument = strstr(value, "perft")))
     {
-        return uci_evaluate_go_perft(instance, argument);
+        argument = strchr(argument, ' ') + 1;
+
+        euler_assert(argument - 1);
+
+        int depth = atoi(argument);
+        time_t start = time(NULL);
+        long long result = perft(&instance->board, &instance->table, depth);
+        double elapsed = difftime(time(NULL), start);
+        double speed = result / elapsed;
+
+        fprintf(instance->output,
+                "info .elapsed %lf s\n"
+                "info .speed %0.lf positions/s\n"
+                "info .result %lld positions\n",
+                elapsed, speed, result);
+
+        return true;
     }
 
     if ((argument = strstr(value, "searchmoves")))
@@ -129,67 +133,105 @@ static bool uci_evaluate_go(Uci instance, String value)
     if ((argument = strstr(value, "wtime")))
     {
         argument = strchr(argument, ' ') + 1;
+
+        euler_assert(argument - 1);
+
         whiteTime = atoi(argument);
     }
 
     if ((argument = strstr(value, "btime")))
     {
         argument = strchr(argument, ' ') + 1;
+
+        euler_assert(argument - 1);
+
         blackTime = atoi(argument);
     }
 
     if ((argument = strstr(value, "winc")))
     {
         argument = strchr(argument, ' ') + 1;
+
+        euler_assert(argument - 1);
+
         whiteIncrement = atoi(argument);
     }
 
     if ((argument = strstr(value, "binc")))
     {
         argument = strchr(argument, ' ') + 1;
+
+        euler_assert(argument - 1);
+
         blackIncrement = atoi(argument);
     }
 
     if ((argument = strstr(value, "movestogo")))
     {
         argument = strchr(argument, ' ') + 1;
+
+        euler_assert(argument - 1);
+
         movesRemaining = atoi(argument);
     }
 
     if ((argument = strstr(value, "depth")))
     {
         argument = strchr(argument, ' ') + 1;
+
+        euler_assert(argument - 1);
+
         depth = atoi(argument);
     }
 
     if ((argument = strstr(value, "nodes")))
     {
         argument = strchr(argument, ' ') + 1;
+
+        euler_assert(argument - 1);
+
         nodes = atoi(argument);
     }
 
     if ((argument = strstr(value, "mate")))
     {
         argument = strchr(argument, ' ') + 1;
+
+        euler_assert(argument - 1);
+
         mate = atoi(argument);
     }
 
     if ((argument = strstr(value, "movetime")))
     {
         argument = strchr(argument, ' ') + 1;
+
+        euler_assert(argument - 1);
+
         moveTime = atoi(argument);
     }
 
-    if (strstr(value, " infinite"))
+    if (strstr(value, "infinite"))
     {
         infinite = true;
     }
+
+    instance->started = true;
+
+    char buffer[8];
+    struct Move bestMove;
+
+    search(&bestMove, &instance->board, &instance->table);
+    move_write_uci_string(buffer, &bestMove);
+    fprintf(instance->output, "bestmove %s\n", buffer);
 
     return true;
 }
 
 static bool uci_evaluate_stop(Uci instance)
 {
+    instance->started = false;
+
     return true;
 }
 
@@ -254,7 +296,7 @@ bool uci_evaluate(Uci instance, String value)
         return uci_evaluate_ponder_hit(instance);
     }
 
-    if (strstr(value, "x-write"))
+    if (strstr(value, ".write"))
     {
         board_write_string(
             instance->output,
