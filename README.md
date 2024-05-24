@@ -5,7 +5,18 @@
 # Snake
 
 The Snake Chess engine is based on the techniques described in the
-[Bitboard chess engine in C](https://youtu.be/QUNP-UjujBM) video series.
+[Bitboard chess engine in C](https://youtu.be/QUNP-UjujBM) video series and on
+the [chess programming wiki](https://www.chessprogramming.org/).
+
+## Components
+
+- **Board representation:** [bitboards](https://www.chessprogramming.org/Bitboards)
+per piece and color indexed from squares A8 to H1.
+- **Move generation:** [magic bitboards](https://www.chessprogramming.org/Magic_Bitboards)
+- **Search:** [negamax](https://www.chessprogramming.org/Negamax) with
+[alpha-beta pruning](https://www.chessprogramming.org/Alpha-Beta)
+- **Evaluation:** [material evaluation](https://www.chessprogramming.org/Material)
+ane [piece-square tables](https://www.chessprogramming.org/Piece-Square_Tables)
 
 To visualize and understand the magic constants involved in bitboard
 manipulation, I have created a companion web application available

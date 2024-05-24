@@ -3,7 +3,9 @@
   "dependencies": [
     {
       "title": "Bitboard CHESS ENGINE in C",
-      "formats": ["video"],
+      "formats": [
+        "video"
+      ],
       "source": "https://youtu.be/QUNP-UjujBM",
       "author": "Maksim Korzh",
       "copyright": "Maksim Korzh",
@@ -11,19 +13,93 @@
     },
     {
       "title": "Codebook",
-      "formats": ["c"],
+      "formats": [
+        "c"
+      ],
       "source": "https://github.com/ishanpranav/codebook",
       "author": "Ishan Pranav",
       "copyright": "2024 Ishan Pranav",
       "index": "Pranav, Ishan",
       "license": "mit_ishanpranav"
+    },
+    {
+      "title": "lichess-bot",
+      "formats": [
+        "python"
+      ],
+      "source": "https://github.com/lichess-bot-devs/lichess-bot",
+      "author": "lichess-bot-devs",
+      "index": "Lichess Bot Devs",
+      "license": "agpl30"
     }
   ],
-  "references": [],
+  "references": [
+    {
+      "title": "Bitboards",
+      "formats": [
+        "article"
+      ],
+      "source": "https://www.chessprogramming.org/Bitboards",
+      "index": "Chess Programming Wiki",
+      "license": "ccbysa30"
+    },
+    {
+      "title": "Magic Bitboards",
+      "formats": [
+        "article"
+      ],
+      "source": "https://www.chessprogramming.org/Magic_Bitboards",
+      "index": "Chess Programming Wiki",
+      "license": "ccbysa30"
+    },
+    {
+      "title": "Negamax",
+      "formats": [
+        "article",
+        "pseudocode"
+      ],
+      "source": "https://www.chessprogramming.org/Negamax",
+      "index": "Chess Programming Wiki",
+      "license": "ccbysa30"
+    },
+    {
+      "title": "Alpha-Beta",
+      "formats": [
+        "article",
+        "pseudocode"
+      ],
+      "source": "https://www.chessprogramming.org/Alpha-Beta",
+      "index": "Chess Programming Wiki",
+      "license": "ccbysa30"
+    },
+    {
+      "title": "Material",
+      "formats": [
+        "article"
+      ],
+      "source": "https://www.chessprogramming.org/Material",
+      "index": "Chess Programming Wiki",
+      "license": "ccbysa30"
+    },
+    {
+      "title": "Piece-Square Tables",
+      "formats": [
+        "article"
+      ],
+      "source": "https://www.chessprogramming.org/Piece-Square_Tables",
+      "index": "Chess Programming Wiki",
+      "license": "ccbysa30"
+    }
+  ],
   "tools": [
     {
       "title": "Bootstrap",
-      "formats": ["javascript", "html", "scss", "css"],
+      "formats": [
+        "javascript",
+        "html",
+        "scss",
+        "css"
+      ],
       "source": "https://github.com/twbs/bootstrap",
       "author": "The Bootstrap Authors",
       "copyright": "2011-2013 The Bootstrap Authors",
@@ -32,7 +108,9 @@
     },
     {
       "title": "JQuery",
-      "formats": ["javascript"],
+      "formats": [
+        "javascript"
+      ],
       "source": "https://github.com/jquery/jquery",
       "author": "OpenJS Foundation and other contributors",
       "copyright": "OpenJS Foundation and other contributors, https://openjsf.org/",
@@ -41,7 +119,10 @@
     },
     {
       "title": "chessboard.js",
-      "formats": ["javascript", "css"],
+      "formats": [
+        "javascript",
+        "css"
+      ],
       "source": "https://github.com/oakmac/chessboardjs",
       "author": "Chris Oakman",
       "copyright": "2019 Chris Oakman",
@@ -50,111 +131,135 @@
     },
     {
       "title": "Chess kdt45",
-      "formats": ["svg"],
+      "formats": [
+        "svg"
+      ],
       "source": "https://commons.wikimedia.org/wiki/File:Chess_kdt45.svg",
       "author": "Cburnett",
       "copyright": "2006 Cburnett",
       "index": "Cburnett",
-      "license": "ccbysa30_cburnett"
+      "license": "ccbysa30"
     },
     {
       "title": "Chess klt45",
-      "formats": ["svg"],
+      "formats": [
+        "svg"
+      ],
       "source": "https://commons.wikimedia.org/wiki/File:Chess_klt45.svg",
       "author": "Cburnett",
       "copyright": "2006 Cburnett",
       "index": "Cburnett",
-      "license": "ccbysa30_cburnett"
+      "license": "ccbysa30"
     },
     {
       "title": "Chess qdt45",
-      "formats": ["svg"],
+      "formats": [
+        "svg"
+      ],
       "source": "https://commons.wikimedia.org/wiki/File:Chess_qdt45.svg",
       "author": "Cburnett",
       "copyright": "2006 Cburnett",
       "index": "Cburnett",
-      "license": "ccbysa30_cburnett"
+      "license": "ccbysa30"
     },
     {
       "title": "Chess qlt45",
-      "formats": ["svg"],
+      "formats": [
+        "svg"
+      ],
       "source": "https://commons.wikimedia.org/wiki/File:Chess_qlt45.svg",
       "author": "Cburnett",
       "copyright": "2006 Cburnett",
       "index": "Cburnett",
-      "license": "ccbysa30_cburnett"
+      "license": "ccbysa30"
     },
     {
       "title": "Chess rdt45",
-      "formats": ["svg"],
+      "formats": [
+        "svg"
+      ],
       "source": "https://commons.wikimedia.org/wiki/File:Chess_rdt45.svg",
       "author": "Cburnett",
       "copyright": "2006 Cburnett",
       "index": "Cburnett",
-      "license": "ccbysa30_cburnett"
+      "license": "ccbysa30"
     },
     {
       "title": "Chess rlt45",
-      "formats": ["svg"],
+      "formats": [
+        "svg"
+      ],
       "source": "https://commons.wikimedia.org/wiki/File:Chess_rlt45.svg",
       "author": "Cburnett",
       "copyright": "2006 Cburnett",
       "index": "Cburnett",
-      "license": "ccbysa30_cburnett"
+      "license": "ccbysa30"
     },
     {
       "title": "Chess bdt45",
-      "formats": ["svg"],
+      "formats": [
+        "svg"
+      ],
       "source": "https://commons.wikimedia.org/wiki/File:Chess_bdt45.svg",
       "author": "Cburnett",
       "copyright": "2006 Cburnett",
       "index": "Cburnett",
-      "license": "ccbysa30_cburnett"
+      "license": "ccbysa30"
     },
     {
       "title": "Chess blt45",
-      "formats": ["svg"],
+      "formats": [
+        "svg"
+      ],
       "source": "https://commons.wikimedia.org/wiki/File:Chess_blt45.svg",
       "author": "Cburnett",
       "copyright": "2006 Cburnett",
       "index": "Cburnett",
-      "license": "ccbysa30_cburnett"
+      "license": "ccbysa30"
     },
     {
       "title": "Chess ndt45",
-      "formats": ["svg"],
+      "formats": [
+        "svg"
+      ],
       "source": "https://commons.wikimedia.org/wiki/File:Chess_ndt45.svg",
       "author": "Cburnett",
       "copyright": "2006 Cburnett",
       "index": "Cburnett",
-      "license": "ccbysa30_cburnett"
+      "license": "ccbysa30"
     },
     {
       "title": "Chess nlt45",
-      "formats": ["svg"],
+      "formats": [
+        "svg"
+      ],
       "source": "https://commons.wikimedia.org/wiki/File:Chess_nlt45.svg",
       "author": "Cburnett",
       "copyright": "2006 Cburnett",
       "index": "Cburnett",
-      "license": "ccbysa30_cburnett"
+      "license": "ccbysa30"
     },
     {
       "title": "Chess pdt45",
-      "formats": ["svg"],
+      "formats": [
+        "svg"
+      ],
       "source": "https://commons.wikimedia.org/wiki/File:Chess_pdt45.svg",
       "author": "Cburnett",
       "copyright": "2006 Cburnett",
       "index": "Cburnett",
-      "license": "ccbysa30_cburnett"
+      "license": "ccbysa30"
     },
     {
       "title": "Chess plt45",
-      "formats": ["svg"],
+      "formats": [
+        "svg"
+      ],
       "source": "https://commons.wikimedia.org/wiki/File:Chess_plt45.svg",
       "author": "Cburnett",
       "copyright": "2006 Cburnett",
       "index": "Cburnett",
-      "license": "ccbysa30_cburnett"
+      "license": "ccbysa30"
     }
   ]
 }

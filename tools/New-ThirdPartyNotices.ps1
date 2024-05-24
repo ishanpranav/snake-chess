@@ -82,6 +82,10 @@ function Out-Dependencies {
                 $source = $source.Substring(35).Replace('_', "%20") + "%20-%20Wikimedia Commons"
             }
 
+            if ($source.StartsWith("https://www.chessprogramming.org/")) {
+                $source = $source.Substring(33).Replace("_", "%20") + "%20-%20Chess Programming Wiki"
+            }
+
             if ($source.StartsWith("https://youtu.be/")) {
                 $source = "YouTube"
             }
