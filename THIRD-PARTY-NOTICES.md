@@ -61,6 +61,35 @@ inspired by third-party open-source software.
 - Source: [Piece-Square Tables - Chess Programming Wiki](https://www.chessprogramming.org/Piece-Square_Tables)
 - License: [Creative Commons Attribution ShareAlike 3.0](#ccbysa30)
 
+### Zobrist Hashing&emsp;<sub><sup>*article*&ensp;</sup></sub>
+- Source: [Zobrist Hashing - Chess Programming Wiki](https://www.chessprogramming.org/Zobrist_Hashing)
+- License: [Creative Commons Attribution ShareAlike 3.0](#ccbysa30)
+
+### Magic Bitboards and How to Find Them&emsp;<sub><sup>*article*&ensp;</sup></sub>
+- Author: Analog Hors
+- Source: [https://analog-hors.github.io/site/magic-bitboards](https://analog-hors.github.io/site/magic-bitboards)
+- License: [Creative Commons Attribution-NonCommercial 4.0 International](#ccbync40)
+
+### Bitboard&emsp;<sub><sup>*article*&ensp;</sup></sub>
+- Source: [Bitboard - Wikipedia](https://en.wikipedia.org/wiki/Bitboard)
+- License: [Creative Commons Attribution ShareAlike 4.0](#ccbysa40)
+
+### Negamax&emsp;<sub><sup>*article*&ensp;*pseudocode*&ensp;</sup></sub>
+- Source: [Negamax - Wikipedia](https://en.wikipedia.org/wiki/Negamax)
+- License: [Creative Commons Attribution ShareAlike 4.0](#ccbysa40)
+
+### Alpha–beta pruning&emsp;<sub><sup>*article*&ensp;*pseudocode*&ensp;</sup></sub>
+- Source: [Alpha–beta pruning - Wikipedia](https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning)
+- License: [Creative Commons Attribution ShareAlike 4.0](#ccbysa40)
+
+### Zobrist hashing&emsp;<sub><sup>*article*&ensp;</sup></sub>
+- Source: [Zobrist hashing - Wikipedia](https://en.wikipedia.org/wiki/Zobrist_hashing)
+- License: [Creative Commons Attribution ShareAlike 4.0](#ccbysa40)
+
+### Transposition table&emsp;<sub><sup>*article*&ensp;</sup></sub>
+- Source: [Transposition table - Wikipedia](https://en.wikipedia.org/wiki/Transposition_table)
+- License: [Creative Commons Attribution ShareAlike 4.0](#ccbysa40)
+
 
 Resources
 ---------
@@ -812,10 +841,24 @@ For more information on this, and how to apply and follow the GNU AGPL, see
 ```
 ________________________________________________________________________________
 
+### <a id='ccbync40'>Creative Commons Attribution-NonCommercial 4.0 International</a>
+
+```
+See https://creativecommons.org/licenses/by-nc/4.0
+```
+________________________________________________________________________________
+
 ### <a id='ccbysa30'>Creative Commons Attribution ShareAlike 3.0</a>
 
 ```
 See http://creativecommons.org/licenses/by-sa/3.0/
+```
+________________________________________________________________________________
+
+### <a id='ccbysa40'>Creative Commons Attribution ShareAlike 4.0</a>
+
+```
+See https://creativecommons.org/licenses/by-sa/4.0/
 ```
 ________________________________________________________________________________
 

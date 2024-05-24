@@ -99,6 +99,56 @@
       "source": "https://www.chessprogramming.org/Piece-Square_Tables",
       "index": "Chess Programming Wiki",
       "license": "ccbysa30"
+    },
+    {
+      "title": "Zobrist Hashing",
+      "formats": ["article"],
+      "source": "https://www.chessprogramming.org/Zobrist_Hashing",
+      "index": "Chess Programming Wiki",
+      "license": "ccbysa30"
+    },
+    {
+      "title": "Bitboard",
+      "formats": ["article"],
+      "source": "https://en.wikipedia.org/wiki/Bitboard",
+      "index": "Wikipedia",
+      "license": "ccbysa40"
+    },
+    {
+      "title": "Negamax",
+      "formats": ["article", "pseudocode"],
+      "source": "https://en.wikipedia.org/wiki/Negamax",
+      "index": "Wikipedia",
+      "license": "ccbysa40"
+    },
+    {
+      "title": "Alpha–beta pruning",
+      "formats": ["article", "pseudocode"],
+      "source": "https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning",
+      "index": "Wikipedia",
+      "license": "ccbysa40"
+    },
+    {
+      "title": "Zobrist hashing",
+      "formats": ["article"],
+      "source": "https://en.wikipedia.org/wiki/Zobrist_hashing",
+      "index": "Wikipedia",
+      "license": "ccbysa40"
+    },
+    {
+      "title": "Transposition table",
+      "formats": ["article"],
+      "source": "https://en.wikipedia.org/wiki/Transposition_table",
+      "index": "Wikipedia",
+      "license": "ccbysa40"
+    },
+    {
+      "title": "Magic Bitboards and How to Find Them",
+      "formats": ["article"],
+      "source": "https://analog-hors.github.io/site/magic-bitboards",
+      "author": "Analog Hors",
+      "index": "Hors, Analog",
+      "license": "ccbync40"
     }
   ],
   "tools": [
