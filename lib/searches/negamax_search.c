@@ -45,6 +45,8 @@ int negamax_search_impl(
 
             continue;
         }
+        
+        hasLegalMoves = true;
 
         int score = -negamax_search_impl(
             &clone,
