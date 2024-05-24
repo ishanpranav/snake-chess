@@ -101,7 +101,7 @@ class EngineWrapper:
         Raises chess.engine.EngineError if an option is sent that the engine does not support.
         """
         try:
-            extra_options = {} if game is None else game_specific_options(game)
+            extra_options = {}
             self.engine.configure(cast(OPTIONS_TYPE, options | extra_options))
         except Exception:
             self.engine.close()
