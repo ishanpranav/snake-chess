@@ -15,7 +15,7 @@ static void board_clean(Board instance)
     memset(instance->colors, 0, sizeof instance->colors);
 }
 
-void board(Board instance)
+void board(Board instance, Zobrist zobrist)
 {
     instance->color = COLOR_WHITE;
     instance->enPassant = SQUARES;
@@ -24,6 +24,7 @@ void board(Board instance)
 
     board_clean(instance);
     memset(instance->pieces, 0, sizeof instance->pieces);
+    board_rehash(instance, zobrist);
 }
 
 static Piece board_get_occupant(Board instance, uint64_t square)

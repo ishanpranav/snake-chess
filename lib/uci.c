@@ -16,9 +16,9 @@ void uci(Uci instance, Stream output)
 {
     uint32_t state = ZOBRIST_SEED;
 
-    board(&instance->board);
-    attack_table(&instance->table);
     zobrist(&instance->zobrist, &state);
+    board(&instance->board, &instance->zobrist);
+    attack_table(&instance->table);
 
     instance->output = output;
     instance->started = false;

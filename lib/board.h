@@ -11,6 +11,12 @@
 #include "zobrist.h"
 #define BOARD_EMPTY "8/8/8/8/8/8/8/8 w - -"
 #define BOARD_INITIAL "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+#define BOARD_INCREMENTAL_HASH 0
+#if BOARD_INCREMENTAL_HASH
+#define board_increment_hash(board, increment) (board)->hash ^= (increment)
+#else
+#define board_increment_hash(board, increment) 
+#endif
 
 /** */
 struct Board
@@ -30,8 +36,9 @@ typedef struct Board* Board;
 /**
  *
  * @param instance
+ * @param zobrist
 */
-void board(Board instance);
+void board(Board instance, Zobrist zobrist);
 
 /**
  *

@@ -6,6 +6,14 @@
 #include "check.h"
 #include "file.h"
 #include "spawn.h"
+#define move_insert(board, piece, target, zobrist) macro \
+(board)->pieces[(piece)] |= bitboard((target)); \
+(board)-> hash ^= (zobrist)->pieces[(piece)][(target)]; \
+end_macro
+#define move_remove(board, piece, source, zobrist) macro \
+(board)->pieces[(piece)] &= ~bitboard((source));\
+(board)-> hash ^= (zobrist)->pieces[(piece)][(source)];\
+end_macro
 
 void move_from_null(Move result)
 {
@@ -28,7 +36,7 @@ bool move_from_uci_string(
 
     for (int i = 0; i < moves.count; i++)
     {
-        char buffer[8] = { 0 };
+        char buffer[8] = {0};
 
         move_write_uci_string(buffer, moves.items + i);
 
@@ -43,18 +51,13 @@ bool move_from_uci_string(
     return false;
 }
 
-static void move_put(Board board, Piece piece, uint64_t source, uint64_t target)
-{
-    board->pieces[piece] &= ~source;
-    board->pieces[piece] |= target;
-}
-
 void move_apply(Move instance, Board board, Zobrist zobrist)
 {
-    uint64_t source = bitboard(instance->source);
-    uint64_t target = bitboard(instance->target);
+    Square source = instance->source;
+    Square target = instance->target;
 
-    move_put(board, instance->piece, source, target);
+    move_remove(board, instance->piece, source, zobrist);
+    move_insert(board, instance->piece, target, zobrist);
 
     int direction;
     Piece enemyBegin;
@@ -79,9 +82,9 @@ void move_apply(Move instance, Board board, Zobrist zobrist)
 
         for (Piece piece = enemyBegin; piece <= enemyEnd; piece++)
         {
-            if (board->pieces[piece] & target)
+            if (board->pieces[piece] & bitboard(target))
             {
-                board->pieces[piece] &= ~target;
+                move_remove(board, piece, target, zobrist);
 
                 break;
             }
@@ -90,61 +93,71 @@ void move_apply(Move instance, Board board, Zobrist zobrist)
 
     if (instance->type & MOVE_TYPES_PROMOTION)
     {
-        board->pieces[friendBegin + PIECE_PAWN] &= ~target;
+        move_remove(board, friendBegin + PIECE_PAWN, target, zobrist);
 
         if (instance->type & MOVE_TYPES_KNIGHT)
         {
-            board->pieces[friendBegin + PIECE_KNIGHT] |= target;
+            move_insert(board, friendBegin + PIECE_KNIGHT, target, zobrist);
         }
         else if (instance->type & MOVE_TYPES_BISHOP)
         {
-            board->pieces[friendBegin + PIECE_BISHOP] |= target;
+            move_insert(board, friendBegin + PIECE_BISHOP, target, zobrist);
         }
         else if (instance->type & MOVE_TYPES_ROOK)
         {
-            board->pieces[friendBegin + PIECE_ROOK] |= target;
+            move_insert(board, friendBegin + PIECE_ROOK, target, zobrist);
         }
         else if (instance->type & MOVE_TYPES_QUEEN)
         {
-            board->pieces[friendBegin + PIECE_QUEEN] |= target;
+            move_insert(board, friendBegin + PIECE_QUEEN, target, zobrist);
         }
     }
     else if (instance->type & MOVE_TYPES_EN_PASSANT)
     {
-        Square enPassantTarget = instance->target + direction * FILES;
-
-        board->pieces[enemyBegin + PIECE_PAWN] &= ~bitboard(enPassantTarget);
+        move_remove(
+            board,
+            enemyBegin + PIECE_PAWN,
+            target + direction * FILES,
+            zobrist);
     }
-
-    board->enPassant = SQUARES;
 
     if (instance->type & MOVE_TYPES_DOUBLE_PUSH)
     {
-        board->enPassant = instance->target + direction * FILES;
+        Square enPassantTarget = target + direction * FILES;
+
+        board->enPassant = enPassantTarget;
+        board->hash ^= zobrist->enPassant[enPassantTarget];
     }
-    else if (instance->type & MOVE_TYPES_KINGSIDE)
+    else if (board->enPassant != SQUARES)
     {
-        move_put(
-            board,
-            friendBegin + PIECE_ROOK,
-            bitboard(instance->source + 3),
-            bitboard(instance->source + 1));
+        board->hash ^= zobrist->enPassant[board->enPassant];
+        board->enPassant = SQUARES;
+    }
+
+    if (instance->type & MOVE_TYPES_KINGSIDE)
+    {
+        move_remove(board, friendBegin + PIECE_ROOK, source + 3, zobrist);
+        move_insert(board, friendBegin + PIECE_ROOK, source + 1, zobrist);
     }
     else if (instance->type & MOVE_TYPES_QUEENSIDE)
     {
-        move_put(
-            board,
-            friendBegin + PIECE_ROOK,
-            bitboard(instance->source - 4),
-            bitboard(instance->source - 1));
+        move_remove(board, friendBegin + PIECE_ROOK, source - 4, zobrist);
+        move_insert(board, friendBegin + PIECE_ROOK, source - 1, zobrist);
     }
 
     CastlingRights castlingRights = board->castlingRights;
 
-    castlingRights = castling_rights_remove(castlingRights, instance->source);
-    castlingRights = castling_rights_remove(castlingRights, instance->target);
+    board->hash ^= zobrist->castlingRights[castlingRights];
+    castlingRights = castling_rights_remove(castlingRights, source);
+    castlingRights = castling_rights_remove(castlingRights, target);
+    board->hash ^= zobrist->castlingRights[castlingRights];
     board->castlingRights = castlingRights;
     board->color = !board->color;
+    
+    if (board->color)
+    {
+        board->hash ^= zobrist->color;
+    }
 
     board_save_changes(board);
 }
@@ -235,7 +248,7 @@ void move_write_uci_string(char buffer[], Move instance)
     }
 
     sprintf(buffer, "%s%s%s",
-        square_to_string(instance->source),
-        square_to_string(instance->target),
-        promotion);
+            square_to_string(instance->source),
+            square_to_string(instance->target),
+            promotion);
 }
