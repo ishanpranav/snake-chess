@@ -3,14 +3,18 @@
 
 // https://www.chessprogramming.org/Transposition_Table
 
+#ifndef TRANSPOSITION_TABLE_96498f09c8eb493589d435e8be4ffa66
+#define TRANSPOSITION_TABLE_96498f09c8eb493589d435e8be4ffa66
 #include <stdbool.h>
 #include "transposition.h"
+#include "zobrist.h"
 
 /** */
 struct TranspositionTable
 {
     struct Transposition* items;
     size_t capacity;
+    struct Zobrist zobrist;
 };
 
 /** */
@@ -40,3 +44,5 @@ bool transposition_table_try_get(
     int beta,
     int depth,
     int* result);
+
+#endif

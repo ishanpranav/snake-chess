@@ -16,7 +16,7 @@ int negamax_search_alpha_beta(
     Move result,
     Board board,
     AttackTable table,
-    Zobrist zobrist,
+    TranspositionTable cache,
     int alpha,
     int beta,
     int depth)
@@ -41,7 +41,7 @@ int negamax_search_alpha_beta(
 
         ply++;
 
-        move_apply(moves.items + i, &clone, zobrist);
+        move_apply(moves.items + i, &clone, &cache->zobrist);
 
         if (check_test_position(&clone, table))
         {
@@ -56,7 +56,7 @@ int negamax_search_alpha_beta(
             result,
             &clone,
             table,
-            zobrist,
+            cache,
             -beta,
             -alpha,
             depth - 1);
@@ -103,14 +103,14 @@ void negamax_search(
     Move result,
     Board board,
     AttackTable table,
-    Zobrist zobrist,
+    TranspositionTable cache,
     int depth)
 {
     negamax_search_alpha_beta(
         result,
         board,
         table,
-        zobrist,
+        cache,
         -INT_MAX,
         INT_MAX,
         depth);

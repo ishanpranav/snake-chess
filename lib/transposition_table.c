@@ -6,6 +6,10 @@
 
 void transposition_table(TranspositionTable instance, size_t capacity)
 {
+    uint32_t state = 1804289383;
+
+    zobrist(&instance->zobrist, &state);
+
     instance->items = calloc(capacity, sizeof * instance->items);
     instance->capacity = capacity;
 }

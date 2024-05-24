@@ -5,14 +5,15 @@
 #include "../ishan/stream.h"
 #include "attack_table.h"
 #include "board.h"
+#include "transposition_table.h"
 
 /** */
 struct Uci
 {
     FILE* output;
-    struct Board board;
     struct AttackTable table;
-    struct Zobrist zobrist;
+    struct TranspositionTable cache;
+    struct Board board;
     bool started;
 };
 
@@ -20,7 +21,7 @@ struct Uci
 typedef struct Uci* Uci;
 
 /**
- * 
+ *
  * @param instance
  * @param output
 */
