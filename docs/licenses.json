@@ -149,6 +149,13 @@
       "author": "Analog Hors",
       "index": "Hors, Analog",
       "license": "ccbync40"
+    },
+    {
+      "title": "Transposition Table",
+      "formats": ["article"],
+      "source": "https://www.chessprogramming.org/Transposition_Table",
+      "index": "Chess Programming Wiki",
+      "license": "ccbysa30"
     }
   ],
   "tools": [

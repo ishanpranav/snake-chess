@@ -18,7 +18,7 @@ per piece and color, indexed from squares A8 to H1.
 and a [transposition table](https://en.wikipedia.org/wiki/Transposition_table)
 using [Zobrist hashing](https://en.wikipedia.org/wiki/Zobrist_hashing).
 - **Evaluation:** [material evaluation](https://www.chessprogramming.org/Material)
-ane [piece-square tables](https://www.chessprogramming.org/Piece-Square_Tables).
+and [piece-square tables](https://www.chessprogramming.org/Piece-Square_Tables).
 
 To visualize and understand the magic constants involved in bitboard
 manipulation, I have created a companion web application available

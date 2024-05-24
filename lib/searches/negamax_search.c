@@ -13,6 +13,7 @@
 #include "../spawn.h"
 
 int negamax_search_impl(
+    Move result,
     Board board,
     AttackTable table,
     Zobrist zobrist,
@@ -27,8 +28,10 @@ int negamax_search_impl(
 
     int ply = 0;
     bool hasLegalMoves = false;
+    struct Move optimum;
     struct MoveCollection moves;
 
+    move_from_null(&optimum);
     move_collection(&moves);
     spawn(&moves, board, table);
 
@@ -46,10 +49,11 @@ int negamax_search_impl(
 
             continue;
         }
-        
+
         hasLegalMoves = true;
 
         int score = -negamax_search_impl(
+            result,
             &clone,
             table,
             zobrist,
@@ -61,12 +65,15 @@ int negamax_search_impl(
 
         if (score >= beta)
         {
+            *result = optimum;
+
             return beta;
         }
 
         if (score > alpha)
         {
             alpha = score;
+            optimum = moves.items[i];
         }
     }
 
@@ -80,52 +87,25 @@ int negamax_search_impl(
 
         if (checked)
         {
+            *result = optimum;
+
             return INT_MIN + ply;
         }
 
         return 0;
     }
 
+    *result = optimum;
+
     return alpha;
 }
 
 void negamax_search(
-    Move result, 
-    Board board, 
+    Move result,
+    Board board,
     AttackTable table,
     Zobrist zobrist,
     int depth)
 {
-    int max = INT_MIN;
-    struct MoveCollection moves;
-
-    move_from_null(result);
-    move_collection(&moves);
-    spawn(&moves, board, table);
-
-    for (int i = 0; i < moves.count; i++)
-    {
-        struct Board clone = *board;
-
-        move_apply(moves.items + i, &clone, zobrist);
-
-        if (check_test_position(&clone, table))
-        {
-            continue;
-        }
-
-        int score = -negamax_search_impl(
-            &clone,
-            table,
-            zobrist,
-            -INT_MAX,
-            INT_MAX,
-            depth);
-
-        if (score > max)
-        {
-            max = score;
-            *result = moves.items[i];
-        }
-    }
+    negamax_search_impl(result, board, table, zobrist, -INT_MAX, INT_MAX, depth);
 }

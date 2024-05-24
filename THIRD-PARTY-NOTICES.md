@@ -65,6 +65,10 @@ inspired by third-party open-source software.
 - Source: [Zobrist Hashing - Chess Programming Wiki](https://www.chessprogramming.org/Zobrist_Hashing)
 - License: [Creative Commons Attribution ShareAlike 3.0](#ccbysa30)
 
+### Transposition Table&emsp;<sub><sup>*article*&ensp;</sup></sub>
+- Source: [Transposition Table - Chess Programming Wiki](https://www.chessprogramming.org/Transposition_Table)
+- License: [Creative Commons Attribution ShareAlike 3.0](#ccbysa30)
+
 ### Magic Bitboards and How to Find Them&emsp;<sub><sup>*article*&ensp;</sup></sub>
 - Author: Analog Hors
 - Source: [https://analog-hors.github.io/site/magic-bitboards](https://analog-hors.github.io/site/magic-bitboards)
