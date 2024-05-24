@@ -5,7 +5,7 @@
 
 #include "check.h"
 #include "spawn.h"
-#include <assert.h>
+
 long long perft(Board board, AttackTable table, Zobrist zobrist, int depth)
 {
     if (!depth)
@@ -18,10 +18,6 @@ long long perft(Board board, AttackTable table, Zobrist zobrist, int depth)
 
     move_collection(&moves);
     spawn(&moves, board, table);
-
-    board_rehash(board, zobrist);
-
-    uint64_t scratch = board->hash;
 
     for (int i = 0; i < moves.count; i++)
     {

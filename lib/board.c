@@ -20,11 +20,11 @@ void board(Board instance, Zobrist zobrist)
     instance->color = COLOR_WHITE;
     instance->enPassant = SQUARES;
     instance->castlingRights = CASTLING_RIGHTS_NONE;
-    instance->hash = 0;
 
     board_clean(instance);
     memset(instance->pieces, 0, sizeof instance->pieces);
-    board_rehash(instance, zobrist);
+
+    instance->hash = board_hash(instance, zobrist);
 }
 
 static Piece board_get_occupant(Board instance, uint64_t square)
@@ -109,7 +109,8 @@ void board_from_fen_string(Board result, String value, Zobrist zobrist)
     result->enPassant = square_from_fen_string(value);
 
     board_save_changes(result);
-    board_rehash(result, zobrist);
+
+    result->hash = board_hash(result, zobrist);
 }
 
 void board_write_string(Stream output, Board instance, Encoding encoding)
@@ -142,9 +143,9 @@ void board_write_string(Stream output, Board instance, Encoding encoding)
     fprintf(output, "\n");
 }
 
-void board_rehash(Board instance, Zobrist zobrist)
+uint64_t board_hash(Board instance, Zobrist zobrist)
 {
-    instance->hash = 0;
+    uint64_t result = 0;
 
     for (Piece piece = 0; piece < PIECES; piece++)
     {
@@ -153,19 +154,21 @@ void board_rehash(Board instance, Zobrist zobrist)
 
         for (bitboard_begin(&it, value); it.value; bitboard_next(&it))
         {
-            instance->hash ^= zobrist->pieces[piece][it.current];
+            result ^= zobrist->pieces[piece][it.current];
         }
     }
 
     if (instance->color)
     {
-        instance->hash ^= zobrist->color;
+        result ^= zobrist->color;
     }
 
     if (instance->enPassant != SQUARES)
     {
-        instance->hash ^= zobrist->enPassant[instance->enPassant];
+        result ^= zobrist->enPassant[instance->enPassant];
     }
 
-    instance->hash ^= zobrist->castlingRights[instance->castlingRights];
+    result ^= zobrist->castlingRights[instance->castlingRights];
+
+    return result;
 }

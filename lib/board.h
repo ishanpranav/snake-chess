@@ -63,10 +63,11 @@ void board_save_changes(Board instance);
 void board_write_string(Stream output, Board instance, Encoding encoding);
 
 /**
- * 
+ *
  * @param instance
  * @param zobrist
+ * @return
 */
-void board_rehash(Board instance, Zobrist zobrist);
+uint64_t board_hash(Board instance, Zobrist zobrist);
 
 #endif
