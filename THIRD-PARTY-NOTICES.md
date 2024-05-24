@@ -17,6 +17,10 @@ redistributed alongside the application.
 - Author: Maksim Korzh
 - Source: [YouTube](https://youtu.be/QUNP-UjujBM)
 
+### Coding Adventure: Chess&emsp;<sub><sup>*video*&ensp;</sup></sub>
+- Author: Sebastian Lague
+- Source: [YouTube](https://youtu.be/U4ogK0MIzqk?si=5SZwEJsQvG_vqlA-)
+
 ### lichess-bot&emsp;<sub><sup>*python*&ensp;</sup></sub>
 - Author: lichess-bot-devs
 - Source: [lichess-bot-devs/lichess-bot](https://github.com/lichess-bot-devs/lichess-bot)

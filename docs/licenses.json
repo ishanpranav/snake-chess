@@ -31,6 +31,16 @@
       "author": "lichess-bot-devs",
       "index": "Lichess Bot Devs",
       "license": "agpl30"
+    },
+    {
+      "title": "Coding Adventure: Chess",
+      "formats": [
+        "video"
+      ],
+      "source": "https://youtu.be/U4ogK0MIzqk?si=5SZwEJsQvG_vqlA-",
+      "author": "Sebastian Lague",
+      "copyright": "Sebastian Lague",
+      "index": "Lague, Sebastian"  
     }
   ],
   "references": [
