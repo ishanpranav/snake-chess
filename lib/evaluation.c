@@ -18,7 +18,7 @@ static const int EVALUATION_MATERIAL[] =
 
 static const int EVALUATION_POSITION[][SQUARES] =
 {
-    [PIECE_PAWN] = 
+    [PIECE_PAWN] =
     {
         90,  90,  90,  90,  90,  90,  90,  90,
         30,  30,  30,  40,  40,  30,  30,  30,
@@ -62,6 +62,17 @@ static const int EVALUATION_POSITION[][SQUARES] =
         0,   0,  10,  20,  20,  10,   0,   0,
         0,   0,   0,  20,  20,   0,   0,   0
     },
+    [PIECE_QUEEN] =
+    {
+        -20, -10, -10,  -5,  -5, -10, -10, -20,
+        -10,   0,   0,   0,   0,   0,   0, -10,
+        -10,   0,   5,   5,   5,   5,   0, -10,
+         -5,   0,   5,   5,   5,   5,   0,  -5,
+          0,   0,   5,   5,   5,   5,   0,  -5,
+        -10,   5,   5,   5,   5,   5,   0, -10,
+        -10,   0,   5,   0,   0,   0,   0, -10,
+        -20, -10, -10,  -5,  -5, -10, -10, -20
+    },
     [PIECE_KING] =
     {
         0,   0,   0,   0,   0,   0,   0,   0,
@@ -91,7 +102,7 @@ int evaluation(Board board)
         }
 
         value = board->pieces[piece + PIECE_BLACK_PAWN];
-        
+
         for (bitboard_begin(&it, value); it.value; bitboard_next(&it))
         {
             Rank rank = RANKS - (it.current / FILES) - 1;

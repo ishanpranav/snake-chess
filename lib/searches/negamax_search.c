@@ -46,7 +46,7 @@ int negamax_search_impl(
             -beta,
             -alpha,
             depth - 1);
-        
+
         if (score >= beta)
         {
             return beta;

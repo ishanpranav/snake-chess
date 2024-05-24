@@ -11,13 +11,13 @@ int main(void)
 
     euler_assert(state);
     uci(state, stdout);
-    
+
     char buffer[16384];
 
     while (fgets(buffer, sizeof buffer, stdin) && uci_evaluate(state, buffer))
     {
         fflush(state->output);
-        board_write_string(state->output, &state->board, ENCODING_STANDARD);
+        //board_write_string(state->output, &state->board, ENCODING_STANDARD);
     }
 
     free(state);
