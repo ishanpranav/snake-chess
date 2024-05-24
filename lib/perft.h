@@ -9,4 +9,4 @@
  * @param depth
  * @return
 */
-long long perft(Board board, AttackTable table, int depth);
+long long perft(Board board, AttackTable table, Zobrist zobrist, int depth);

@@ -7,7 +7,6 @@
 #include "castling_rights.h"
 #include "piece.h"
 #include "square.h"
-#define ZOBRIST_SEED 1804289383
 
 /** */
 struct Zobrist
@@ -22,7 +21,7 @@ struct Zobrist
 typedef struct Zobrist* Zobrist;
 
 /**
- * 
+ *
  * @param instance
  * @param state
 */

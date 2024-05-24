@@ -14,7 +14,7 @@
 
 void uci(Uci instance, Stream output)
 {
-    uint32_t state = ZOBRIST_SEED;
+    uint32_t state = 1804289383;
 
     zobrist(&instance->zobrist, &state);
     board(&instance->board, &instance->zobrist);
@@ -37,7 +37,7 @@ static bool uci_evaluate_set_option(Uci instance, String value)
 static bool uci_evaluate_new_game(Uci instance)
 {
     board_from_fen_string(&instance->board, BOARD_INITIAL, &instance->zobrist);
-    
+
     return true;
 }
 
@@ -47,7 +47,7 @@ static bool uci_evaluate_position(Uci instance, String value)
 
     euler_assert(value - 1);
 
-    char *argument;
+    char* argument;
     Board board = &instance->board;
 
     if (strstr(value, "startpos"))
@@ -69,9 +69,9 @@ static bool uci_evaluate_position(Uci instance, String value)
 
         euler_assert(argument - 1);
 
-        for (char *token = strtok(argument, " \n");
-             token;
-             token = strtok(NULL, " \n"))
+        for (char* token = strtok(argument, " \n");
+            token;
+            token = strtok(NULL, " \n"))
         {
             struct Move move;
 
@@ -111,15 +111,15 @@ static bool uci_evaluate_go(Uci instance, String value)
         depth = atoi(argument);
 
         time_t start = time(NULL);
-        long long result = perft(board, table, depth);
+        long long result = perft(board, table, &instance->zobrist, depth);
         double elapsed = difftime(time(NULL), start);
         double speed = result / elapsed;
 
         fprintf(instance->output,
-                "info .elapsed %lf s\n"
-                "info .speed %0.lf positions/s\n"
-                "info .result %lld positions\n",
-                elapsed, speed, result);
+            "info .elapsed %lf s\n"
+            "info .speed %0.lf positions/s\n"
+            "info .result %lld positions\n",
+            elapsed, speed, result);
 
         return true;
     }
@@ -223,14 +223,14 @@ static bool uci_evaluate_go(Uci instance, String value)
 
     instance->started = true;
 
-    char buffer[8] = {0};
+    char buffer[8] = { 0 };
     struct Move bestMove;
 
     fprintf(instance->output,
-            "info depth %d\n"
-            "info score cp %d\n",
-            depth,
-            evaluation(board));
+        "info depth %d\n"
+        "info score cp %d\n",
+        depth,
+        evaluation(board));
     negamax_search(&bestMove, board, table, &instance->zobrist, depth);
     move_write_uci_string(buffer, &bestMove);
     fprintf(instance->output, "bestmove %s\n", buffer);
@@ -262,9 +262,9 @@ bool uci_evaluate(Uci instance, String value)
     if (strstr(value, "uci"))
     {
         fprintf(instance->output,
-                "id name snake-chess\n"
-                "id author Ishan Pranav\n"
-                "uciok\n");
+            "id name snake-chess\n"
+            "id author Ishan Pranav\n"
+            "uciok\n");
 
         return true;
     }
