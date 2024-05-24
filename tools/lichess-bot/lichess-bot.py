@@ -10,7 +10,7 @@ import logging
 import logging.handlers
 import multiprocessing
 import signal
-import timef
+import time
 import datetime
 import backoff
 import os
