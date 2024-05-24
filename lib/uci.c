@@ -14,8 +14,11 @@
 
 void uci(Uci instance, Stream output)
 {
+    uint32_t state = ZOBRIST_SEED;
+
     board(&instance->board);
     attack_table(&instance->table);
+    zobrist(&instance->zobrist, &state);
 
     instance->output = output;
     instance->started = false;
@@ -33,8 +36,8 @@ static bool uci_evaluate_set_option(Uci instance, String value)
 
 static bool uci_evaluate_new_game(Uci instance)
 {
-    board_from_fen_string(&instance->board, BOARD_INITIAL);
-
+    board_from_fen_string(&instance->board, BOARD_INITIAL, &instance->zobrist);
+    
     return true;
 }
 
@@ -45,12 +48,11 @@ static bool uci_evaluate_position(Uci instance, String value)
     euler_assert(value - 1);
 
     char *argument;
+    Board board = &instance->board;
 
-    if ((argument = strstr(value, "startpos")))
+    if (strstr(value, "startpos"))
     {
-        argument = strchr(argument, ' ') + 1;
-
-        board_from_fen_string(&instance->board, BOARD_INITIAL);
+        board_from_fen_string(board, BOARD_INITIAL, &instance->zobrist);
     }
 
     if ((argument = strstr(value, "fen")))
@@ -58,7 +60,7 @@ static bool uci_evaluate_position(Uci instance, String value)
         argument = strchr(argument, ' ') + 1;
 
         euler_assert(argument - 1);
-        board_from_fen_string(&instance->board, argument);
+        board_from_fen_string(board, argument, &instance->zobrist);
     }
 
     if ((argument = strstr(value, "moves")))
@@ -73,13 +75,9 @@ static bool uci_evaluate_position(Uci instance, String value)
         {
             struct Move move;
 
-            if (move_from_uci_string(
-                    &move,
-                    token,
-                    &instance->board,
-                    &instance->table))
+            if (move_from_uci_string(&move, token, board, &instance->table))
             {
-                move_apply(&move, &instance->board);
+                move_apply(&move, board, &instance->zobrist);
             }
         }
     }
@@ -101,6 +99,8 @@ static bool uci_evaluate_go(Uci instance, String value)
     bool ponder = false;
     bool infinite = false;
     String argument = NULL;
+    Board board = &instance->board;
+    AttackTable table = &instance->table;
 
     if ((argument = strstr(value, "perft")))
     {
@@ -111,7 +111,7 @@ static bool uci_evaluate_go(Uci instance, String value)
         depth = atoi(argument);
 
         time_t start = time(NULL);
-        long long result = perft(&instance->board, &instance->table, depth);
+        long long result = perft(board, table, depth);
         double elapsed = difftime(time(NULL), start);
         double speed = result / elapsed;
 
@@ -230,8 +230,8 @@ static bool uci_evaluate_go(Uci instance, String value)
             "info depth %d\n"
             "info score cp %d\n",
             depth,
-            evaluation(&instance->board));
-    negamax_search(&bestMove, &instance->board, &instance->table, depth);
+            evaluation(board));
+    negamax_search(&bestMove, board, table, &instance->zobrist, depth);
     move_write_uci_string(buffer, &bestMove);
     fprintf(instance->output, "bestmove %s\n", buffer);
 

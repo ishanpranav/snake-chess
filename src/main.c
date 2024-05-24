@@ -5,9 +5,11 @@
 #include <string.h>
 #include "../lib/uci.h"
 
+#include <inttypes.h>
+
 int main(void)
 {
-    Uci state = malloc(sizeof * state);
+    Uci state = malloc(sizeof *state);
 
     euler_assert(state);
     uci(state, stdout);
@@ -16,8 +18,10 @@ int main(void)
 
     while (fgets(buffer, sizeof buffer, stdin) && uci_evaluate(state, buffer))
     {
+        printf("0x%" PRIx64 "\n", state->board.hash);
+        board_rehash(&state->board, &state->zobrist);
+        printf("0x%" PRIx64 "\n", state->board.hash);
         fflush(state->output);
-        //board_write_string(state->output, &state->board, ENCODING_STANDARD);
     }
 
     free(state);

@@ -3,7 +3,7 @@
 
 #include <ctype.h>
 #include <string.h>
-#include "bitboard.h"
+#include "bitboard_iterator.h"
 #include "board.h"
 #include "file.h"
 #include "rank.h"
@@ -17,9 +17,10 @@ static void board_clean(Board instance)
 
 void board(Board instance)
 {
-    instance->castlingRights = CASTLING_RIGHTS_NONE;
     instance->color = COLOR_WHITE;
     instance->enPassant = SQUARES;
+    instance->castlingRights = CASTLING_RIGHTS_NONE;
+    instance->hash = 0;
 
     board_clean(instance);
     memset(instance->pieces, 0, sizeof instance->pieces);
@@ -58,13 +59,13 @@ void board_save_changes(Board instance)
     }
 }
 
-void board_from_fen_string(Board result, String value)
+void board_from_fen_string(Board result, String value, Zobrist zobrist)
 {
     memset(result->pieces, 0, sizeof result->pieces);
 
     for (Rank rank = 0; rank < RANKS; rank++)
     {
-        for (File file = 0; file < FILES; value++)
+        for (File file = 0; file < FILES && *value; value++)
         {
             Piece piece = piece_from_fen_char(*value);
 
@@ -78,24 +79,36 @@ void board_from_fen_string(Board result, String value)
 
             if (isdigit(*value))
             {
-                int offset = *value - '0';
-
-                file += offset;
+                file += *value - '0';
             }
         }
     }
 
+    euler_assert(*value);
+    
     value++;
+    
+    euler_assert(*value);
+    
     result->color = color_from_fen_char(*value);
-    value += 2;
+    value++;
+    
+    euler_assert(*value);
+    
     result->castlingRights = castling_rights_from_fen_string(value);
 
     for (; *value && *value != ' '; value++) {}
 
+    euler_assert(*value);
+    
     value++;
+    
+    euler_assert(*value);
+
     result->enPassant = square_from_fen_string(value);
 
     board_save_changes(result);
+    board_rehash(result, zobrist);
 }
 
 void board_write_string(Stream output, Board instance, Encoding encoding)
@@ -126,4 +139,27 @@ void board_write_string(Stream output, Board instance, Encoding encoding)
         square_to_string(instance->enPassant));
     castling_rights_write_string(output, instance->castlingRights);
     fprintf(output, "\n");
+}
+
+void board_rehash(Board instance, Zobrist zobrist)
+{
+    instance->hash = 0;
+
+    for (Piece piece = 0; piece < PIECES; piece++)
+    {
+        struct BitboardIterator it;
+        uint64_t value = instance->pieces[piece];
+
+        for (bitboard_begin(&it, value); it.value; bitboard_next(&it))
+        {
+            instance->hash ^= zobrist->pieces[piece][it.current];
+        }
+    }
+
+    if (instance->enPassant != SQUARES)
+    {
+        instance->hash ^= zobrist->enPassant[instance->enPassant];
+    }
+
+    instance->hash ^= zobrist->castlingRights[instance->castlingRights];
 }

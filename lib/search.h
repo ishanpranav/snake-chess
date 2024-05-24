@@ -4,15 +4,15 @@
 #include "board.h"
 #include "attack_table.h"
 #include "move.h"
+#include "zobrist.h"
 
 /**
  * 
  * @param 
 */
-void search(Move result, Board board, AttackTable table, int depth);
-
-/**
- * 
- * @param 
-*/
-void negamax_search(Move result, Board board, AttackTable table, int depth);
+void negamax_search(
+    Move result, 
+    Board board, 
+    AttackTable table,
+    Zobrist zobrist,
+    int depth);

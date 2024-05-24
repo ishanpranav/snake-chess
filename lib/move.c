@@ -49,7 +49,7 @@ static void move_put(Board board, Piece piece, uint64_t source, uint64_t target)
     board->pieces[piece] |= target;
 }
 
-void move_apply(Move instance, Board board)
+void move_apply(Move instance, Board board, Zobrist zobrist)
 {
     uint64_t source = bitboard(instance->source);
     uint64_t target = bitboard(instance->target);
@@ -147,17 +147,6 @@ void move_apply(Move instance, Board board)
     board->color = !board->color;
 
     board_save_changes(board);
-}
-
-bool move_is_legal(Move instance, Board board, AttackTable table)
-{
-    struct Board clone = *board;
-
-    move_apply(instance, &clone);
-
-    bool result = !check_test_position(&clone, table);
-    
-    return result;
 }
 
 void move_write_string(Stream output, Move instance)

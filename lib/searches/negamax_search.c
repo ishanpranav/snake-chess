@@ -15,6 +15,7 @@
 int negamax_search_impl(
     Board board,
     AttackTable table,
+    Zobrist zobrist,
     int alpha,
     int beta,
     int depth)
@@ -37,7 +38,7 @@ int negamax_search_impl(
 
         ply++;
 
-        move_apply(moves.items + i, &clone);
+        move_apply(moves.items + i, &clone, zobrist);
 
         if (check_test_position(&clone, table))
         {
@@ -51,6 +52,7 @@ int negamax_search_impl(
         int score = -negamax_search_impl(
             &clone,
             table,
+            zobrist,
             -beta,
             -alpha,
             depth - 1);
@@ -87,7 +89,12 @@ int negamax_search_impl(
     return alpha;
 }
 
-void negamax_search(Move result, Board board, AttackTable table, int depth)
+void negamax_search(
+    Move result, 
+    Board board, 
+    AttackTable table,
+    Zobrist zobrist,
+    int depth)
 {
     int max = INT_MIN;
     struct MoveCollection moves;
@@ -100,7 +107,7 @@ void negamax_search(Move result, Board board, AttackTable table, int depth)
     {
         struct Board clone = *board;
 
-        move_apply(moves.items + i, &clone);
+        move_apply(moves.items + i, &clone, zobrist);
 
         if (check_test_position(&clone, table))
         {
@@ -110,6 +117,7 @@ void negamax_search(Move result, Board board, AttackTable table, int depth)
         int score = -negamax_search_impl(
             &clone,
             table,
+            zobrist,
             -INT_MAX,
             INT_MAX,
             depth);

@@ -12,6 +12,7 @@ struct Uci
     FILE* output;
     struct Board board;
     struct AttackTable table;
+    struct Zobrist zobrist;
     bool started;
 };
 

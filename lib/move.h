@@ -10,6 +10,7 @@
 #include "move_types.h"
 #include "piece.h"
 #include "square.h"
+#include "zobrist.h"
 
 /** */
 struct Move
@@ -47,17 +48,9 @@ bool move_from_uci_string(
  *
  * @param instance
  * @param board
- * @param table
+ * @param zobrist
 */
-void move_apply(Move instance, Board board);
-
-/**
- * 
- * @param instance
- * @param board
- * @param table
-*/
-bool move_is_legal(Move instance, Board board, AttackTable table);
+void move_apply(Move instance, Board board, Zobrist zobrist);
 
 /**
  *
