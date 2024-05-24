@@ -811,7 +811,7 @@ ________________________________________________________________________________
 ### <a id='ccbysa30'>Creative Commons Attribution ShareAlike 3.0</a>
 
 ```
-http://creativecommons.org/licenses/by-sa/3.0/
+See http://creativecommons.org/licenses/by-sa/3.0/
 ```
 ________________________________________________________________________________
 
