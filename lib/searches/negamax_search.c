@@ -24,6 +24,8 @@ int negamax_search_impl(
         return evaluation(board);
     }
 
+    int ply = 0;
+    bool hasLegalMoves = false;
     struct MoveCollection moves;
 
     move_collection(&moves);
@@ -33,10 +35,14 @@ int negamax_search_impl(
     {
         struct Board clone = *board;
 
+        ply++;
+
         move_apply(moves.items + i, &clone);
 
         if (check_test_position(&clone, table))
         {
+            ply--;
+
             continue;
         }
 
@@ -47,6 +53,8 @@ int negamax_search_impl(
             -alpha,
             depth - 1);
 
+        ply--;
+
         if (score >= beta)
         {
             return beta;
@@ -56,6 +64,22 @@ int negamax_search_impl(
         {
             alpha = score;
         }
+    }
+
+    if (!hasLegalMoves)
+    {
+        board->color = !board->color;
+
+        bool checked = check_test_position(board, table);
+
+        board->color = !board->color;
+
+        if (checked)
+        {
+            return INT_MIN + ply;
+        }
+
+        return 0;
     }
 
     return alpha;

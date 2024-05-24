@@ -53,6 +53,11 @@ bool check_test_position(Board board, AttackTable table)
         king += PIECE_BLACK_PAWN;
     }
 
+    if (!board->pieces[king])
+    {
+        return true;
+    }
+
     Square kingSquare = bitboard_first(board->pieces[king]);
 
     return check_test(board, table, kingSquare, board->color);

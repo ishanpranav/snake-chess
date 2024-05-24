@@ -42,7 +42,7 @@ class Configuration:
         """:return: All the key-value pairs in this config."""
         return self.config.items()
 
-    def keys(self) -> list[str]:
+    def keys(self):
         """:return: All of the keys in this config."""
         return list(self.config.keys())
 
