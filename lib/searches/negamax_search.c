@@ -12,7 +12,7 @@
 #include "../search.h"
 #include "../spawn.h"
 
-int negamax_search_impl(
+int negamax_search_alpha_beta(
     Move result,
     Board board,
     AttackTable table,
@@ -52,7 +52,7 @@ int negamax_search_impl(
 
         hasLegalMoves = true;
 
-        int score = -negamax_search_impl(
+        int score = -negamax_search_alpha_beta(
             result,
             &clone,
             table,
@@ -84,11 +84,10 @@ int negamax_search_impl(
         bool checked = check_test_position(board, table);
 
         board->color = !board->color;
+        *result = optimum;
 
         if (checked)
         {
-            *result = optimum;
-
             return INT_MIN + ply;
         }
 
@@ -107,5 +106,12 @@ void negamax_search(
     Zobrist zobrist,
     int depth)
 {
-    negamax_search_impl(result, board, table, zobrist, -INT_MAX, INT_MAX, depth);
+    negamax_search_alpha_beta(
+        result,
+        board,
+        table,
+        zobrist,
+        -INT_MAX,
+        INT_MAX,
+        depth);
 }
