@@ -26,10 +26,19 @@ int negamax_search_alpha_beta(
         return evaluation(board);
     }
 
+    uint64_t hash = board->hash;
+    struct TranspositionTableResult entry;
+
+    if (transposition_table_try_get(&entry, cache, hash, alpha, beta, depth))
+    {
+        return entry.score;
+    }
+
     int ply = 0;
     bool hasLegalMoves = false;
     struct Move optimum;
     struct MoveCollection moves;
+    NodeType type = NODE_TYPE_ALL_ALPHA;
 
     move_from_null(&optimum);
     move_collection(&moves);
@@ -67,6 +76,14 @@ int negamax_search_alpha_beta(
         {
             *result = optimum;
 
+            transposition_table_set(
+                cache,
+                board->hash,
+                &optimum,
+                score,
+                depth,
+                NODE_TYPE_CUT_BETA);
+
             return beta;
         }
 
@@ -74,6 +91,7 @@ int negamax_search_alpha_beta(
         {
             alpha = score;
             optimum = moves.items[i];
+            type = NODE_TYPE_PRINCIPAL_VARIATION;
         }
     }
 
@@ -95,6 +113,8 @@ int negamax_search_alpha_beta(
     }
 
     *result = optimum;
+
+    transposition_table_set(cache, board->hash, &optimum, alpha, depth, type);
 
     return alpha;
 }

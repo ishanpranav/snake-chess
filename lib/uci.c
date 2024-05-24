@@ -308,5 +308,19 @@ bool uci_evaluate(Uci instance, String value)
         return uci_evaluate_ponder_hit(instance);
     }
 
+    if (strstr(value, ".dump"))
+    {
+        for (size_t i = 0; i < instance->cache.capacity; i++)
+        {
+            struct Transposition t = instance->cache.items[i];
+
+            if (!t.type) continue;
+
+            printf("hash = %lx, ", t.hash);
+            move_write_string(stdout, &t.value);
+            printf(", score = %d, depth = %d, type = %d\n", t.score, t.depth, t.type);
+        }
+    }
+
     return !strstr(value, "quit");
 }

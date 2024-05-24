@@ -3,6 +3,8 @@
 
 #include <stdlib.h>
 #include "transposition_table.h"
+#define transposition_table_find(instance, hash) \
+    ((instance)->items + ((hash) % (instance)->capacity))
 
 void transposition_table(TranspositionTable instance, size_t capacity)
 {
@@ -15,14 +17,14 @@ void transposition_table(TranspositionTable instance, size_t capacity)
 }
 
 bool transposition_table_try_get(
+    TranspositionTableResult result,
     TranspositionTable instance,
     uint64_t hash,
     int alpha,
     int beta,
-    int depth,
-    int* result)
+    int depth)
 {
-    Transposition entry = instance->items + (hash % instance->capacity);
+    Transposition entry = transposition_table_find(instance, hash);
 
     if (entry->hash != hash)
     {
@@ -34,20 +36,22 @@ bool transposition_table_try_get(
         return false;
     }
 
+    result->value = entry->value;
+
     switch (entry->type)
     {
     case NODE_TYPE_PRINCIPAL_VARIATION:
-        *result = entry->score;
+        result->score = entry->score;
 
         return true;
 
     case NODE_TYPE_CUT_BETA:
-        *result = beta;
+        result->score = beta;
 
         return entry->score >= beta;
 
     case NODE_TYPE_ALL_ALPHA:
-        *result = alpha;
+        result->score = beta;
 
         return entry->score <= alpha;
 
@@ -55,7 +59,19 @@ bool transposition_table_try_get(
     }
 }
 
-void transposition_table_set(int score, int depth, NodeType type)
+void transposition_table_set(
+    TranspositionTable instance,
+    uint64_t hash,
+    Move value,
+    int score,
+    int depth,
+    NodeType type)
 {
+    Transposition entry = transposition_table_find(instance, hash);
 
+    entry->hash = hash;
+    entry->value = *value;
+    entry->score = score;
+    entry->depth = depth;
+    entry->type = type;
 }

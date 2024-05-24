@@ -14,7 +14,7 @@ struct Transposition
     enum NodeType type;
     int depth;
     int score;
-    struct Move result;
+    struct Move value;
 };
 
 /** */
