@@ -86,24 +86,24 @@ void board_from_fen_string(Board result, String value, Zobrist zobrist)
     }
 
     euler_assert(*value);
-    
+
     value++;
-    
+
     euler_assert(*value);
-    
+
     result->color = color_from_fen_char(*value);
     value++;
-    
+
     euler_assert(*value);
-    
+
     result->castlingRights = castling_rights_from_fen_string(value);
 
     for (; *value && *value != ' '; value++) {}
 
     euler_assert(*value);
-    
+
     value++;
-    
+
     euler_assert(*value);
 
     result->enPassant = square_from_fen_string(value);
@@ -155,6 +155,11 @@ void board_rehash(Board instance, Zobrist zobrist)
         {
             instance->hash ^= zobrist->pieces[piece][it.current];
         }
+    }
+
+    if (instance->color)
+    {
+        instance->hash ^= zobrist->color;
     }
 
     if (instance->enPassant != SQUARES)

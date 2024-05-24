@@ -8,11 +8,11 @@
 #include "spawn.h"
 #define move_insert(board, piece, target, zobrist) macro \
 (board)->pieces[(piece)] |= bitboard((target)); \
-(board)-> hash ^= (zobrist)->pieces[(piece)][(target)]; \
+(board)->hash ^= (zobrist)->pieces[(piece)][(target)]; \
 end_macro
 #define move_remove(board, piece, source, zobrist) macro \
 (board)->pieces[(piece)] &= ~bitboard((source));\
-(board)-> hash ^= (zobrist)->pieces[(piece)][(source)];\
+(board)->hash ^= (zobrist)->pieces[(piece)][(source)];\
 end_macro
 
 void move_from_null(Move result)
@@ -36,7 +36,7 @@ bool move_from_uci_string(
 
     for (int i = 0; i < moves.count; i++)
     {
-        char buffer[8] = {0};
+        char buffer[8] = { 0 };
 
         move_write_uci_string(buffer, moves.items + i);
 
@@ -91,6 +91,12 @@ void move_apply(Move instance, Board board, Zobrist zobrist)
         }
     }
 
+    if (board->enPassant != SQUARES)
+    {
+        board->hash ^= zobrist->enPassant[board->enPassant];
+        board->enPassant = SQUARES;
+    }
+
     if (instance->type & MOVE_TYPES_PROMOTION)
     {
         move_remove(board, friendBegin + PIECE_PAWN, target, zobrist);
@@ -120,21 +126,14 @@ void move_apply(Move instance, Board board, Zobrist zobrist)
             target + direction * FILES,
             zobrist);
     }
-
-    if (instance->type & MOVE_TYPES_DOUBLE_PUSH)
+    else if (instance->type & MOVE_TYPES_DOUBLE_PUSH)
     {
         Square enPassantTarget = target + direction * FILES;
 
         board->enPassant = enPassantTarget;
         board->hash ^= zobrist->enPassant[enPassantTarget];
     }
-    else if (board->enPassant != SQUARES)
-    {
-        board->hash ^= zobrist->enPassant[board->enPassant];
-        board->enPassant = SQUARES;
-    }
-
-    if (instance->type & MOVE_TYPES_KINGSIDE)
+    else if (instance->type & MOVE_TYPES_KINGSIDE)
     {
         move_remove(board, friendBegin + PIECE_ROOK, source + 3, zobrist);
         move_insert(board, friendBegin + PIECE_ROOK, source + 1, zobrist);
@@ -153,11 +152,7 @@ void move_apply(Move instance, Board board, Zobrist zobrist)
     board->hash ^= zobrist->castlingRights[castlingRights];
     board->castlingRights = castlingRights;
     board->color = !board->color;
-    
-    if (board->color)
-    {
-        board->hash ^= zobrist->color;
-    }
+    board->hash ^= zobrist->color;
 
     board_save_changes(board);
 }
@@ -248,7 +243,7 @@ void move_write_uci_string(char buffer[], Move instance)
     }
 
     sprintf(buffer, "%s%s%s",
-            square_to_string(instance->source),
-            square_to_string(instance->target),
-            promotion);
+        square_to_string(instance->source),
+        square_to_string(instance->target),
+        promotion);
 }
