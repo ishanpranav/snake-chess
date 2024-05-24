@@ -54,8 +54,6 @@ def create_engine(engine_config: config.Configuration, game: Optional[model.Game
         Engine = XBoardEngine
     elif engine_type == "uci":
         Engine = UCIEngine
-    elif engine_type == "homemade":
-        Engine = getHomemadeEngine(cfg.name)
     else:
         raise ValueError(
             f"    Invalid engine type: {engine_type}. Expected xboard, uci, or homemade.")

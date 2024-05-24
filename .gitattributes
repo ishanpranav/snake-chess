@@ -6,3 +6,4 @@
 THIRD-PARTY-NOTICES.md linguist-generated
 docs/** -linguist-documentation
 ishan/** linguist-vendored
+tools/lichess-bot/** linguist-vendored
