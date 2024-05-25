@@ -12,8 +12,7 @@
 #include "../search.h"
 #include "../spawn.h"
 
-int negamax_search_alpha_beta(
-    Move result,
+int negamax_search_impl(
     Board board,
     AttackTable table,
     TranspositionTable cache,
@@ -26,21 +25,10 @@ int negamax_search_alpha_beta(
         return evaluation(board);
     }
 
-    uint64_t hash = board->hash;
-    struct TranspositionTableResult entry;
-
-    if (transposition_table_try_get(&entry, cache, hash, alpha, beta, depth))
-    {
-        return entry.score;
-    }
-
     int ply = 0;
     bool hasLegalMoves = false;
-    struct Move optimum;
     struct MoveCollection moves;
-    NodeType type = NODE_TYPE_ALL_ALPHA;
 
-    move_from_null(&optimum);
     move_collection(&moves);
     spawn(&moves, board, table);
 
@@ -58,11 +46,10 @@ int negamax_search_alpha_beta(
 
             continue;
         }
-
+        
         hasLegalMoves = true;
 
-        int score = -negamax_search_alpha_beta(
-            result,
+        int score = -negamax_search_impl(
             &clone,
             table,
             cache,
@@ -74,24 +61,12 @@ int negamax_search_alpha_beta(
 
         if (score >= beta)
         {
-            *result = optimum;
-
-            transposition_table_set(
-                cache,
-                board->hash,
-                &optimum,
-                score,
-                depth,
-                NODE_TYPE_CUT_BETA);
-
             return beta;
         }
 
         if (score > alpha)
         {
             alpha = score;
-            optimum = moves.items[i];
-            type = NODE_TYPE_PRINCIPAL_VARIATION;
         }
     }
 
@@ -102,7 +77,6 @@ int negamax_search_alpha_beta(
         bool checked = check_test_position(board, table);
 
         board->color = !board->color;
-        *result = optimum;
 
         if (checked)
         {
@@ -112,26 +86,41 @@ int negamax_search_alpha_beta(
         return 0;
     }
 
-    *result = optimum;
-
-    transposition_table_set(cache, board->hash, &optimum, alpha, depth, type);
-
     return alpha;
 }
 
-void negamax_search(
-    Move result,
-    Board board,
-    AttackTable table,
-    TranspositionTable cache,
-    int depth)
+void negamax_search(Move result, Board board, AttackTable table, TranspositionTable cache, int depth)
 {
-    negamax_search_alpha_beta(
-        result,
-        board,
-        table,
-        cache,
-        -INT_MAX,
-        INT_MAX,
-        depth);
+    int max = INT_MIN;
+    struct MoveCollection moves;
+
+    move_from_null(result);
+    move_collection(&moves);
+    spawn(&moves, board, table);
+
+    for (int i = 0; i < moves.count; i++)
+    {
+        struct Board clone = *board;
+
+        move_apply(moves.items + i, &clone, &cache->zobrist);
+
+        if (check_test_position(&clone, table))
+        {
+            continue;
+        }
+
+        int score = -negamax_search_impl(
+            &clone,
+            table,
+            cache,
+            -INT_MAX,
+            INT_MAX,
+            depth);
+
+        if (score > max)
+        {
+            max = score;
+            *result = moves.items[i];
+        }
+    }
 }
