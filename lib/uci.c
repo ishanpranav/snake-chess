@@ -14,7 +14,7 @@
 
 void uci(Uci instance, Stream output)
 {
-    transposition_table(&instance->cache, 65536);
+    transposition_table(&instance->cache, 1000000);
     board(&instance->board, &instance->cache.zobrist);
     attack_table(&instance->table);
 
@@ -87,7 +87,7 @@ static bool uci_evaluate_position(Uci instance, String value)
 
 static bool uci_evaluate_go(Uci instance, String value)
 {
-    int depth = 5;
+    int depth = 6;
     int nodes = 0;
     int mate = 0;
     int moveTime = 0;
