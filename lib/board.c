@@ -96,6 +96,10 @@ void board_from_fen_string(Board result, String value, Zobrist zobrist)
 
     euler_assert(*value);
 
+    value++;
+
+    euler_assert(*value);
+
     result->castlingRights = castling_rights_from_fen_string(value);
 
     for (; *value && *value != ' '; value++) {}
