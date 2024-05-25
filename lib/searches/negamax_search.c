@@ -25,7 +25,7 @@ int negamax_search_alpha_beta(
 {
     if (!depth)
     {
-        return evaluation(board);
+        return evaluation_evaluate_board(board);
     }
 
     uint64_t hash = board->hash;
@@ -46,6 +46,7 @@ int negamax_search_alpha_beta(
     move_from_null(&optimum);
     move_collection(&moves);
     spawn(&moves, board, table);
+    move_collection_sort(&moves, board);
 
     for (int i = 0; i < moves.count; i++)
     {

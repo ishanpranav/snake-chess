@@ -14,14 +14,21 @@ struct MoveCollection
 typedef struct MoveCollection* MoveCollection;
 
 /**
- * 
+ *
  * @param instance
 */
 void move_collection(MoveCollection instance);
 
 /**
- * 
+ *
  * @param instance
  * @param item
 */
 void move_collection_add(MoveCollection instance, Move item);
+
+/**
+ *
+ * @param instance
+ * @param board
+*/
+void move_collection_sort(MoveCollection instance, Board board);

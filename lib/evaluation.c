@@ -86,7 +86,17 @@ static const int EVALUATION_POSITION[][SQUARES] =
     }
 };
 
-int evaluation(Board board)
+static const int EVALUATION_MOST_VALUABLE_VICTIM_LEAST_VALUABLE_AGGRESSOR[][6] =
+{
+    { 105, 205, 305, 405, 505, 605 },
+    { 104, 204, 304, 404, 504, 604 },
+    { 103, 203, 303, 403, 503, 603 },
+    { 102, 202, 302, 402, 502, 602 },
+    { 101, 201, 301, 401, 501, 601 },
+    { 100, 200, 300, 400, 500, 600 }
+};
+
+int evaluation_evaluate_board(Board board)
 {
     int result = 0;
 
@@ -120,4 +130,23 @@ int evaluation(Board board)
     }
 
     return result;
+}
+
+int evaluation_evaluate_move(Move move, Board board)
+{
+    Piece enemyOffset = 0;
+
+    if (board->color)
+    {
+        enemyOffset = PIECE_BLACK_PAWN;
+    }
+
+    Piece capture = move_get_capture(move, board, enemyOffset);
+
+    if (capture != PIECES)
+    {
+        return 1;
+    }
+
+    return 0;
 }

@@ -87,7 +87,7 @@ static bool uci_evaluate_position(Uci instance, String value)
 
 static bool uci_evaluate_go(Uci instance, String value)
 {
-    int depth = 7;
+    int depth = 6;
     int nodes = 0;
     int mate = 0;
     int moveTime = 0;
@@ -230,7 +230,7 @@ static bool uci_evaluate_go(Uci instance, String value)
         "info depth %d\n"
         "info score cp %d\n",
         depth,
-        evaluation(board));
+        evaluation_evaluate_board(board));
     negamax_search(&result, board, table, &instance->cache, depth);
     move_write_uci_string(buffer, &result);
     fprintf(instance->output, "bestmove %s\n", buffer);

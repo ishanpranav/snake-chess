@@ -51,6 +51,29 @@ bool move_from_uci_string(
     return false;
 }
 
+Piece move_get_capture(Move instance, Board board, Piece enemyOffset)
+{
+    if (instance->type & MOVE_TYPES_EN_PASSANT)
+    {
+        return enemyOffset + PIECE_PAWN;
+    }
+
+    if (instance->type & MOVE_TYPES_CAPTURE)
+    {
+        Piece enemyKing = enemyOffset + PIECE_KING;
+
+        for (Piece piece = enemyOffset; piece <= enemyKing; piece++)
+        {
+            if (board->pieces[piece] & bitboard(instance->target))
+            {
+                return piece;
+            }
+        }
+    }
+
+    return PIECES;
+}
+
 void move_apply(Move instance, Board board, Zobrist zobrist)
 {
     Square source = instance->source;
@@ -78,17 +101,9 @@ void move_apply(Move instance, Board board, Zobrist zobrist)
 
     if (instance->type & MOVE_TYPES_CAPTURE)
     {
-        Piece enemyEnd = enemyBegin + PIECE_KING;
+        Piece capture = move_get_capture(instance, board, enemyBegin);
 
-        for (Piece piece = enemyBegin; piece <= enemyEnd; piece++)
-        {
-            if (board->pieces[piece] & bitboard(target))
-            {
-                move_remove(board, piece, target, zobrist);
-
-                break;
-            }
-        }
+        move_remove(board, capture, instance->target, zobrist);
     }
 
     if (board->enPassant != SQUARES)

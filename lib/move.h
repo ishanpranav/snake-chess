@@ -25,7 +25,7 @@ struct Move
 typedef struct Move* Move;
 
 /**
- * 
+ *
  * @param result
 */
 void move_from_null(Move result);
@@ -43,6 +43,15 @@ bool move_from_uci_string(
     String value,
     Board board,
     AttackTable table);
+
+/**
+ *
+ * @param instance
+ * @param board
+ * @param enemyOffset
+ * @return
+*/
+Piece move_get_capture(Move instance, Board board, Piece enemyOffset);
 
 /**
  *
