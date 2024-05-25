@@ -67,6 +67,11 @@ void transposition_table_set(
     int depth,
     NodeType type)
 {
+    if (value->source == value->target)
+    {
+        return;
+    }
+
     Transposition entry = transposition_table_find(instance, hash);
 
     entry->hash = hash;
