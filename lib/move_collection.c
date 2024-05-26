@@ -42,7 +42,7 @@ static int move_collection_compare_item(Object left, Object right)
 
     return scores[q->source][q->target] - scores[p->source][p->target];
 }
-#include "bitboard.h"
+
 void move_collection_sort(
     MoveCollection instance,
     Board board,
@@ -54,23 +54,7 @@ void move_collection_sort(
     {
         Move move = instance->items + i;
 
-        if ((int)move->target < 0)
-        {
-            board_write_string(stdout, board, ENCODING_UNICODE);
-            printf("%s piece ", piece_to_string(move->piece, ENCODING_ASCII));
-            printf("from %d to %d:\n", move->source, move->target);
-            printf("doing [%d]", move->type);
-
-            for (Piece piece = 0; piece <= PIECE_BLACK_KING; piece++)
-            {
-                bitboard_write_string(stdout, board->pieces[piece]);
-            }
-            fflush(NULL);
-
-            return;
-        }
-
-        if (move->source != SQUARES && move->target != SQUARES)
+        if (move->source != move->target)
         {
             scores[move->source][move->target] =
                 evaluation_evaluate_move(move, board, table);

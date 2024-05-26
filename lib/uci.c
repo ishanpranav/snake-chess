@@ -87,7 +87,7 @@ static bool uci_evaluate_position(Uci instance, String value)
 
 static bool uci_evaluate_go(Uci instance, String value)
 {
-    int depth = 8;
+    int depth = 7;
     int nodes = 0;
     int mate = 0;
     int moveTime = 0;

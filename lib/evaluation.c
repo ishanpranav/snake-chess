@@ -87,14 +87,14 @@ static const int EVALUATION_POSITION[][SQUARES] =
     }
 };
 
-static const int EVALUATION_VICTIM_AGGRESSOR[][6] =
+static const int EVALUATION_AGGRESSOR_VICTIM[][6] =
 {
-    { 105, 205, 305, 405, 505, 605 },
-    { 104, 204, 304, 404, 504, 604 },
-    { 103, 203, 303, 403, 503, 603 },
-    { 102, 202, 302, 402, 502, 602 },
-    { 101, 201, 301, 401, 501, 601 },
-    { 100, 200, 300, 400, 500, 600 }
+    [PIECE_PAWN] = { 105, 205, 305, 405, 505, 605 },
+    [PIECE_KNIGHT] = { 104, 204, 304, 404, 504, 604 },
+    [PIECE_BISHOP] = { 103, 203, 303, 403, 503, 603 },
+    [PIECE_ROOK] = { 102, 202, 302, 402, 502, 602 },
+    [PIECE_QUEEN] = { 101, 201, 301, 401, 501, 601 },
+    [PIECE_KING] = { 100, 200, 300, 400, 500, 600 }
 };
 
 int evaluation_evaluate_board(Board board)
@@ -153,23 +153,24 @@ int evaluation_evaluate_move(Move move, Board board, AttackTable table)
 
     if (capture != PIECES)
     {
-        uint64_t source = bitboard(move->source);
+        // uint64_t source = bitboard(move->source);
 
-        board->pieces[capture] &= ~source;
+        // board->pieces[capture] &= ~source;
 
-        if (!check_test(board, table, move->target, !board->color))
-        {
-            board->pieces[capture] |= source;
+        // if (!check_test(board, table, move->target, !board->color))
+        // {
+        //     board->pieces[capture] |= source;
 
-            return 15000;
-        }
+        //     return 15000;
+        // }
 
-        board->pieces[capture] |= source;
+        // board->pieces[capture] |= source;
 
-        Piece aggressor = move->piece - friendOffset;
-        Piece victim = capture - enemyOffset;
+        // Piece aggressor = move->piece - friendOffset;
+        // Piece victim = capture - enemyOffset;
 
-        return 10000 + EVALUATION_VICTIM_AGGRESSOR[aggressor][victim];
+        // return 10000 + EVALUATION_AGGRESSOR_VICTIM[aggressor][victim];
+        return 1;
     }
 
     return 0;
