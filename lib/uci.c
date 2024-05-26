@@ -87,7 +87,7 @@ static bool uci_evaluate_position(Uci instance, String value)
 
 static bool uci_evaluate_go(Uci instance, String value)
 {
-    int depth = 6;
+    int depth = 8;
     int nodes = 0;
     int mate = 0;
     int moveTime = 0;
@@ -306,20 +306,6 @@ bool uci_evaluate(Uci instance, String value)
     if (strstr(value, "ponderhit"))
     {
         return uci_evaluate_ponder_hit(instance);
-    }
-
-    if (strstr(value, ".dump"))
-    {
-        for (size_t i = 0; i < instance->cache.capacity; i++)
-        {
-            struct Transposition t = instance->cache.items[i];
-
-            if (!t.type) continue;
-
-            printf("hash = %lx, ", t.hash);
-            move_write_string(stdout, &t.value);
-            printf(", score = %d, depth = %d, type = %d\n", t.score, t.depth, t.type);
-        }
     }
 
     return !strstr(value, "quit");

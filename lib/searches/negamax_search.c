@@ -46,7 +46,7 @@ int negamax_search_alpha_beta(
     move_from_null(&optimum);
     move_collection(&moves);
     spawn(&moves, board, table);
-    move_collection_sort(&moves, board);
+    move_collection_sort(&moves, board, table);
 
     for (int i = 0; i < moves.count; i++)
     {

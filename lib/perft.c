@@ -4,6 +4,7 @@
 // https://www.chessprogramming.org/Perft
 
 #include "check.h"
+#include "perft.h"
 #include "spawn.h"
 
 long long perft(Board board, AttackTable table, Zobrist zobrist, int depth)

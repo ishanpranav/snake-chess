@@ -3,6 +3,7 @@
 
 #include "attack_table.h"
 #include "board.h"
+#include "zobrist.h"
 
 /**
  *

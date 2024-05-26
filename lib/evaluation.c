@@ -2,6 +2,7 @@
 // Licensed under the MIT license.
 
 #include "bitboard_iterator.h"
+#include "check.h"
 #include "evaluation.h"
 #include "file.h"
 #include "rank.h"
@@ -86,7 +87,7 @@ static const int EVALUATION_POSITION[][SQUARES] =
     }
 };
 
-static const int EVALUATION_MOST_VALUABLE_VICTIM_LEAST_VALUABLE_AGGRESSOR[][6] =
+static const int EVALUATION_VICTIM_AGGRESSOR[][6] =
 {
     { 105, 205, 305, 405, 505, 605 },
     { 104, 204, 304, 404, 504, 604 },
@@ -132,12 +133,19 @@ int evaluation_evaluate_board(Board board)
     return result;
 }
 
-int evaluation_evaluate_move(Move move, Board board)
+int evaluation_evaluate_move(Move move, Board board, AttackTable table)
 {
-    Piece enemyOffset = 0;
+    Piece friendOffset;
+    Piece enemyOffset;
 
     if (board->color)
     {
+        friendOffset = PIECE_BLACK_PAWN;
+        enemyOffset = PIECE_WHITE_PAWN;
+    }
+    else
+    {
+        friendOffset = PIECE_WHITE_PAWN;
         enemyOffset = PIECE_BLACK_PAWN;
     }
 
@@ -145,7 +153,23 @@ int evaluation_evaluate_move(Move move, Board board)
 
     if (capture != PIECES)
     {
-        return 1;
+        uint64_t source = bitboard(move->source);
+
+        board->pieces[capture] &= ~source;
+
+        if (!check_test(board, table, move->target, !board->color))
+        {
+            board->pieces[capture] |= source;
+
+            return 15000;
+        }
+
+        board->pieces[capture] |= source;
+
+        Piece aggressor = move->piece - friendOffset;
+        Piece victim = capture - enemyOffset;
+
+        return 10000 + EVALUATION_VICTIM_AGGRESSOR[aggressor][victim];
     }
 
     return 0;

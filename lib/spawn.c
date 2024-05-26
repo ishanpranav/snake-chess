@@ -86,7 +86,7 @@ static void spawn_pawn(MoveCollection results, Board board, AttackTable table)
         pawn.value;
         bitboard_next(&pawn))
     {
-        int target = pawn.current + direction * FILES;
+        Square target = pawn.current + direction * FILES;
 
         if (target < SQUARES && !(board->squares & bitboard(target)))
         {

@@ -30,5 +30,9 @@ void move_collection_add(MoveCollection instance, Move item);
  *
  * @param instance
  * @param board
+ * @param table
 */
-void move_collection_sort(MoveCollection instance, Board board);
+void move_collection_sort(
+    MoveCollection instance,
+    Board board,
+    AttackTable table);

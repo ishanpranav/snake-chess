@@ -103,7 +103,7 @@ void move_apply(Move instance, Board board, Zobrist zobrist)
     {
         Piece capture = move_get_capture(instance, board, enemyBegin);
 
-        move_remove(board, capture, instance->target, zobrist);
+        move_remove(board, capture, target, zobrist);
     }
 
     if (board->enPassant != SQUARES)
@@ -128,7 +128,7 @@ void move_apply(Move instance, Board board, Zobrist zobrist)
         {
             move_insert(board, friendBegin + PIECE_ROOK, target, zobrist);
         }
-        else if (instance->type & MOVE_TYPES_QUEEN)
+        else
         {
             move_insert(board, friendBegin + PIECE_QUEEN, target, zobrist);
         }

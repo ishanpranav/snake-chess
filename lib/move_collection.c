@@ -25,10 +25,28 @@ static int move_collection_compare_item(Object left, Object right)
     const struct Move* p = left;
     const struct Move* q = right;
 
-    return scores[p->source][p->target] - scores[q->source][q->target];
-}
+    if (p->source == q->source && p->target == q->target)
+    {
+        return 0;
+    }
 
-void move_collection_sort(MoveCollection instance, Board board)
+    if (p->source == SQUARES || p->target == SQUARES)
+    {
+        return 1;
+    }
+
+    if (q->source == SQUARES || q->target == SQUARES)
+    {
+        return -1;
+    }
+
+    return scores[q->source][q->target] - scores[p->source][p->target];
+}
+#include "bitboard.h"
+void move_collection_sort(
+    MoveCollection instance,
+    Board board,
+    AttackTable table)
 {
     memset(scores, 0, sizeof scores);
 
@@ -36,8 +54,27 @@ void move_collection_sort(MoveCollection instance, Board board)
     {
         Move move = instance->items + i;
 
-        scores[move->source][move->target] =
-            evaluation_evaluate_move(move, board);
+        if ((int)move->target < 0)
+        {
+            board_write_string(stdout, board, ENCODING_UNICODE);
+            printf("%s piece ", piece_to_string(move->piece, ENCODING_ASCII));
+            printf("from %d to %d:\n", move->source, move->target);
+            printf("doing [%d]", move->type);
+
+            for (Piece piece = 0; piece <= PIECE_BLACK_KING; piece++)
+            {
+                bitboard_write_string(stdout, board->pieces[piece]);
+            }
+            fflush(NULL);
+
+            return;
+        }
+
+        if (move->source != SQUARES && move->target != SQUARES)
+        {
+            scores[move->source][move->target] =
+                evaluation_evaluate_move(move, board, table);
+        }
     }
 
     qsort(
