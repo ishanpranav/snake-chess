@@ -80,3 +80,10 @@ void transposition_table_set(
     entry->depth = depth;
     entry->type = type;
 }
+
+void finalize_transposition_table(TranspositionTable instance)
+{
+    free(instance->items);
+
+    instance->capacity = 0;
+}

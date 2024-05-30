@@ -223,16 +223,25 @@ static bool uci_evaluate_go(Uci instance, String value)
 
     instance->started = true;
 
-    char buffer[8] = { 0 };
-    struct Move result;
+    struct SearchResult result;
 
+    negamax_search(&result, board, table, &instance->cache, depth);
     fprintf(instance->output,
         "info depth %d\n"
+        "info nodes %ld\n"
         "info score cp %d\n",
-        depth,
-        evaluation_evaluate_board(board));
-    negamax_search(&result, board, table, &instance->cache, depth);
-    move_write_uci_string(buffer, &result);
+        result.depth,
+        result.nodes,
+        result.score);
+
+    if (result.mate)
+    {
+        fprintf(instance->output, "info mate %d\n", abs(result.mate) / 2 + 1);
+    }
+
+    char buffer[8] = { 0 };
+
+    move_write_uci_string(buffer, &result.move);
     fprintf(instance->output, "bestmove %s\n", buffer);
 
     instance->started = false;
@@ -309,4 +318,9 @@ bool uci_evaluate(Uci instance, String value)
     }
 
     return !strstr(value, "quit");
+}
+
+void finalize_uci(Uci instance)
+{
+    finalize_transposition_table(&instance->cache);
 }

@@ -54,11 +54,8 @@ void move_collection_sort(
     {
         Move move = instance->items + i;
 
-        if (move->source != move->target)
-        {
-            scores[move->source][move->target] =
-                evaluation_evaluate_move(move, board, table);
-        }
+        scores[move->source][move->target] =
+            evaluation_evaluate_move(move, board, table);
     }
 
     qsort(

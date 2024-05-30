@@ -63,4 +63,10 @@ void transposition_table_set(
     int depth,
     NodeType type);
 
+/**
+ *
+ * @param instance
+*/
+void finalize_transposition_table(TranspositionTable instance);
+
 #endif

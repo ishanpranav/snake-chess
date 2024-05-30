@@ -34,3 +34,9 @@ void uci(Uci instance, Stream output);
  * @return
 */
 bool uci_evaluate(Uci instance, String value);
+
+/**
+ *
+ * @param instance
+*/
+void finalize_uci(Uci instance);

@@ -19,6 +19,7 @@ int main(void)
         fflush(state->output);
     }
 
+    finalize_uci(state);
     free(state);
 
     return 0;

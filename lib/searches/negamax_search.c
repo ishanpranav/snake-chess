@@ -12,9 +12,10 @@
 #include "../search.h"
 #include "../spawn.h"
 #define NEGAMAX_CHECKMATE_VALUE 100000
+#define NEGAMAX_CHECKMATE_THRESHOLD 99000
 
-int negamax_search_alpha_beta(
-    Move result,
+static int negamax_search_alpha_beta(
+    SearchResult result,
     Board board,
     AttackTable table,
     TranspositionTable cache,
@@ -28,12 +29,22 @@ int negamax_search_alpha_beta(
         return evaluation_evaluate_board(board);
     }
 
+    if (ply > result->depth)
+    {
+        result->depth = ply;
+    }
+
+    if (check_test_position(board, table))
+    {
+        depth++;
+    }
+
     uint64_t hash = board->hash;
     struct TranspositionTableResult entry;
 
     if (transposition_table_try_get(&entry, cache, hash, alpha, beta, depth))
     {
-        *result = entry.value;
+        result->move = entry.value;
 
         return entry.score;
     }
@@ -59,6 +70,7 @@ int negamax_search_alpha_beta(
             continue;
         }
 
+        result->nodes++;
         hasLegalMoves = true;
 
         int score = -negamax_search_alpha_beta(
@@ -73,7 +85,7 @@ int negamax_search_alpha_beta(
 
         if (score >= beta)
         {
-            *result = optimum;
+            result->move = optimum;
 
             transposition_table_set(
                 cache,
@@ -101,7 +113,7 @@ int negamax_search_alpha_beta(
         bool checked = check_test_position(board, table);
 
         board->color = !board->color;
-        *result = optimum;
+        result->move = optimum;
 
         if (checked)
         {
@@ -111,7 +123,7 @@ int negamax_search_alpha_beta(
         return 0;
     }
 
-    *result = optimum;
+    result->move = optimum;
 
     transposition_table_set(cache, board->hash, &optimum, alpha, depth, type);
 
@@ -119,19 +131,43 @@ int negamax_search_alpha_beta(
 }
 
 void negamax_search(
-    Move result,
+    SearchResult result,
     Board board,
     AttackTable table,
     TranspositionTable cache,
     int depth)
 {
-    negamax_search_alpha_beta(
-        result,
-        board,
-        table,
-        cache,
-        0,
-        -INT_MAX,
-        INT_MAX,
-        depth);
+    result->nodes = 0;
+    result->depth = 0;
+
+    int score = 0;
+
+    for (int currentDepth = 1; currentDepth <= depth; currentDepth++)
+    {
+        score = negamax_search_alpha_beta(
+            result,
+            board,
+            table,
+            cache,
+            0,
+            -INT_MAX,
+            INT_MAX,
+            currentDepth);
+    }
+
+    result->depth++;
+    result->score = score;
+
+    if (score > NEGAMAX_CHECKMATE_THRESHOLD)
+    {
+        result->mate = NEGAMAX_CHECKMATE_VALUE - score;
+    }
+    else if (score < -NEGAMAX_CHECKMATE_THRESHOLD)
+    {
+        result->mate = -NEGAMAX_CHECKMATE_VALUE - score;
+    }
+    else
+    {
+        result->mate = 0;
+    }
 }

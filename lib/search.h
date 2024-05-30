@@ -3,7 +3,7 @@
 
 #include "board.h"
 #include "attack_table.h"
-#include "move.h"
+#include "search_result.h"
 #include "transposition_table.h"
 
 /**
@@ -11,7 +11,7 @@
  * @param
 */
 void negamax_search(
-    Move result,
+    SearchResult result,
     Board board,
     AttackTable table,
     TranspositionTable cache,
